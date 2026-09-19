@@ -1,0 +1,19 @@
+node_modules
+dist
+dist-ssr
+*.local
+*.local.ts
+.DS_Store
+
+# archives de travail (ne pas versionner)
+*.zip
+
+# capturées et logs de debug
+*.png.tmp
+build-apk.log
+
+# dossier de travail Freebuff
+.freebuff/
+
+# debris d'un filter-branch avorte (montage reseau, non supprimable, inoffensif)
+.git-rewrite.bak/

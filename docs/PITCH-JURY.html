@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PUNCH — Pitch for the jury</title>
+<style>
+  :root{
+    --bg:#0c0c0d; --fg:#f2f1ee; --dim:#9c9a96;
+    --card:#141416; --line:rgba(242,241,238,0.12); --line-strong:rgba(242,241,238,0.22);
+    --accent:#d7d2cb; --accent-fg:#0c0c0d; --mono:'IBM Plex Mono',monospace;
+    --display:'Fraunces',serif; --body:'Figtree',sans-serif;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);line-height:1.65;padding:56px 20px 80px;}
+  .wrap{max-width:720px;margin:0 auto;}
+  .top{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:8px;}
+  .brand{display:flex;align-items:center;gap:8px;}
+  .brand svg{width:22px;height:22px;}
+  .brand span{font-family:var(--mono);font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--dim);}
+  .lang{display:flex;gap:4px;background:var(--card);border-radius:10px;padding:4px;border:1px solid var(--line);}
+  .lang button{font-family:var(--mono);font-size:12px;padding:8px 16px;border-radius:8px;border:none;background:transparent;color:var(--dim);cursor:pointer;}
+  .lang button.active{background:var(--accent);color:var(--accent-fg);}
+  h1{font-family:var(--display);font-size:44px;margin:24px 0 40px;letter-spacing:-0.5px;}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:26px 28px;margin-bottom:18px;}
+  .card h2{font-family:var(--display);font-size:20px;margin:0 0 10px;color:var(--accent);}
+  .card p{margin:0;color:#d8d5cf;font-size:15.5px;}
+  .lg{display:none;}
+  .lg.active{display:block;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div class="brand">
+      <svg viewBox="0 0 32 32" fill="var(--fg)"><path d="M18.4 3.2 8.6 16.8h6.1l-2.2 12 11.6-16.1h-6.4L18.4 3.2Z"/></svg>
+      <span>PUNCH</span>
+    </div>
+    <div class="lang">
+      <button data-l="en" class="active">EN</button>
+      <button data-l="fr">FR</button>
+    </div>
+  </div>
+  <h1>Why this app? For whom? What does it do?</h1>
+
+  <div class="lg active" data-lg="en">
+    <div class="card"><h2>Why this app?</h2><p>Most "proof of presence" apps on crypto rails are fake in one of two ways: either presence isn't verified, or the money split is hidden behind a token model nobody can audit. PUNCH fixes both. Presence is proven by a real Solana transaction signed by a real Seeker phone through Seed Vault. Every payment follows one printed rule: <strong>92% to the person who showed up, 3% to SKR holders, 5% to the app</strong>. No hidden fee.</p></div>
+    <div class="card"><h2>What does it do?</h2><p>Tap once a day, a real devnet transaction records your presence, and it unlocks small paid jobs nearby — done in minutes, paid in USDC/USDT. Pay someone else to do a job, swap USDC/USDT/SKR, stake SKR for earlier access to better jobs, watch a live globe of Seekers punching in worldwide. Every money action is a real signed Solana transaction — nothing fake in local storage.</p></div>
+    <div class="card"><h2>Who is it for?</h2><p>Seeker phone owners who want their daily presence to mean something economically — gig workers, community organizers verifying attendance, or anyone who wants a small honest income without trusting a black-box algorithm. Also the SKR ecosystem itself: staking gives real utility without printing new supply.</p></div>
+    <div class="card"><h2>Why is it fun?</h2><p>The ticket you get after punching in looks like a real paper receipt — timestamp, country, the exact cut printed on it, an on-chain stamp. Saying hi to a nearby Seeker pays both of you ten cents from the app's own cut. The globe spins with real drag physics. A small, honest economy you can watch move in real time.</p></div>
+    <div class="card"><h2>Who does it target?</h2><p>Solana Mobile Seeker owners at launch, expanding to any Mobile Wallet Adapter–compatible device. Scales from a hackathon demo (devnet) to a real presence-and-micro-gig economy on mainnet.</p></div>
+  </div>
+
+  <div class="lg" data-lg="fr">
+    <div class="card"><h2>Pourquoi cette app ?</h2><p>La plupart des apps « preuve de présence » sont fausses d'une des deux façons : soit la présence n'est pas vérifiée, soit la répartition de l'argent est cachée. PUNCH corrige les deux. La présence est prouvée par une vraie transaction Solana signée par un vrai téléphone Seeker via Seed Vault. Chaque paiement suit une règle imprimée : <strong>92 % à la personne présente, 3 % aux détenteurs de SKR, 5 % à l'app</strong>. Pas de frais caché.</p></div>
+    <div class="card"><h2>Qu'est-ce qu'elle fait ?</h2><p>Tape une fois par jour, une vraie transaction devnet enregistre ta présence, ça débloque de petites missions payées — quelques minutes, payées en USDC/USDT. Paie quelqu'un pour une mission, échange USDC/USDT/SKR, mise du SKR pour un accès anticipé aux meilleures missions, regarde un globe en direct des Seekers dans le monde. Chaque action d'argent est une vraie transaction signée — rien de faux en local.</p></div>
+    <div class="card"><h2>À qui elle s'adresse ?</h2><p>Aux propriétaires de téléphone Seeker qui veulent que leur présence compte économiquement — travailleurs à la mission, organisateurs vérifiant une présence réelle, ou toute personne voulant un petit revenu honnête sans algorithme opaque. Aussi à l'écosystème SKR : miser donne une vraie utilité sans imprimer de monnaie.</p></div>
+    <div class="card"><h2>Pourquoi c'est fun ?</h2><p>Le ticket reçu après pointage ressemble à un vrai reçu papier — horodatage, pays, part exacte imprimée, tampon on-chain. Dire bonjour à un Seeker à côté vous paie tous les deux dix centimes. Le globe tourne avec une vraie physique de glissement. Une petite économie honnête que tu regardes bouger en temps réel.</p></div>
+    <div class="card"><h2>À qui elle s'adresse (business) ?</h2><p>Aux propriétaires de Solana Mobile Seeker au lancement, extensible à tout appareil compatible Mobile Wallet Adapter. Passe d'une démo hackathon (devnet) à une vraie économie de présence et micro-missions sur mainnet.</p></div>
+  </div>
+</div>
+<script>
+  document.querySelectorAll('.lang button').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      document.querySelectorAll('.lang button').forEach(function(b){b.classList.remove('active');});
+      document.querySelectorAll('.lg').forEach(function(l){l.classList.remove('active');});
+      btn.classList.add('active');
+      document.querySelector('.lg[data-lg="'+btn.dataset.l+'"]').classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>

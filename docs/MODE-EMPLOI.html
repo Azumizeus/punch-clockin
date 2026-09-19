@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mode d'emploi — PUNCH</title>
+<style>
+  :root{
+    --bg:#0c0c0d; --fg:#f2f1ee; --dim:#9c9a96;
+    --card:#141416; --line:rgba(242,241,238,0.12); --line-strong:rgba(242,241,238,0.22);
+    --accent:#d7d2cb; --accent-fg:#0c0c0d;
+    --mono:'IBM Plex Mono',ui-monospace,Menlo,monospace;
+    --display:'Fraunces',Georgia,serif; --body:'Figtree',system-ui,sans-serif;
+    --green:#7fd9a0; --amber:#e0c26a; --gold:#d4af37;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);line-height:1.6;padding:56px 20px;}
+  .wrap{max-width:800px;margin:0 auto;}
+  .badge{display:inline-block;font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:1px;background:var(--card);border:1px solid var(--line-strong);border-radius:999px;padding:3px 10px;color:var(--dim);margin-bottom:10px;}
+  h1{font-family:var(--display);font-size:40px;margin:0 0 6px;letter-spacing:-0.5px;}
+  .sub{color:var(--dim);font-size:13px;font-family:var(--mono);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:24px;}
+  .tabs{display:flex;gap:8px;margin-bottom:30px;flex-wrap:wrap;}
+  .tab{font-family:var(--mono);font-size:12px;padding:8px 14px;border-radius:999px;background:var(--card);border:1px solid var(--line);color:var(--dim);cursor:pointer;}
+  .tab.active{background:var(--accent);color:var(--accent-fg);border-color:var(--accent);}
+  .sec{display:none;}
+  .sec.active{display:block;}
+  h2{font-family:var(--display);font-size:22px;margin:0 0 14px;}
+  h3{font-family:var(--display);font-size:16px;margin:22px 0 8px;}
+  p,li{font-size:14px;color:#d8d5cf;}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 18px;margin-bottom:10px;}
+  table{width:100%;border-collapse:collapse;font-size:13.5px;}
+  th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);}
+  th{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--dim);}
+  td b{color:var(--fg);}
+  .note{background:var(--card);border-left:3px solid var(--gold);border-radius:8px;padding:12px 16px;margin:14px 0;font-size:14px;}
+  .kbd{font-family:var(--mono);font-size:12px;background:var(--card);border:1px solid var(--line-strong);border-radius:6px;padding:1px 7px;}
+  /* Simulateur */
+  .sim{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;margin-top:10px;}
+  .simRow{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;}
+  .simBtn{font-family:var(--mono);font-size:11px;padding:6px 12px;border-radius:999px;background:var(--bg);border:1px solid var(--line-strong);color:var(--dim);cursor:pointer;}
+  .simBtn.on{background:var(--gold);color:#0c0a07;border-color:var(--gold);}
+  .phone{border-radius:18px;padding:26px 18px;min-height:300px;transition:all .35s ease;border:1px solid var(--line);}
+  .phone .ptitle{font-size:24px;text-align:center;margin:18px 0 4px;}
+  .phone .pdial{width:120px;height:120px;border-radius:999px;margin:16px auto;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:13px;}
+  .phone .ptag{text-align:center;font-family:var(--mono);font-size:11px;letter-spacing:2px;}
+  .phone .pcard{border-radius:8px;padding:10px 14px;margin-top:14px;font-size:12px;}
+  .phone .pnav{display:flex;justify-content:center;gap:14px;margin-top:16px;font-family:var(--mono);font-size:10px;letter-spacing:1px;}
+  .simname{font-family:var(--mono);font-size:12px;color:var(--gold);margin-top:12px;text-align:center;letter-spacing:1.5px;}
+  /* Accordéon */
+  details{background:var(--card);border:1px solid var(--line);border-radius:10px;margin-bottom:8px;padding:0;}
+  summary{cursor:pointer;padding:13px 16px;font-size:14px;font-weight:600;list-style:none;}
+  summary::before{content:'▸ ';color:var(--dim);}
+  details[open] summary::before{content:'▾ ';}
+  details .body{padding:0 16px 14px;font-size:13.5px;color:#d8d5cf;}
+  /* Checklist */
+  .chk{display:flex;gap:10px;align-items:flex-start;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin-bottom:8px;cursor:pointer;}
+  .chk input{margin-top:3px;accent-color:#7fd9a0;width:16px;height:16px;}
+  .chk.done span{text-decoration:line-through;color:var(--dim);}
+  .progress{font-family:var(--mono);font-size:12px;color:var(--green);margin-bottom:12px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <span class="badge">Mode d'emploi</span>
+  <h1>PUNCH — mode d'emploi</h1>
+  <div class="sub">mise à jour 20 sept. 2026 — v jury devnet</div>
+
+  <div class="tabs">
+    <div class="tab active" data-s="s0">Commencer</div>
+    <div class="tab" data-s="s1">Le quotidien</div>
+    <div class="tab" data-s="s2">12 apparences</div>
+    <div class="tab" data-s="s3">Dépannage</div>
+    <div class="tab" data-s="s4">Script jury</div>
+  </div>
+
+  <div class="sec active" id="s0">
+    <h2>Avant de commencer</h2>
+    <div class="card">Un téléphone <b>Solana Seeker</b> avec <b>Seed Vault</b> configuré, une connexion internet, et l'APK installé (build arm64 signé — <b>pas besoin d'Expo Go</b>).</div>
+    <div class="note"><b>Première connexion ?</b> Le trésor du réseau te crédite un <b>lot de bienvenue</b> : 0,05 SOL + 5 USDC + 20 USDT + 5 000 SKR. De quoi tester tous les flux sans faucet.</div>
+    <h3>Première ouverture</h3>
+    <p><span class="kbd">1</span> Choisis la langue → <span class="kbd">2</span> écran CLOCK IN → tape <b>Connecter</b> → <span class="kbd">3</span> autorise le Seed Vault → <span class="kbd">4</span> les soldes apparaissent dans l'onglet <b>Argent</b>.</p>
+  </div>
+
+  <div class="sec" id="s1">
+    <h2>Le quotidien</h2>
+    <table>
+      <tr><th>Action</th><th>Où</th><th>Ce qui se passe</th></tr>
+      <tr><td><b>Pointer</b></td><td>CLOCK IN → cadran</td><td>Memo <span class="kbd">PUNCH &lt;date&gt;</span> signée par ton wallet. Ticket avec heure + signature cliquable. Re-pointage après 24 h.</td></tr>
+      <tr><td><b>Missions</b></td><td>Missions</td><td>Prendre une mission : le trésor te paie à la validation (vraie tx). Tu peux en poster.</td></tr>
+      <tr><td><b>Argent</b></td><td>Argent</td><td>Soldes SOL/USDC/USDT/SKR, <b>swap</b>, <b>stake</b> et <b>unstake</b> (frais 1,5 %, net libéré).</td></tr>
+      <tr><td><b>Bonjour</b></td><td>CLOCK IN → « À proximité »</td><td>Saluer un Seeker proche : petit paiement réel.</td></tr>
+      <tr><td><b>Globe</b></td><td>Globe</td><td>Rotation à inertie (drag), tap un pays.</td></tr>
+      <tr><td><b>Quitter</b></td><td>Réglages</td><td>Transaction de sortie obligatoire, compteurs honnêtement décrémentés.</td></tr>
+    </table>
+    <div class="note">Chaque flux ouvre un <b>reçu</b> avec la ligne <b>Tx</b> : elle ouvre l'explorateur devnet sur la vraie transaction. Pas de signature dans l'explorateur = pas de transaction. L'appli ne ment jamais.</div>
+  </div>
+
+  <div class="sec" id="s2">
+    <h2>12 apparences : 4 thèmes × 3 habillages</h2>
+    <p>Thèmes (couleurs) : <b>Sombre</b>, <b>Clair</b>, <b>Or noir</b> ✦, <b>Or clair</b> ✧. Habillages (forme + typo + composition) : boutons <b>A B C</b> dans la barre du haut, sur tous les écrans. Le choix persiste après fermeture complète.</p>
+    <div class="sim">
+      <div class="simRow" id="rowTheme">
+        <button class="simBtn on" data-t="dark">Sombre</button>
+        <button class="simBtn" data-t="light">Clair</button>
+        <button class="simBtn" data-t="gold">Or noir ✦</button>
+        <button class="simBtn" data-t="goldL">Or clair ✧</button>
+      </div>
+      <div class="simRow" id="rowLook">
+        <button class="simBtn on" data-l="a">A — Horloge d'usine</button>
+        <button class="simBtn" data-l="b">B — Ticket de pointeuse</button>
+        <button class="simBtn" data-l="c">C — Hardware Seeker</button>
+      </div>
+      <div class="phone" id="phone">
+        <div class="ptag" id="ptag">— 14:32:07 —</div>
+        <div class="ptitle" id="ptitle">CLOCK IN</div>
+        <div class="pdial" id="pdial">PUNCH</div>
+        <div class="pcard" id="pcard">Ticket — 14:32 · SPLIT 92 / 3 / 5</div>
+        <div class="pnav" id="pnav">MISSIONS · ARGENT · GLOBE</div>
+      </div>
+      <div class="simname" id="simname">SOMBRE × A — HORLOGE D'USINE</div>
+    </div>
+  </div>
+
+  <div class="sec" id="s3">
+    <h2>Dépannage</h2>
+    <details><summary>« Session expirée — rouvre ton portefeuille pour signer »</summary>
+      <div class="body">Normal : le token d'autorisation est volontairement purgé à chaque relance (règle Seed Vault). Va sur <b>CLOCK IN</b> et re-tape <b>Connecter</b> — une nouvelle autorisation et tout remarche. Les paiements du trésor vers toi restent possibles même sans session.</div>
+    </details>
+    <details><summary>« Transaction refusée ou échouée »</summary>
+      <div class="body">Vérifie ta connexion puis ton SOL (les frais partent de ton wallet). L'erreur exacte est journalisée (<span class="kbd">[PUNCH-TX]</span> dans logcat) : aucune transaction n'est jamais perdue en silence.</div>
+    </details>
+    <details><summary>« Je ne vois rien bouger »</summary>
+      <div class="body">Ouvre la ligne <b>Tx</b> du reçu dans l'explorateur : c'est la seule source de vérité.</div>
+    </details>
+    <details><summary>Désinstallation / mise à jour</summary>
+      <div class="body">Désinstaller efface tes réglages locaux et fait re-partir le lot de bienvenue (le trésor paie un nouveau wallet). Pour une simple mise à jour : installer l'APK <b>par-dessus</b> (<span class="kbd">adb install -r</span>), sans désinstaller.</div>
+    </details>
+    <details><summary>Écran de veille</summary>
+      <div class="body">Réglages → <b>Veille</b> → 10 s / 30 s / 60 s / Off. Après le délai, l'écran affiche <b>ton</b> style CLOCK IN (ta combinaison) avec l'heure en direct. Un tap réveille l'app où tu l'avais laissée.</div>
+    </details>
+  </div>
+
+  <div class="sec" id="s4">
+    <h2>Script démo — 2 minutes devant le jury</h2>
+    <div class="progress" id="prog">0 / 7 — coche au fur et à mesure (mémorisé dans le navigateur)</div>
+    <div id="cl">
+      <label class="chk"><input type="checkbox"><span>Ouvrir l'app → <b>Connecter</b> (nouvelle autorisation Seed Vault)</span></label>
+      <label class="chk"><input type="checkbox"><span><b>Pointer</b> → signer → montrer le ticket et sa signature sur l'explorateur</span></label>
+      <label class="chk"><input type="checkbox"><span><b>Argent</b> → Swap 500 SKR → USDC → signer → reçu</span></label>
+      <label class="chk"><input type="checkbox"><span><b>Stake</b> 1 000 SKR → reçu. Puis <b>Unstake</b> → frais 1,5 % visibles</span></label>
+      <label class="chk"><input type="checkbox"><span>Barre du haut → taper <b>A</b>, <b>B</b>, <b>C</b> : l'app change de design en direct</span></label>
+      <label class="chk"><input type="checkbox"><span>✦ / ✧ : balayer les 4 thèmes</span></label>
+      <label class="chk"><input type="checkbox"><span>Poser le téléphone → écran de veille → tap pour réveiller</span></label>
+    </div>
+    <div class="note" style="margin-top:20px"><b>Règles du produit (jamais négociables)</b> — la règle 92/3/5 est affichée sur chaque reçu ; aucune géolocalisation précise n'est stockée (le pays seulement) ; aucune fonctionnalité qui touche à l'argent n'est simulée : une vraie transaction ou rien.</div>
+  </div>
+</div>
+<script>
+  // Onglets
+  document.querySelectorAll('.tab').forEach(function(tab){
+    tab.addEventListener('click', function(){
+      document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active');});
+      document.querySelectorAll('.sec').forEach(function(p){p.classList.remove('active');});
+      tab.classList.add('active');
+      document.getElementById(tab.dataset.s).classList.add('active');
+    });
+  });
+
+  // Simulateur des 12 apparences
+  var T = {
+    dark:{bg:'#0c0c0d',fg:'#f2f1ee',card:'#141416',dim:'#9c9a96',accent:'#d7d2cb',afg:'#0c0c0d',line:'rgba(242,241,238,0.18)'},
+    light:{bg:'#f3e6c1',fg:'#1a1308',card:'#faeecf',dim:'#a0844c',accent:'#b8892a',afg:'#fff8e6',line:'rgba(184,137,42,0.38)'},
+    gold:{bg:'#0a0908',fg:'#f4ecd8',card:'#161310',dim:'#8a7a56',accent:'#d4af37',afg:'#0a0908',line:'rgba(212,175,55,0.28)'},
+    goldL:{bg:'#f6ecd2',fg:'#241a06',card:'#fbf4dd',dim:'#9a7f3e',accent:'#a67c1a',afg:'#fffbe8',line:'rgba(150,116,30,0.38)'}
+  };
+  var LK = {
+    a:{name:"A — HORLOGE D'USINE",dial:'#d4af37',dialFg:'#0c0a07',titleFont:"var(--mono)",titleSpacing:'6px',radius:'999px',cardRadius:'999px',tag:function(v){return '— '+v+' —';}},
+    b:{name:'B — TICKET DE POINTEUSE',dial:'var(--display)',dialFg:null,titleFont:"var(--display)",titleSpacing:'0',radius:'2px',cardRadius:'2px',tag:function(v){return 'TIME '+v;}},
+    c:{name:'C — HARDWARE SEEKER',dial:null,dialFg:null,titleFont:"var(--body)",titleSpacing:'0',radius:'6px',cardRadius:'6px',tag:function(v){return 'LOCAL TIME '+v;}}
+  };
+  var curT='dark', curL='a';
+  function tick(){var d=new Date(),p=function(n){return (n<10?'0':'')+n;};return p(d.getHours())+':'+p(d.getMinutes())+':'+p(d.getSeconds());}
+  function paint(){
+    var t=T[curT], l=LK[curL], ph=document.getElementById('phone');
+    ph.style.background=t.bg; ph.style.color=t.fg; ph.style.borderColor=t.line;
+    var pt=document.getElementById('ptitle');
+    pt.style.fontFamily=l.titleFont; pt.style.letterSpacing=l.titleSpacing;
+    pt.textContent = curL==='a' ? '— CLOCK IN —' : 'CLOCK IN';
+    if(curL==='a'){pt.style.fontFamily='var(--mono)';pt.style.fontSize='22px';}else{pt.style.fontSize='24px';}
+    var pd=document.getElementById('pdial');
+    if(curL==='b'){pd.textContent='⏱';pd.style.fontSize='40px';}else{pd.textContent='PUNCH';pd.style.fontSize='13px';}
+    pd.style.background = curL==='a' ? '#f0e0ad' : (curT==='dark'||curT==='gold' ? t.card : (curL==='c' ? '#0c0c0d' : t.accent));
+    pd.style.color = curL==='a' ? '#0c0a07' : (curL==='c' ? '#f2f1ee' : t.afg);
+    pd.style.borderRadius='999px'; pd.style.border='2px solid '+(curL==='a'?'#d4af37':t.accent);
+    document.getElementById('ptag').textContent=l.tag(tick());
+    var pc=document.getElementById('pcard');
+    pc.style.background = curL==='c' ? 'transparent' : (curL==='b' ? '#fffaf0' : t.card);
+    pc.style.color = curL==='b' ? '#2c1810' : (curL==='c' ? t.fg : t.fg);
+    pc.style.borderRadius=l.cardRadius;
+    pc.style.border = curL==='b' ? '1px dashed #2c1810' : (curL==='c' ? '1px solid rgba(242,241,238,0.14)' : '1px solid '+t.line);
+    document.getElementById('pnav').style.opacity = curL==='c' ? '1' : '0.8';
+    document.getElementById('simname').textContent =
+      ({dark:'SOMBRE',light:'CLAIR',gold:'OR NOIR',goldL:'OR CLAIR'})[curT] + ' × ' + l.name;
+  }
+  document.querySelectorAll('#rowTheme .simBtn').forEach(function(b){
+    b.addEventListener('click',function(){
+      document.querySelectorAll('#rowTheme .simBtn').forEach(function(x){x.classList.remove('on');});
+      b.classList.add('on'); curT=b.dataset.t; paint();
+    });
+  });
+  document.querySelectorAll('#rowLook .simBtn').forEach(function(b){
+    b.addEventListener('click',function(){
+      document.querySelectorAll('#rowLook .simBtn').forEach(function(x){x.classList.remove('on');});
+      b.classList.add('on'); curL=b.dataset.l; paint();
+    });
+  });
+  setInterval(paint,1000); paint();
+
+  // Checklist persistante
+  var KEY='punch-demo-checklist';
+  var saved=[]; try{saved=JSON.parse(localStorage.getItem(KEY)||'[]');}catch(e){}
+  var boxes=document.querySelectorAll('#cl input');
+  boxes.forEach(function(cb,i){
+    cb.checked = saved.indexOf(i)>=0;
+    cb.addEventListener('change',update);
+  });
+  function update(){
+    var done=0, list=[];
+    boxes.forEach(function(cb,i){ cb.closest('.chk').classList.toggle('done',cb.checked); if(cb.checked){done++;list.push(i);} });
+    document.getElementById('prog').textContent = done+' / '+boxes.length+(done===boxes.length?' — prêt pour le jury ✓':'');
+    try{localStorage.setItem(KEY,JSON.stringify(list));}catch(e){}
+  }
+  update();
+</script>
+</body>
+</html>

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AEGIS-7 — cerveau du projet PUNCH</title>
+<style>
+  :root{
+    --bg:#0c0c0d; --fg:#f2f1ee; --dim:#9c9a96; --dim2:#6e6c68;
+    --card:#141416; --line:rgba(242,241,238,0.12); --line-strong:rgba(242,241,238,0.22);
+    --accent:#d7d2cb; --accent-fg:#0c0c0d; --mono:'IBM Plex Mono',monospace;
+    --display:'Fraunces',serif; --body:'Figtree',sans-serif;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);line-height:1.6;}
+  a{color:var(--fg);}
+  .layout{display:flex;min-height:100vh;}
+  nav{
+    width:260px;flex:0 0 260px;padding:32px 20px;border-right:1px solid var(--line);
+    position:sticky;top:0;height:100vh;overflow-y:auto;
+  }
+  nav .brand{display:flex;align-items:center;gap:8px;margin-bottom:28px;}
+  nav .brand svg{width:18px;height:18px;}
+  nav .brand span{font-family:var(--mono);font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--dim);}
+  nav h2{font-family:var(--display);font-size:15px;color:var(--fg);margin:0 0 12px;}
+  nav ul{list-style:none;padding:0;margin:0 0 24px;}
+  nav li{margin-bottom:6px;}
+  nav a.nav-link{display:block;padding:6px 10px;border-radius:8px;color:var(--dim);text-decoration:none;font-size:13px;}
+  nav a.nav-link:hover{background:var(--card);color:var(--fg);}
+  main{flex:1;padding:48px 56px;max-width:820px;}
+  h1{font-family:var(--display);font-size:40px;margin:0 0 6px;letter-spacing:-0.5px;}
+  .sub{color:var(--dim);font-size:13px;font-family:var(--mono);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:44px;}
+  section{margin-bottom:40px;scroll-margin-top:24px;}
+  h2{font-family:var(--display);font-size:24px;margin:0 0 14px;border-bottom:1px solid var(--line);padding-bottom:10px;}
+  h3{font-family:var(--display);font-size:17px;margin:22px 0 8px;color:var(--fg);}
+  p{color:#d8d5cf;font-size:15px;}
+  ul,ol{color:#d8d5cf;font-size:15px;padding-left:20px;}
+  li{margin-bottom:6px;}
+  strong{color:var(--fg);}
+  code{font-family:var(--mono);background:var(--card);padding:2px 6px;border-radius:5px;font-size:0.88em;color:var(--accent);}
+  pre{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;overflow-x:auto;}
+  pre code{background:none;padding:0;}
+  .callout{background:var(--card);border-left:3px solid var(--accent);border-radius:8px;padding:14px 18px;margin:16px 0;font-size:14px;color:#d8d5cf;}
+  details{background:var(--card);border-radius:12px;padding:14px 18px;margin:10px 0;border:1px solid var(--line);}
+  summary{cursor:pointer;font-family:var(--body);font-weight:600;color:var(--fg);}
+  .badge{display:inline-block;font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:1px;background:var(--card);border:1px solid var(--line-strong);border-radius:999px;padding:3px 10px;color:var(--dim);margin-bottom:8px;}
+  @media(max-width:800px){.layout{flex-direction:column;}nav{position:relative;height:auto;width:100%;flex:none;}main{padding:32px 20px;}}
+</style>
+</head>
+<body>
+<div class="layout">
+  <nav>
+    <div class="brand">
+      <svg viewBox="0 0 32 32" fill="var(--fg)"><path d="M18.4 3.2 8.6 16.8h6.1l-2.2 12 11.6-16.1h-6.4L18.4 3.2Z"/></svg>
+      <span>PUNCH</span>
+    </div>
+    <h2>AEGIS-7</h2>
+    <ul>
+      <li><a class="nav-link" href="#s1">1. C'est quoi, PUNCH ?</a></li>
+      <li><a class="nav-link" href="#s2">2. Les deux bases de code</a></li>
+      <li><a class="nav-link" href="#s3">3. Stack technique</a></li>
+      <li><a class="nav-link" href="#s4">4. Économie réelle devnet</a></li>
+      <li><a class="nav-link" href="#s5">5. Fonctionnalités premium</a></li>
+      <li><a class="nav-link" href="#s6">6. Habillage visuel</a></li>
+      <li><a class="nav-link" href="#s7">7. Pièges déjà rencontrés</a></li>
+      <li><a class="nav-link" href="#s8">8. Voir aussi</a></li>
+    </ul>
+  </nav>
+  <main>
+    <span class="badge">Document cerveau</span>
+    <h1>AEGIS-7</h1>
+    <div class="sub">À lire en premier par tout assistant IA ou dev qui reprend le projet · mis à jour 19 sept. 2026</div>
+
+    <section id="s1">
+      <h2>1. C'est quoi, PUNCH ?</h2>
+      <p>PUNCH est une app mobile native (Expo / React Native) construite pour le hackathon Solana Mobile <strong>CLOCK IN</strong>. Elle fait partie d'un écosystème plus large appelé <strong>Nexus Seeker</strong>, qui a deux produits :</p>
+      <ul>
+        <li><strong>PUNCH</strong> (ce projet) — tu pointes une fois par jour depuis un vrai téléphone Seeker, une transaction Solana prouve ta présence, et tu accèdes à de petites missions payées.</li>
+        <li><strong>PLI</strong> — un produit séparé (secret scellé, payant à lire, la chaîne ne voit jamais le contenu). <strong>PLI n'est pas touché dans ce projet.</strong></li>
+      </ul>
+      <div class="callout">Règle centrale : chaque paiement suit la même règle partout dans l'app — <strong>92 % à la personne qui a fait le geste, 3 % à ceux qui gardent du SKR, 5 % à l'app</strong>. Affichée partout, jamais cachée.</div>
+    </section>
+
+    <section id="s2">
+      <h2>2. Les deux bases de code</h2>
+      <p>Deux projets distincts, ne jamais les confondre :</p>
+      <ol>
+        <li><strong>punch-native</strong> (<code>C:\Users\admin\Desktop\PUNCH\punch-native</code>) — l'app mobile Expo/React Native. C'est celle-ci qui compte pour le hackathon.</li>
+        <li><strong>L'app de base web</strong> (Grok/xAI App Builder, dossier le plus récent : <code>PUNCH-CLOCK-IN-19sept2026</code>) — source de vérité du design : polices, couleurs, copy, structure d'écran.</li>
+      </ol>
+      <div class="callout">Règle d'or répétée par l'utilisateur : <strong>« un clone, un jumeau, un miroir »</strong>. Toute divergence visuelle avec l'app de base est un bug, sauf fonctionnalités premium explicitement ajoutées (section 5).</div>
+    </section>
+
+    <section id="s3">
+      <h2>3. Stack technique (punch-native)</h2>
+      <ul>
+        <li>Expo Router (routing par fichiers), groupe <code>(tabs)</code> avec header custom (<code>TopBar</code>).</li>
+        <li>Zustand (<code>lib/punch/store.ts</code>) avec <code>persist</code> (stockage MMKV).</li>
+        <li><code>@solana-mobile/mobile-wallet-adapter-protocol-web3js</code> pour Seed Vault.</li>
+        <li><code>@solana/web3.js</code> + <code>@solana/spl-token</code> pour les transactions et transferts réels.</li>
+        <li>Polices : Fraunces (titres), Figtree (corps), IBM Plex Mono (mono / reçus).</li>
+        <li>Thèmes : <code>dark</code>, <code>light</code>, <code>gold</code> — <code>lib/punch/theme.ts</code>.</li>
+        <li>Traductions FR/EN complètes dans <code>lib/punch/copy.ts</code>.</li>
+      </ul>
+    </section>
+
+    <section id="s4">
+      <h2>4. Économie réelle sur devnet</h2>
+      <div class="callout">Règle explicite de l'utilisateur : <strong>« rien de fake, que du vrai fonctionnel premium »</strong>. Toute action qui touche à l'argent est une vraie transaction Solana devnet.</div>
+      <h3>Infrastructure</h3>
+      <ul>
+        <li><strong>Trésor devnet</strong> : <code>FUiCbnDhEEJtz9Zcj66hGB54iGMGeyjRKD7CsTwpihJn</code>. Clé dans <code>lib/solana/treasurySecretDEVNET.ts</code>, embarquée uniquement parce qu'on est en devnet.</li>
+        <li><strong>Mints</strong> — USDC : vrai mint devnet Circle (<code>4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU</code>). USDT et SKR : mints SPL devnet créés pour la démo (le vrai SKR mainnet existe, mais pas sur devnet).</li>
+        <li><strong>Helpers</strong> (<code>lib/solana/wallet.ts</code>) : <code>sendUserToTreasuryTransfer</code>, <code>sendTreasuryToUserTransfer</code>, <code>sendTreasurySol</code>.</li>
+      </ul>
+      <details>
+        <summary>Actions réelles dans store.ts</summary>
+        <p><code>punchIn</code> (mémo + frais d'entrée), <code>leaveNetwork</code> (mémo + frais de sortie), <code>stake</code>/<code>unstake</code> (transfert SPL + frais 1,5 %), <code>swap</code> (deux transferts, spread 0,35 %), <code>postShift</code>/<code>cashShift</code>/<code>greetNearby</code> (transferts réels).</p>
+      </details>
+      <details>
+        <summary>Premier lien réel (connectReal)</summary>
+        <p>Un wallet Seed Vault neuf démarre à zéro. L'app envoie un vrai petit lot de bienvenue depuis le trésor : 0,05 SOL, 5 USDC, 20 USDT, 5000 SKR.</p>
+      </details>
+      <div class="callout">Limite honnête : le SKR « misé » reste un compteur côté app (le staking va dans un trésor commun). Sans un vrai programme Solana dédié, la chaîne ne peut pas savoir « combien appartient à qui ». Le transfert lui-même est réel.</div>
+    </section>
+
+    <section id="s5">
+      <h2>5. Fonctionnalités premium ajoutées</h2>
+      <ol>
+        <li>Globe avec vraie physique (<code>IDLE=0.12 rad/s</code>, <code>DAMP=1.85</code>, <code>MAX_OMEGA=9 rad/s</code>).</li>
+        <li>Globe agrandi pour remplir la largeur de l'écran.</li>
+        <li>Icône de l'app à côté du mot « PUNCH » dans la barre du haut.</li>
+        <li>Bouton « Quitter le réseau » avec vraie transaction blockchain obligatoire.</li>
+        <li>Thème premium « Solana Seeker Mobile Gold ».</li>
+        <li>Frais protocole réels sur entrée/sortie du réseau et retrait de staking.</li>
+        <li>Onglet Réglages en plus des 5 onglets de l'app de base.</li>
+      </ol>
+    </section>
+
+    <section id="s6">
+      <h2>6. Habillage visuel — état actuel</h2>
+      <ul>
+        <li><strong>Écran de connexion</strong> : minimal — éclair, « CLOCK IN », « Nexus paie la présence. », un bouton.</li>
+        <li><strong>Après le pointage</strong> : ticket papier — « IN » énorme, heure, pays, règle 92/3/5, tampon on-chain.</li>
+        <li><strong>Mode d'emploi interactif</strong> : 8 étapes, accessible depuis Réglages, PLI en teaser informatif seulement.</li>
+      </ul>
+    </section>
+
+    <section id="s7">
+      <h2>7. Pièges déjà rencontrés</h2>
+      <ul>
+        <li>Ne jamais généraliser un rayon de bordure — vérifier le vrai <code>button.tsx</code> de l'app de base.</li>
+        <li>Ne jamais confondre les anciens dossiers de référence avec le plus récent (le plus daté fait foi).</li>
+        <li>Les labels de boutons doivent décrire honnêtement l'action.</li>
+        <li>Toute fonctionnalité qui touche à l'argent = vraie transaction devnet dès le départ.</li>
+      </ul>
+    </section>
+
+    <section id="s8">
+      <h2>8. Voir aussi</h2>
+      <ul>
+        <li><a href="ROADMAP.html">ROADMAP.html</a> — ce qui est fait, ce qui reste.</li>
+        <li><a href="PITCH-JURY.html">PITCH-JURY.html</a> — pourquoi cette app, pour qui (bilingue).</li>
+        <li><a href="GUIDE-JURY.html">GUIDE-JURY.html</a> — mode d'emploi pas-à-pas (bilingue).</li>
+      </ul>
+    </section>
+  </main>
+</div>
+</body>
+</html>

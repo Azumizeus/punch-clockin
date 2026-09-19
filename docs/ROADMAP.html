@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Feuille de route — PUNCH</title>
+<style>
+  :root{
+    --bg:#0c0c0d; --fg:#f2f1ee; --dim:#9c9a96;
+    --card:#141416; --line:rgba(242,241,238,0.12); --line-strong:rgba(242,241,238,0.22);
+    --accent:#d7d2cb; --accent-fg:#0c0c0d; --mono:'IBM Plex Mono',monospace;
+    --display:'Fraunces',serif; --body:'Figtree',sans-serif;
+    --green:#7fd9a0; --amber:#e0c26a;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);line-height:1.6;padding:56px 20px;}
+  .wrap{max-width:760px;margin:0 auto;}
+  .badge{display:inline-block;font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:1px;background:var(--card);border:1px solid var(--line-strong);border-radius:999px;padding:3px 10px;color:var(--dim);margin-bottom:10px;}
+  h1{font-family:var(--display);font-size:40px;margin:0 0 6px;letter-spacing:-0.5px;}
+  .sub{color:var(--dim);font-size:13px;font-family:var(--mono);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:20px;}
+  .tabs{display:flex;gap:8px;margin-bottom:36px;flex-wrap:wrap;}
+  .tab{font-family:var(--mono);font-size:12px;padding:8px 14px;border-radius:999px;background:var(--card);border:1px solid var(--line);color:var(--dim);cursor:pointer;}
+  .tab.active{background:var(--accent);color:var(--accent-fg);border-color:var(--accent);}
+  .phase{display:none;}
+  .phase.active{display:block;}
+  h2{font-family:var(--display);font-size:22px;margin:0 0 16px;}
+  ul.tasks{list-style:none;padding:0;margin:0 0 8px;}
+  ul.tasks li{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 16px;margin-bottom:8px;font-size:14px;color:#d8d5cf;display:flex;gap:10px;align-items:flex-start;}
+  .chip{flex:0 0 auto;width:20px;height:20px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;margin-top:1px;}
+  .chip.done{background:var(--green);color:#0c0c0d;}
+  .chip.todo{background:var(--line-strong);color:var(--dim);}
+  .principles{background:var(--card);border-left:3px solid var(--accent);border-radius:8px;padding:16px 20px;margin-top:30px;}
+  .principles h3{font-family:var(--display);font-size:16px;margin:0 0 10px;}
+  .principles ul{margin:0;padding-left:18px;color:#d8d5cf;font-size:14px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <span class="badge">Feuille de route</span>
+  <h1>Roadmap PUNCH</h1>
+  <div class="sub">mise à jour 20 sept. 2026 — clique un onglet</div>
+
+  <div class="tabs">
+    <div class="tab active" data-p="p0">Phase 0 — Hackathon</div>
+    <div class="tab" data-p="s20">Sprint 20 sept — Fiabilité & habillages</div>
+    <div class="tab" data-p="p1">Phase 1 — Post-hackathon</div>
+    <div class="tab" data-p="p2">Phase 2 — Mainnet</div>
+    <div class="tab" data-p="p3">Phase 3 — Écosystème Nexus</div>
+  </div>
+
+  <div class="phase active" id="p0">
+    <h2>Phase 0 — Hackathon CLOCK IN (fait)</h2>
+    <ul class="tasks">
+      <li><span class="chip done">✓</span>App native Expo/React Native, clone fidèle de l'app de base.</li>
+      <li><span class="chip done">✓</span>Pointage quotidien avec vraie transaction mémo signée (Seed Vault, devnet).</li>
+      <li><span class="chip done">✓</span>Globe avec vraie physique de rotation (drag, momentum, damping exponentiel).</li>
+      <li><span class="chip done">✓</span>Thème premium Solana Seeker Mobile Gold.</li>
+      <li><span class="chip done">✓</span>Bouton « Quitter le réseau » avec vraie transaction obligatoire.</li>
+      <li><span class="chip done">✓</span>Économie réelle sur devnet : trésor + mints SPL, tous les mouvements d'argent sont de vraies transactions.</li>
+      <li><span class="chip done">✓</span>Frais protocole réels sur entrée/sortie et retrait.</li>
+      <li><span class="chip done">✓</span>Nouvel habillage visuel : « CLOCK IN », ticket papier, mode d'emploi interactif.</li>
+      <li><span class="chip done">✓</span>Documentation complète.</li>
+    </ul>
+  </div>
+
+  <div class="phase" id="s20">
+    <h2>Sprint 20 septembre — fiabilité et habillages (fait)</h2>
+    <ul class="tasks">
+      <li><span class="chip done">✓</span>Crash au lancement réparé : polyfill <b>Buffer</b> chargé avant expo-router (bundle Hermes embarqué).</li>
+      <li><span class="chip done">✓</span><b>Seed Vault signe, l'app soumet</b> (5 tentatives) puis confirme — plus de « validée côté vault, refusée côté app, rien on-chain ».</li>
+      <li><span class="chip done">✓</span>Zéro simulation : session perdue = message clair, jamais de chiffres modifiés en douce. Check de SOL avant signature.</li>
+      <li><span class="chip done">✓</span>Reçus vérifiables pour tous les flux, signature cliquable vers l'explorer, navigation auto après swap/stake/unstake.</li>
+      <li><span class="chip done">✓</span>Habillages A/B/C fidèles : police globale, formes, et <b>compositions distinctes</b> (anneau or A, ticket pointillé B qui s'enfonce, onglets hardware C).</li>
+      <li><span class="chip done">✓</span><b>4 thèmes × 3 habillages = 12 apparences</b>, palettes exactes du CSS source, boutons A B C dans la barre du haut.</li>
+      <li><span class="chip done">✓</span>Écran de veille miroir (10/30/60 s) : le style de ta combinaison, horloge en direct.</li>
+      <li><span class="chip done">✓</span>APK signé arm64 buildé localement, installé sur Seeker — rien à installer pour le jury.</li>
+    </ul>
+    <div class="note" style="background:var(--card);border-left:3px solid var(--accent);border-radius:8px;padding:14px 18px;margin-top:14px;font-size:14px">
+      <b>Décision du 20 sept.</b> — Le jury est présenté avec l'app sur <b>SPL standard devnet</b> (déjà vivant : trésor, mints, tous les flux signés vérifiables). Le programme Anchor de staking reste en Phase 1 : plus de vérifiabilité, pas un prérequis de démo.
+    </div>
+  </div>
+
+  <div class="phase" id="p1">
+    <h2>Phase 1 — Juste après le hackathon</h2>
+    <ul class="tasks">
+      <li><span class="chip todo">○</span>Programme Solana dédié (Anchor) pour le staking — un compte on-chain par utilisateur.</li>
+      <li><span class="chip todo">○</span>Petit serveur backend pour le trésor (la clé ne doit plus être dans l'app).</li>
+      <li><span class="chip todo">○</span>Vraies missions géolocalisées avec vérification de présence.</li>
+      <li><span class="chip todo">○</span>Système de réputation des Seekers au-delà du rang par SKR misé.</li>
+    </ul>
+  </div>
+
+  <div class="phase" id="p2">
+    <h2>Phase 2 — Mainnet</h2>
+    <ul class="tasks">
+      <li><span class="chip todo">○</span>Basculer sur le vrai mint mainnet Solana Mobile Seeker (SKR).</li>
+      <li><span class="chip todo">○</span>USDC / USDT mainnet standards.</li>
+      <li><span class="chip todo">○</span>Conformité KYC minimale si paiements réels vers fiat.</li>
+      <li><span class="chip todo">○</span>Programme de staking audité avant tout dépôt réel de valeur.</li>
+    </ul>
+  </div>
+
+  <div class="phase" id="p3">
+    <h2>Phase 3 — Écosystème Nexus complet</h2>
+    <ul class="tasks">
+      <li><span class="chip todo">○</span>Intégration de PLI comme second verbe de l'écosystème.</li>
+      <li><span class="chip todo">○</span>Écran « Atelier » commun PUNCH + PLI.</li>
+      <li><span class="chip todo">○</span>Trésorerie et pool de stakers partagés, reporting transparent.</li>
+    </ul>
+  </div>
+
+  <div class="principles">
+    <h3>Ce qui ne changera pas</h3>
+    <ul>
+      <li>La règle 92/3/5 est affichée sur chaque reçu, jamais cachée.</li>
+      <li>Aucune géolocalisation précise n'est jamais stockée — seulement le pays.</li>
+      <li>Aucune fonctionnalité qui touche à l'argent n'est simulée.</li>
+    </ul>
+  </div>
+</div>
+<script>
+  document.querySelectorAll('.tab').forEach(function(tab){
+    tab.addEventListener('click', function(){
+      document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active');});
+      document.querySelectorAll('.phase').forEach(function(p){p.classList.remove('active');});
+      tab.classList.add('active');
+      document.getElementById(tab.dataset.p).classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>

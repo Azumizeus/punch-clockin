@@ -1,0 +1,44 @@
+EXPORT 2026-09-19T00:03:21.788264+00:00
+PREUVE globe IDLE: YES
+PREUVE ticket IN: YES
+PREUVE guide accueil: YES
+
+FICHIERS:
+2026-09-18 20:08 UTC       861  public/favicon-32.png
+2026-09-18 20:08 UTC       201  public/favicon.svg
+2026-09-18 20:08 UTC     10764  public/icon-192.png
+2026-09-18 20:08 UTC     73270  public/icon-512.png
+2026-09-18 23:27 UTC    318134  public/looks/a.jpg
+2026-09-18 23:27 UTC    378112  public/looks/b.jpg
+2026-09-18 23:27 UTC    199106  public/looks/c.jpg
+2026-09-18 20:09 UTC    372922  public/splash.png
+2026-09-18 23:39 UTC     11138  src/components/guide-screen.tsx
+2026-09-13 08:29 UTC      1125  src/components/theme-sync.tsx
+2026-09-12 22:56 UTC      1494  src/components/ui/button.tsx
+2026-09-18 23:38 UTC     17816  src/lib/punch/copy.ts
+2026-09-12 22:49 UTC      1929  src/lib/punch/format.ts
+2026-09-13 15:56 UTC      2848  src/lib/punch/globe.ts
+2026-09-13 03:56 UTC      2799  src/lib/punch/plis.ts
+2026-09-13 03:33 UTC      7337  src/lib/punch/shifts.ts
+2026-09-13 15:55 UTC     23213  src/lib/punch/store.ts
+2026-09-13 15:54 UTC      2440  src/lib/punch/types.ts
+2026-09-12 22:48 UTC       169  src/lib/utils.ts
+2026-09-13 16:01 UTC      1046  src/punch/README.md
+2026-09-18 21:56 UTC      3777  src/punch/app.tsx
+2026-09-13 08:28 UTC      1476  src/punch/bar.tsx
+2026-09-13 16:00 UTC      4576  src/punch/board-screen.tsx
+2026-09-18 23:31 UTC      1363  src/punch/connect-screen.tsx
+2026-09-18 21:57 UTC     10203  src/punch/globe-screen.tsx
+2026-09-12 22:57 UTC      3569  src/punch/post-screen.tsx
+2026-09-18 23:31 UTC      9071  src/punch/punch-screen.tsx
+2026-09-13 16:00 UTC      1334  src/punch/receipt-screen.tsx
+2026-09-13 16:00 UTC      8531  src/punch/shift-screen.tsx
+2026-09-18 20:09 UTC       860  src/punch/splash.tsx
+2026-09-13 16:00 UTC      2896  src/punch/split-screen.tsx
+2026-09-13 16:00 UTC      5421  src/punch/wallet-screen.tsx
+2026-09-18 23:39 UTC       187  src/routes/index.tsx
+2026-09-18 23:27 UTC       192  src/routes/looks.tsx
+2026-09-13 16:00 UTC       172  src/routes/punch.tsx
+2026-09-13 16:00 UTC      2040  src/shared/receipt-card.tsx
+2026-09-12 22:52 UTC       546  src/shared/token-chip.tsx
+2026-09-13 08:27 UTC      5190  src/styles.css
