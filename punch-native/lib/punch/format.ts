@@ -71,3 +71,14 @@ export function fakeSig() {
   for (let i = 0; i < 88; i++) s += alphabet[Math.floor(Math.random() * alphabet.length)];
   return s;
 }
+
+/** Une vraie signature Solana : base58, 87–88 caractères, jamais 0/O/I/l. */
+export function isRealSig(sig: string | null | undefined) {
+  if (!sig) return false;
+  return sig.length >= 87 && sig.length <= 88 && !/[0OIl]/.test(sig);
+}
+
+/** Lien explorer d'une transaction, cluster devnet. */
+export function txUrl(sig: string) {
+  return `https://explorer.solana.com/tx/${sig}?cluster=devnet`;
+}

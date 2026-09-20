@@ -6,12 +6,13 @@ import {
   TouchableOpacity,
   StyleSheet,
   ActivityIndicator,
+  Linking,
 } from "react-native";
 import { usePunch, useT, useColors } from "../../lib/punch/store";
 import { fonts } from "../../lib/punch/fonts";
 import { lookTokens } from "../../lib/punch/looks";
 import { tokenColors } from "../../lib/punch/theme";
-import { formatAmt, formatUsd, shortAddr } from "../../lib/punch/format";
+import { formatAmt, formatUsd, shortAddr, isRealSig, txUrl } from "../../lib/punch/format";
 import { useLeaveNetwork } from "../../lib/punch/useLeaveNetwork";
 
 export default function SplitScreen() {
@@ -84,7 +85,15 @@ export default function SplitScreen() {
             <Text style={s.recRow}>{t.stakers}: {formatAmt(r.stakers, r.token)}  3%</Text>
             <Text style={s.recRow}>{t.protocol}: {formatAmt(r.protocol, r.token)}  5%</Text>
           </View>
-          <Text style={s.recTx}>{t.tx} {shortAddr(r.signature)}</Text>
+          {/* Preuve on-chain : les vraies signatures ouvrent la page tx (devnet).
+              Les signatures fictives du mode démo restent en texte simple. */}
+          {isRealSig(r.signature) ? (
+            <TouchableOpacity onPress={() => Linking.openURL(txUrl(r.signature))} activeOpacity={0.7}>
+              <Text style={[s.recTx, s.recTxLink]} numberOfLines={1}>{t.tx} {shortAddr(r.signature)} ↗</Text>
+            </TouchableOpacity>
+          ) : (
+            <Text style={s.recTx} numberOfLines={1}>{t.tx} {shortAddr(r.signature)}</Text>
+          )}
         </View>
       ))}
 
@@ -133,6 +142,7 @@ function makeStyles(c: ReturnType<typeof useColors>, lk: ReturnType<typeof lookT
     recRows: { gap: 2 },
     recRow: { fontFamily: lk.ticketMono ? fonts.mono : fonts.body, fontSize: 12, color: "rgba(26,25,22,0.75)" },
     recTx: { fontFamily: lk.ticketMono ? fonts.mono : fonts.body, fontSize: 10, color: c.paperMuted, marginTop: 8 },
+    recTxLink: { textDecorationLine: "underline" },
     footer: { marginTop: 12, gap: 10, alignItems: "stretch" },
     pitchBtn: { backgroundColor: c.accent, borderRadius: lk.ctaRadius, paddingVertical: 14, alignItems: "center" },
     pitchBtnTxt: { fontFamily: fonts.bodySemi, fontSize: 14, color: c.accentFg },

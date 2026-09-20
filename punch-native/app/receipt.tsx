@@ -11,7 +11,7 @@ import { useRouter } from "expo-router";
 import { usePunch, useT, useColors } from "../lib/punch/store";
 import { fonts } from "../lib/punch/fonts";
 import { tokenColors } from "../lib/punch/theme";
-import { formatAmt, shortAddr } from "../lib/punch/format";
+import { formatAmt, shortAddr, isRealSig, txUrl } from "../lib/punch/format";
 import { lookTokens } from "../lib/punch/looks";
 
 export default function ReceiptScreen() {
@@ -77,13 +77,16 @@ export default function ReceiptScreen() {
             </View>
           )}
 
-          <TouchableOpacity
-            onPress={() =>
-              Linking.openURL(`https://explorer.solana.com/tx/${receipt.signature}?cluster=devnet`)
-            }
-          >
-            <Text style={s.sig} numberOfLines={1}>{t.tx} {shortAddr(receipt.signature)} ↗</Text>
-          </TouchableOpacity>
+          {/* La PREUVE que ça fonctionne : la signature réelle ouvre la page tx
+              sur l'explorateur devnet. Une signature fictive (mode démo) n'a
+              pas de page — elle reste du texte, pas un faux lien. */}
+          {isRealSig(receipt.signature) ? (
+            <TouchableOpacity onPress={() => Linking.openURL(txUrl(receipt.signature))} activeOpacity={0.7}>
+              <Text style={[s.sig, s.sigLink]} numberOfLines={1}>{t.tx} {shortAddr(receipt.signature)} ↗</Text>
+            </TouchableOpacity>
+          ) : (
+            <Text style={s.sig} numberOfLines={1}>{t.tx} {shortAddr(receipt.signature)}</Text>
+          )}
         </View>
       </ScrollView>
 
@@ -140,6 +143,7 @@ function makeStyles(c: ReturnType<typeof useColors>, lk: ReturnType<typeof lookT
     rowV: { fontFamily: lk.ticketMono ? fonts.mono : fonts.body, fontSize: 13, color: "rgba(26,25,22,0.8)" },
     rowVStrong: { fontFamily: lk.ticketMono ? fonts.mono : fonts.bodySemi, color: c.paperFg, fontWeight: "600" },
     sig: { fontFamily: lk.ticketMono ? fonts.mono : fonts.body, fontSize: 10, color: c.paperMuted, marginTop: 16 },
+    sigLink: { textDecorationLine: "underline" },
     footerRow: { flexDirection: "row", gap: 8, paddingHorizontal: 24, paddingBottom: 24, paddingTop: 8 },
     footerBtnSecondary: { flex: 1, backgroundColor: c.card, borderRadius: lk.ctaRadius, paddingVertical: 14, alignItems: "center" },
     footerBtnSecondaryTxt: { fontFamily: fonts.bodySemi, fontSize: 14, color: c.fg },

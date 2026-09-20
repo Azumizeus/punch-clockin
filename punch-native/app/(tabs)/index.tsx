@@ -10,11 +10,12 @@ import {
   Alert,
   Image,
   Pressable,
+  Linking,
 } from "react-native";
 import { useRouter } from "expo-router";
 import { usePunch, useT, useColors } from "../../lib/punch/store";
 import { fonts } from "../../lib/punch/fonts";
-import { formatUsd, rankFromStake } from "../../lib/punch/format";
+import { formatUsd, rankFromStake, isRealSig, txUrl } from "../../lib/punch/format";
 import { NEARBY } from "../../lib/punch/shifts";
 import { countryByCode } from "../../lib/punch/globe";
 import { Connection, PublicKey } from "@solana/web3.js";
@@ -264,10 +265,14 @@ export default function HomeScreen() {
                 {lk.labels ? `${t.lblSplit}  92 / 3 / 5` : t.ticketRule}
               </Text>
             </View>
-            {pulse && (
-              <Text style={[s.ticketStamp, { color: c.paperMuted }]} numberOfLines={1}>
-                {t.globeStamp} {pulse.sig.slice(0, 18)}…
-              </Text>
+            {/* Tampon on-chain du pointage : ouvre la page tx de la preuve memo
+                quand la signature est réelle (fictive en démo = texte simple). */}
+            {pulse && isRealSig(pulse.sig) && (
+              <TouchableOpacity onPress={() => Linking.openURL(txUrl(pulse.sig))} activeOpacity={0.7}>
+                <Text style={[s.ticketStamp, s.ticketStampLink, { color: c.paperMuted }]} numberOfLines={1}>
+                  {t.globeStamp} {pulse.sig.slice(0, 18)}… ↗
+                </Text>
+              </TouchableOpacity>
             )}
           </Animated.View>
           </Animated.View>
@@ -528,6 +533,7 @@ function makeStyles(
     ticketPlace: { fontFamily: fonts.body, fontSize: 17, marginTop: 6 },
     ticketRule: { fontFamily: fonts.mono, fontSize: 13, letterSpacing: 0.5, marginTop: 28 },
     ticketStamp: { fontFamily: fonts.mono, fontSize: 10, marginTop: 12 },
+    ticketStampLink: { textDecorationLine: "underline" },
     ticketLabel: { fontFamily: fonts.mono, fontSize: 11, letterSpacing: 2 },
     ruleWrap: { marginTop: 18 },
     ruleLine: { height: 1, width: "100%" },
