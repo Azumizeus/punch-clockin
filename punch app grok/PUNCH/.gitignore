@@ -1,0 +1,14 @@
+# artefacts de build / deploy
+.vercel/
+dist/
+
+# logs et verrous locaux
+dev.log
+*.log
+.node_modules.lock
+
+# identifiant de projet grok
+.project_id
+
+# dossier de travail de l'agent grok (meme convention que .freebuff/)
+.grok/
