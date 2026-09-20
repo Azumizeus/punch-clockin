@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { usePunch, useT, useColors } from "../../lib/punch/store";
 import { fonts } from "../../lib/punch/fonts";
+import { lookTokens } from "../../lib/punch/looks";
 import { tokenColors } from "../../lib/punch/theme";
 import { formatAmt, formatUsd, shortAddr } from "../../lib/punch/format";
 import { useLeaveNetwork } from "../../lib/punch/useLeaveNetwork";
@@ -16,7 +17,10 @@ import { useLeaveNetwork } from "../../lib/punch/useLeaveNetwork";
 export default function SplitScreen() {
   const t = useT();
   const c = useColors();
-  const s = useMemo(() => makeStyles(c), [c]);
+  // L'habillage pilote rayons + mono du ticket ici aussi (reçus = tickets).
+  const look = usePunch((st) => st.look);
+  const lk = useMemo(() => lookTokens(look), [look]);
+  const s = useMemo(() => makeStyles(c, lk), [c, lk]);
   const receipts = usePunch((s) => s.receipts);
   const protocolUsdc = usePunch((s) => s.protocolUsdc);
   const stakerUsdc = usePunch((s) => s.stakerUsdc);
@@ -101,7 +105,7 @@ export default function SplitScreen() {
   );
 }
 
-function makeStyles(c: ReturnType<typeof useColors>) {
+function makeStyles(c: ReturnType<typeof useColors>, lk: ReturnType<typeof lookTokens>) {
   return StyleSheet.create({
     wrap: { flex: 1, backgroundColor: c.bg },
     content: { paddingTop: 16, paddingHorizontal: 24, paddingBottom: 40 },
@@ -121,16 +125,16 @@ function makeStyles(c: ReturnType<typeof useColors>) {
     totalLabel: { fontFamily: fonts.body, fontSize: 14, color: c.dim2 },
     totalVal: { fontFamily: fonts.mono, fontSize: 14, color: c.fg },
     receiptTitle: { fontFamily: fonts.display, fontSize: 18, color: c.fg, marginBottom: 12 },
-    receiptCard: { backgroundColor: c.paper, borderRadius: 16, padding: 14, marginBottom: 10 },
+    receiptCard: { backgroundColor: c.paper, borderRadius: lk.ticketRadius, padding: 14, marginBottom: 10 },
     recHead: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 8 },
     recTitle: { fontFamily: fonts.display, fontSize: 15, color: c.paperFg, flex: 1, marginRight: 8 },
-    tokenChip: { backgroundColor: "rgba(0,0,0,0.06)", borderRadius: 999, paddingHorizontal: 8, paddingVertical: 3 },
-    tokenChipTxt: { fontFamily: fonts.mono, fontSize: 10, color: c.paperMuted },
+    tokenChip: { backgroundColor: "rgba(0,0,0,0.06)", borderRadius: lk.ctaRadius, paddingHorizontal: 8, paddingVertical: 3 },
+    tokenChipTxt: { fontFamily: lk.ticketMono ? fonts.mono : fonts.bodySemi, fontSize: 10, color: c.paperMuted },
     recRows: { gap: 2 },
-    recRow: { fontFamily: fonts.mono, fontSize: 12, color: "rgba(26,25,22,0.75)" },
-    recTx: { fontFamily: fonts.mono, fontSize: 10, color: c.paperMuted, marginTop: 8 },
+    recRow: { fontFamily: lk.ticketMono ? fonts.mono : fonts.body, fontSize: 12, color: "rgba(26,25,22,0.75)" },
+    recTx: { fontFamily: lk.ticketMono ? fonts.mono : fonts.body, fontSize: 10, color: c.paperMuted, marginTop: 8 },
     footer: { marginTop: 12, gap: 10, alignItems: "stretch" },
-    pitchBtn: { backgroundColor: c.accent, borderRadius: 12, paddingVertical: 14, alignItems: "center" },
+    pitchBtn: { backgroundColor: c.accent, borderRadius: lk.ctaRadius, paddingVertical: 14, alignItems: "center" },
     pitchBtnTxt: { fontFamily: fonts.bodySemi, fontSize: 14, color: c.accentFg },
     resetTxt: { fontFamily: fonts.body, fontSize: 14, color: c.dim, textAlign: "center", paddingVertical: 8 },
     demoVault: { fontFamily: fonts.body, fontSize: 11, color: c.dim, textAlign: "center" },

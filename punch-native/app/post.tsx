@@ -12,11 +12,15 @@ import {
 import { useRouter } from "expo-router";
 import { usePunch, useT, useColors } from "../lib/punch/store";
 import { fonts } from "../lib/punch/fonts";
+import { lookTokens } from "../lib/punch/looks";
 
 export default function PostScreen() {
   const t = useT();
   const c = useColors();
-  const s = useMemo(() => makeStyles(c), [c]);
+  // Publication : inputs et CTA suivent l'habillage (ctaRadius).
+  const look = usePunch((st) => st.look);
+  const lk = useMemo(() => lookTokens(look), [look]);
+  const s = useMemo(() => makeStyles(c, lk), [c, lk]);
   const locale = usePunch((s) => s.locale);
   const postShift = usePunch((s) => s.postShift);
   const router = useRouter();
@@ -104,7 +108,7 @@ export default function PostScreen() {
   );
 }
 
-function makeStyles(c: ReturnType<typeof useColors>) {
+function makeStyles(c: ReturnType<typeof useColors>, lk: ReturnType<typeof lookTokens>) {
   return StyleSheet.create({
     wrap: { flex: 1, backgroundColor: c.bg },
     content: { paddingTop: 64, paddingHorizontal: 24, paddingBottom: 40 },
@@ -113,15 +117,15 @@ function makeStyles(c: ReturnType<typeof useColors>) {
     title: { fontFamily: fonts.display, fontSize: 26, color: c.fg },
     body: { fontFamily: fonts.body, fontSize: 14, color: c.dim2, lineHeight: 20, marginTop: 10, maxWidth: "95%" },
     label: { fontFamily: fonts.mono, fontSize: 11, color: c.dim, textTransform: "uppercase", letterSpacing: 0.5, marginTop: 18, marginBottom: 8 },
-    input: { backgroundColor: c.card, borderRadius: 16, paddingHorizontal: 16, paddingVertical: 14, fontFamily: fonts.body, fontSize: 15, color: c.fg },
+    input: { backgroundColor: c.card, borderRadius: lk.ctaRadius, paddingHorizontal: 16, paddingVertical: 14, fontFamily: fonts.body, fontSize: 15, color: c.fg },
     row2: { flexDirection: "row", gap: 12 },
     col: { flex: 1 },
     tokenRow: { flexDirection: "row", gap: 8, marginTop: 18 },
-    tokenBtn: { flex: 1, backgroundColor: c.card, borderRadius: 999, height: 44, alignItems: "center", justifyContent: "center" },
+    tokenBtn: { flex: 1, backgroundColor: c.card, borderRadius: lk.ctaRadius, height: 44, alignItems: "center", justifyContent: "center" },
     tokenBtnActive: { backgroundColor: c.accent },
     tokenBtnTxt: { fontFamily: fonts.mono, fontSize: 12, color: c.dim },
     tokenBtnTxtActive: { color: c.accentFg },
-    ctaBtn: { backgroundColor: c.accent, borderRadius: 16, paddingVertical: 16, alignItems: "center", marginTop: 24 },
+    ctaBtn: { backgroundColor: c.accent, borderRadius: lk.ctaRadius, paddingVertical: 16, alignItems: "center", marginTop: 24 },
     ctaTxt: { fontFamily: fonts.bodySemi, fontSize: 16, color: c.accentFg },
   });
 }

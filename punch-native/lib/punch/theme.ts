@@ -1,4 +1,4 @@
-import type { Look } from "./types";
+import type { Look, Theme } from "./types";
 
 // Palette reprise à l'identique de punch-app/src/styles.css (source de vérité du design).
 export const palettes = {
@@ -67,190 +67,207 @@ export const palettes = {
   },
 };
 
-export type Theme = keyof typeof palettes;
-export type Palette = (typeof palettes)["dark"];
+export type ThemePalette = (typeof palettes)["dark"];
+export type Palette = ThemePalette;
 
-// Les habillages (looks PUNCH-ABC) s'appliquent à TOUTE l'app comme des
-// variantes par thème — source : punch app grok/PUNCH-ABC/src/styles.css :
-//   a = rond/horloge/mono  (pill radius, IBM Plex Mono, or sur noir / crème-or)
-//   b = ticket/serif       (angles 2px, Fraunces, papier)
-//   c = vide/hardware      (suit le thème, sans fioritures)
-// Le THÈME reste maître : chaque look définit ses 4 variantes (dark, light,
-// gold = gold black, goldLight = gold clair) — les deux gold sont dérivées
-// des palettes dark/light du skin, teintées or pour coller au thème.
-export const lookPalettes: Record<
-  Look,
-  {
-    dark?: Partial<Palette>;
-    light?: Partial<Palette>;
-    gold?: Partial<Palette>;
-    goldLight?: Partial<Palette>;
-  } | null
-> = {
+// Palettes validées des 3 habillages — PORTAGE EXACT du web validé
+// (punch app grok/PUNCH/src/lib/punch/looks.ts — lookPalettes).
+// 13 tokens (bg fg dim dim2 card input border borderLight accent accentFg
+// paper paperFg paperMuted) × 4 thèmes × 3 looks.
+//  - a : machine or (dark or sur noir, light crème, gold lampe or, goldLight jaune machine)
+//  - b : papier de pointeuse (dark brûlé, light lin, gold crème-or, goldLight lin doré)
+//  - c : MONOLITHE — la même palette mono dans les 4 thèmes (le skin ignore
+//    délibérément le thème, c'est ce qui le rend reconnaissable).
+export const lookPalettes: Record<Look, Record<Theme, Palette>> = {
   a: {
     dark: {
       bg: "#0c0a07",
+      fg: "#f0e0ad",
+      dim: "#8a7030",
+      dim2: "#a09060",
       card: "#16120c",
       input: "#1e1910",
-      fg: "#f0e0ad",
-      dim2: "#a09060",
+      border: "rgba(212, 175, 55, 0.35)",
+      borderLight: "rgba(212, 175, 55, 0.18)",
       accent: "#d4af37",
       accentFg: "#0c0a07",
+      paper: "#ebe1c4",
+      paperFg: "#1a1308",
+      paperMuted: "#8a7040",
     },
     light: {
-      // Valeurs EXACTES de html[data-theme="light"][data-skin="a"] (styles.css) :
-      // jaune machine saturé, accent = encre noire sur fond jaune.
+      bg: "#f6f1e4",
+      fg: "#2a1a00",
+      dim: "#7a5600",
+      dim2: "#5c3d00",
+      card: "#fff8e6",
+      input: "#fff3b0",
+      border: "rgba(42, 26, 0, 0.28)",
+      borderLight: "rgba(42, 26, 0, 0.12)",
+      accent: "#2a1a00",
+      accentFg: "#fff8e6",
+      paper: "#fffaf0",
+      paperFg: "#2a1a00",
+      paperMuted: "#7a5600",
+    },
+    gold: {
+      bg: "#1a1408",
+      fg: "#f0c14b",
+      dim: "#a0844c",
+      dim2: "#c4a35a",
+      card: "#241c0c",
+      input: "#2e2410",
+      border: "rgba(240, 193, 75, 0.4)",
+      borderLight: "rgba(240, 193, 75, 0.2)",
+      accent: "#f0c14b",
+      accentFg: "#1a1408",
+      paper: "#f0e0ad",
+      paperFg: "#1a1408",
+      paperMuted: "#8a7040",
+    },
+    goldLight: {
       bg: "#f0c14b",
+      fg: "#2a1a00",
+      dim: "#7a5600",
+      dim2: "#5c3d00",
       card: "#ffe08a",
       input: "#fff3b0",
-      fg: "#2a1a00",
-      dim: "#7a5600", // --color-subtle
-      dim2: "#5c3d00", // --color-muted
+      border: "rgba(42, 26, 0, 0.35)",
+      borderLight: "rgba(42, 26, 0, 0.18)",
       accent: "#2a1a00",
       accentFg: "#f0c14b",
-      border: "rgba(42, 26, 0, 0.18)",
-      borderLight: "rgba(42, 26, 0, 0.35)",
-    },
-    // gold black : la variante dark du skin, accent or pur (machine or sur noir).
-    gold: {
-      bg: "#0b0906",
-      card: "#171208",
-      input: "#201a0a",
-      fg: "#f2dfa4",
-      dim: "#8a7a52",
-      dim2: "#b09a5e",
-      accent: "#e0b53e",
-      accentFg: "#171208",
-      border: "rgba(224, 181, 62, 0.3)",
-      borderLight: "rgba(224, 181, 62, 0.15)",
-    },
-    // gold clair : la variante light du skin, dorée.
-    goldLight: {
-      bg: "#f0dc9e",
-      card: "#f6e6ae",
-      input: "#fdf2c8",
-      fg: "#241a06",
-      dim: "#96742c",
-      dim2: "#6a5220",
-      accent: "#8a6410",
-      accentFg: "#fdf2c8",
-      border: "rgba(138, 100, 16, 0.4)",
-      borderLight: "rgba(138, 100, 16, 0.22)",
-      paper: "#fdf2c8",
-      paperFg: "#241a06",
-      paperMuted: "#8a6f34",
+      paper: "#fff8e6",
+      paperFg: "#2a1a00",
+      paperMuted: "#7a5600",
     },
   },
   b: {
     dark: {
       bg: "#120e09",
+      fg: "#f4ead0",
+      dim: "#8a7364",
+      dim2: "#6b5344",
       card: "#1c160f",
       input: "#261e14",
-      fg: "#f4ead0",
-      paper: "#ebe1c4",
-      paperFg: "#1a1308",
+      border: "rgba(244, 234, 208, 0.28)",
+      borderLight: "rgba(244, 234, 208, 0.12)",
       accent: "#ebe1c4",
       accentFg: "#120e09",
-    },
-    // gold black : ticket papier sous lampe — fond brun-noir, ticket crème-or.
-    gold: {
-      bg: "#140f08",
-      card: "#201a10",
-      input: "#2a2214",
-      fg: "#f4e8c8",
-      accent: "#f0e2b8",
-      accentFg: "#140f08",
-      paper: "#f0e6c6",
-      paperFg: "#1a1408",
-      paperMuted: "#7a6a44",
-      border: "rgba(212, 175, 55, 0.25)",
-      borderLight: "rgba(212, 175, 55, 0.13)",
-    },
-    // gold clair : papier doré vieilli.
-    goldLight: {
-      bg: "#e3cf96",
-      card: "#f0e2b4",
-      input: "#f9efd0",
-      fg: "#241a06",
-      dim: "#96742c",
-      dim2: "#6a5220",
-      accent: "#241a06",
-      accentFg: "#f9efd0",
-      paper: "#fffbe8",
-      paperFg: "#241a06",
-      paperMuted: "#8a7038",
-      border: "rgba(120, 90, 20, 0.4)",
-      borderLight: "rgba(120, 90, 20, 0.22)",
+      paper: "#ebe1c4",
+      paperFg: "#1a1308",
+      paperMuted: "#6b5344",
     },
     light: {
-      // Valeurs EXACTES de html[data-theme="light"][data-skin="b"] : fond lin
-      // sable, surfaces papier ivoire, accent = encre brune.
-      bg: "#cfc3a8",
+      bg: "#e8e0d2",
+      fg: "#2c1810",
+      dim: "#8a7364",
+      dim2: "#6b5344",
       card: "#f4efe4",
       input: "#fffaf0",
-      fg: "#2c1810",
-      dim: "#8a7364", // --color-subtle
-      dim2: "#6b5344", // --color-muted
+      border: "rgba(44, 24, 16, 0.22)",
+      borderLight: "rgba(44, 24, 16, 0.1)",
       accent: "#2c1810",
       accentFg: "#f4efe4",
       paper: "#fffaf0",
       paperFg: "#2c1810",
-      paperMuted: "#8a7364",
+      paperMuted: "#6b5344",
+    },
+    gold: {
+      bg: "#1c160c",
+      fg: "#e8d5a0",
+      dim: "#a0844c",
+      dim2: "#c4a35a",
+      card: "#261e10",
+      input: "#2e2414",
+      border: "rgba(232, 213, 160, 0.3)",
+      borderLight: "rgba(232, 213, 160, 0.14)",
+      accent: "#e8d5a0",
+      accentFg: "#1c160c",
+      paper: "#f4ead0",
+      paperFg: "#1c160c",
+      paperMuted: "#8a7040",
+    },
+    goldLight: {
+      bg: "#cfc3a8",
+      fg: "#2c1810",
+      dim: "#8a7364",
+      dim2: "#6b5344",
+      card: "#f4efe4",
+      input: "#fffaf0",
       border: "rgba(44, 24, 16, 0.22)",
-      borderLight: "rgba(44, 24, 16, 0.12)",
+      borderLight: "rgba(44, 24, 16, 0.1)",
+      accent: "#2c1810",
+      accentFg: "#f4efe4",
+      paper: "#fffaf0",
+      paperFg: "#2c1810",
+      paperMuted: "#6b5344",
     },
   },
   c: {
-    // C = MONOLITHE HARDWARE : la source force html[data-skin="c"] (et ses
-    // variantes light/dark) sur bg = surface = #0c0c0d, texte clair, lignes
-    // transparentes, accent = texte — DANS TOUS LES THÈMES. Le skin ignore
-    // délibérément la palette du thème (c'est ce qui le rend reconnaissable).
+    // C = MONOLITHE NOIR dans les 4 thèmes (règle 2 de la checklist :
+    // "C est un monolithe noir dans les 4 thèmes").
     dark: {
+      bg: "#0c0c0d",
+      fg: "#f2f1ee",
+      dim: "#6e6c68",
+      dim2: "#9c9a96",
       card: "#0c0c0d",
-      input: "#0c0c0d",
+      input: "#141416",
+      border: "rgba(242, 241, 238, 0.18)",
+      borderLight: "transparent",
       accent: "#f2f1ee",
       accentFg: "#0c0c0d",
-      border: "transparent",
-      borderLight: "transparent",
+      paper: "#ebe6dc",
+      paperFg: "#1a1916",
+      paperMuted: "#6a6560",
     },
     light: {
       bg: "#0c0c0d",
-      card: "#0c0c0d",
-      input: "#0c0c0d",
       fg: "#f2f1ee",
       dim: "#6e6c68",
       dim2: "#9c9a96",
+      card: "#0c0c0d",
+      input: "#141416",
+      border: "rgba(242, 241, 238, 0.18)",
+      borderLight: "transparent",
       accent: "#f2f1ee",
       accentFg: "#0c0c0d",
-      border: "transparent",
-      borderLight: "transparent",
+      paper: "#ebe6dc",
+      paperFg: "#1a1916",
+      paperMuted: "#6a6560",
     },
     gold: {
       bg: "#0c0c0d",
-      card: "#0c0c0d",
-      input: "#0c0c0d",
       fg: "#f2f1ee",
       dim: "#6e6c68",
       dim2: "#9c9a96",
+      card: "#0c0c0d",
+      input: "#141416",
+      border: "rgba(242, 241, 238, 0.18)",
+      borderLight: "transparent",
       accent: "#f2f1ee",
       accentFg: "#0c0c0d",
-      border: "transparent",
-      borderLight: "transparent",
+      paper: "#ebe6dc",
+      paperFg: "#1a1916",
+      paperMuted: "#6a6560",
     },
     goldLight: {
       bg: "#0c0c0d",
-      card: "#0c0c0d",
-      input: "#0c0c0d",
       fg: "#f2f1ee",
       dim: "#6e6c68",
       dim2: "#9c9a96",
+      card: "#0c0c0d",
+      input: "#141416",
+      border: "rgba(242, 241, 238, 0.18)",
+      borderLight: "transparent",
       accent: "#f2f1ee",
       accentFg: "#0c0c0d",
-      border: "transparent",
-      borderLight: "transparent",
+      paper: "#ebe6dc",
+      paperFg: "#1a1916",
+      paperMuted: "#6a6560",
     },
   },
-} as const;
+};
 
 // Couleurs de token, identiques quel que soit le thème (non redéfinies en clair dans styles.css).
 export const tokenColors = {

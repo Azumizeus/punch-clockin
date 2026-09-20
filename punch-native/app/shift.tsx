@@ -11,13 +11,18 @@ import {
 import { useRouter } from "expo-router";
 import { usePunch, useT, useColors } from "../lib/punch/store";
 import { fonts } from "../lib/punch/fonts";
+import { lookTokens } from "../lib/punch/looks";
 import { tokenColors } from "../lib/punch/theme";
 import { formatAmt, splitOf } from "../lib/punch/format";
 
 export default function ShiftScreen() {
   const t = useT();
   const c = useColors();
-  const s = useMemo(() => makeStyles(c), [c]);
+  // L'habillage pilote aussi les rayons de CET écran (15e règle du portage :
+  // CTA / inputs / chips suivent ctaRadius, comme --cta-radius côté web).
+  const look = usePunch((st) => st.look);
+  const lk = useMemo(() => lookTokens(look), [look]);
+  const s = useMemo(() => makeStyles(c, lk), [c, lk]);
   const locale = usePunch((s) => s.locale);
   const activeShiftId = usePunch((s) => s.activeShiftId);
   const shifts = usePunch((s) => s.shifts);
@@ -260,7 +265,7 @@ function PulseSwapTask({ s, spread, spreadSplit, cta, onDone }: {
   );
 }
 
-function makeStyles(c: ReturnType<typeof useColors>) {
+function makeStyles(c: ReturnType<typeof useColors>, lk: ReturnType<typeof lookTokens>) {
   return StyleSheet.create({
     wrap: { flex: 1, backgroundColor: c.bg },
     content: { paddingTop: 64, paddingBottom: 40, paddingHorizontal: 24 },
@@ -270,8 +275,8 @@ function makeStyles(c: ReturnType<typeof useColors>) {
     title: { fontFamily: fonts.display, fontSize: 26, color: c.fg, marginTop: 6, lineHeight: 30 },
     blurb: { fontFamily: fonts.body, fontSize: 14, color: c.dim2, lineHeight: 20, marginTop: 10 },
     metaRow: { flexDirection: "row", alignItems: "center", gap: 10, marginTop: 16 },
-    tokenChip: { backgroundColor: c.card, borderRadius: 999, paddingHorizontal: 10, paddingVertical: 4 },
-    tokenChipTxt: { fontFamily: fonts.mono, fontSize: 11, color: c.dim2 },
+    tokenChip: { backgroundColor: c.card, borderRadius: lk.ctaRadius, paddingHorizontal: 10, paddingVertical: 4 },
+    tokenChipTxt: { fontFamily: lk.ticketMono ? fonts.mono : fonts.bodySemi, fontSize: 11, color: c.dim2 },
     metaTxt: { fontFamily: fonts.mono, fontSize: 13, color: c.fg },
     splitCard: { backgroundColor: c.card, borderRadius: 16, padding: 14, marginTop: 16 },
     splitLine: {
@@ -285,7 +290,7 @@ function makeStyles(c: ReturnType<typeof useColors>) {
     hint: { fontFamily: fonts.body, fontSize: 14, color: c.dim2, marginBottom: 12 },
     taskLabel: { fontFamily: fonts.mono, fontSize: 11, color: c.dim, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 8 },
     textInput: {
-      backgroundColor: c.card, borderRadius: 16, padding: 14, color: c.fg,
+      backgroundColor: c.card, borderRadius: lk.ctaRadius, padding: 14, color: c.fg,
       fontFamily: fonts.body, fontSize: 14, minHeight: 110, textAlignVertical: "top",
     },
     scanBox: { alignItems: "center", backgroundColor: c.card, borderRadius: 24, paddingVertical: 40 },
@@ -300,9 +305,9 @@ function makeStyles(c: ReturnType<typeof useColors>) {
     holdTrack: { width: "100%", height: 4, borderRadius: 2, backgroundColor: c.input, marginTop: 16, overflow: "hidden" },
     holdFill: { height: 4, borderRadius: 2 },
     holdSub: { fontFamily: fonts.mono, fontSize: 10, color: c.dim, marginTop: 10 },
-    secondaryBtn: { backgroundColor: c.card, borderRadius: 16, paddingVertical: 14, alignItems: "center" },
+    secondaryBtn: { backgroundColor: c.card, borderRadius: lk.ctaRadius, paddingVertical: 14, alignItems: "center" },
     secondaryBtnTxt: { fontFamily: fonts.bodySemi, fontSize: 15, color: c.fg },
-    ctaBtn: { backgroundColor: c.accent, borderRadius: 16, paddingVertical: 15, alignItems: "center", marginTop: 14 },
+    ctaBtn: { backgroundColor: c.accent, borderRadius: lk.ctaRadius, paddingVertical: 15, alignItems: "center", marginTop: 14 },
     ctaText: { fontFamily: fonts.bodySemi, fontSize: 16, color: c.accentFg },
     ctaDisabled: { opacity: 0.4 },
   });

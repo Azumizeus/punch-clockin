@@ -12,11 +12,16 @@ import { usePunch, useT, useColors } from "../lib/punch/store";
 import { fonts } from "../lib/punch/fonts";
 import { tokenColors } from "../lib/punch/theme";
 import { formatAmt, shortAddr } from "../lib/punch/format";
+import { lookTokens } from "../lib/punch/looks";
 
 export default function ReceiptScreen() {
   const t = useT();
   const c = useColors();
-  const s = useMemo(() => makeStyles(c), [c]);
+  // Reçu = ticket : rayon et mono pilotés par l'habillage (ticketRadius /
+  // ticketMono), CTA et chip suivent ctaRadius — portage du web validé.
+  const look = usePunch((st) => st.look);
+  const lk = useMemo(() => lookTokens(look), [look]);
+  const s = useMemo(() => makeStyles(c, lk), [c, lk]);
   const lastReceiptId = usePunch((s) => s.lastReceiptId);
   const receipts = usePunch((s) => s.receipts);
   const setTab = usePunch((s) => s.setTab);
@@ -111,34 +116,34 @@ function Row({ s, k, v, strong, last }: { s: ReturnType<typeof makeStyles>; k: s
   );
 }
 
-function makeStyles(c: ReturnType<typeof useColors>) {
+function makeStyles(c: ReturnType<typeof useColors>, lk: ReturnType<typeof lookTokens>) {
   return StyleSheet.create({
     wrap: { flex: 1, backgroundColor: c.bg },
     content: { paddingTop: 64, paddingHorizontal: 24, paddingBottom: 24 },
     backBtn: { marginTop: 64, marginLeft: 24 },
     backText: { fontFamily: fonts.body, color: c.dim, fontSize: 14 },
     eyebrow: { fontFamily: fonts.mono, fontSize: 11, color: c.dim, textTransform: "uppercase", letterSpacing: 1.5, marginBottom: 16 },
-    card: { backgroundColor: c.paper, borderRadius: 24, padding: 20 },
+    card: { backgroundColor: c.paper, borderRadius: lk.ticketRadius, padding: 20 },
     cardHead: { flexDirection: "row", justifyContent: "space-between", alignItems: "flex-start", gap: 8 },
     cardHeadText: { flex: 1 },
     cardEyebrow: { fontFamily: fonts.body, fontSize: 11, color: c.paperMuted, textTransform: "uppercase", letterSpacing: 0.5 },
     cardTitle: { fontFamily: fonts.display, fontSize: 19, color: c.paperFg, marginTop: 4 },
-    tokenChip: { backgroundColor: "rgba(0,0,0,0.06)", borderRadius: 999, paddingHorizontal: 10, paddingVertical: 4 },
-    tokenChipTxt: { fontFamily: fonts.mono, fontSize: 11, color: c.paperMuted },
+    tokenChip: { backgroundColor: "rgba(0,0,0,0.06)", borderRadius: lk.ctaRadius, paddingHorizontal: 10, paddingVertical: 4 },
+    tokenChipTxt: { fontFamily: lk.ticketMono ? fonts.mono : fonts.bodySemi, fontSize: 11, color: c.paperMuted },
     rows: { marginTop: 18 },
     row: {
       flexDirection: "row", justifyContent: "space-between", paddingVertical: 6,
       borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: "rgba(26,25,22,0.08)",
     },
     rowLast: { borderBottomWidth: 0 },
-    rowK: { fontFamily: fonts.mono, fontSize: 13, color: c.paperMuted },
-    rowV: { fontFamily: fonts.mono, fontSize: 13, color: "rgba(26,25,22,0.8)" },
-    rowVStrong: { fontFamily: fonts.mono, color: c.paperFg, fontWeight: "600" },
-    sig: { fontFamily: fonts.mono, fontSize: 10, color: c.paperMuted, marginTop: 16 },
+    rowK: { fontFamily: lk.ticketMono ? fonts.mono : fonts.body, fontSize: 13, color: c.paperMuted },
+    rowV: { fontFamily: lk.ticketMono ? fonts.mono : fonts.body, fontSize: 13, color: "rgba(26,25,22,0.8)" },
+    rowVStrong: { fontFamily: lk.ticketMono ? fonts.mono : fonts.bodySemi, color: c.paperFg, fontWeight: "600" },
+    sig: { fontFamily: lk.ticketMono ? fonts.mono : fonts.body, fontSize: 10, color: c.paperMuted, marginTop: 16 },
     footerRow: { flexDirection: "row", gap: 8, paddingHorizontal: 24, paddingBottom: 24, paddingTop: 8 },
-    footerBtnSecondary: { flex: 1, backgroundColor: c.card, borderRadius: 12, paddingVertical: 14, alignItems: "center" },
+    footerBtnSecondary: { flex: 1, backgroundColor: c.card, borderRadius: lk.ctaRadius, paddingVertical: 14, alignItems: "center" },
     footerBtnSecondaryTxt: { fontFamily: fonts.bodySemi, fontSize: 14, color: c.fg },
-    footerBtn: { flex: 1, backgroundColor: c.accent, borderRadius: 12, paddingVertical: 14, alignItems: "center" },
+    footerBtn: { flex: 1, backgroundColor: c.accent, borderRadius: lk.ctaRadius, paddingVertical: 14, alignItems: "center" },
     footerBtnTxt: { fontFamily: fonts.bodySemi, fontSize: 14, color: c.accentFg },
   });
 }

@@ -12,6 +12,7 @@ import * as Haptics from "expo-haptics";
 import { useRouter, Stack } from "expo-router";
 import { usePunch, useT, useColors } from "../lib/punch/store";
 import { fonts } from "../lib/punch/fonts";
+import { lookGallery } from "../lib/punch/looks";
 import type { Look } from "../lib/punch/types";
 
 // Les 3 habillages viennent de l'export web (public/looks) : trois directions
@@ -23,11 +24,13 @@ const LOOK_IMAGES = {
   c: require("../assets/images/looks/c.jpg"),
 } as const;
 
-const LOOK_ORDER: Look[] = ["c", "a", "b"];
+const LOOK_ORDER: Look[] = ["a", "b", "c"];
+// Texte validé de la galerie web (looks-screen + lookGallery) : noms,
+// sur-titres SKIN et descriptions — plus de libellés « Pointeuse / Editorial ».
 const LOOK_NAME: Record<Look, { en: string; fr: string }> = {
-  a: { en: "Industrial", fr: "Pointeuse" },
-  b: { en: "Paper ticket", fr: "Ticket papier" },
-  c: { en: "Editorial", fr: "Éditorial" },
+  a: { en: "Horloge d'usine", fr: "Horloge d'usine" },
+  b: { en: "Ticket de pointeuse", fr: "Ticket de pointeuse" },
+  c: { en: "Hardware Seeker", fr: "Hardware Seeker" },
 };
 
 export default function LooksScreen() {
@@ -75,6 +78,7 @@ export default function LooksScreen() {
             <View key={l} style={[s.card, { width: cardW, borderColor: active ? c.accent : c.borderLight }]}>
               <Image source={LOOK_IMAGES[l]} style={s.img} resizeMode="cover" />
               <View style={s.cardBody}>
+                <Text style={s.cardSub}>{lookGallery[l].sub}</Text>
                 <View style={s.cardHead}>
                   <Text style={s.cardName}>{LOOK_NAME[l][locale]}</Text>
                   {active && (
@@ -83,6 +87,7 @@ export default function LooksScreen() {
                     </View>
                   )}
                 </View>
+                <Text style={s.cardDesc}>{lookGallery[l].desc[locale]}</Text>
                 <TouchableOpacity
                   style={[
                     s.useBtn,
@@ -93,7 +98,7 @@ export default function LooksScreen() {
                   activeOpacity={0.85}
                 >
                   <Text style={[s.useBtnTxt, { color: active ? c.fg : c.accentFg }]}>
-                    {active ? `✓ ${t.looksUsed}` : t.looksUse}
+                    {active ? `✓ ${t.looksUsed}` : `${t.looksUse} ${l.toUpperCase()} →`}
                   </Text>
                 </TouchableOpacity>
                 {applied === l ? (
@@ -133,7 +138,9 @@ function makeStyles(c: ReturnType<typeof useColors>) {
     },
     img: { width: "100%", height: 260 },
     cardBody: { padding: 14 },
-    cardHead: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginBottom: 10 },
+    cardSub: { fontFamily: fonts.mono, fontSize: 11, color: c.dim, textTransform: "uppercase", letterSpacing: 2, marginBottom: 4 },
+    cardHead: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginBottom: 6 },
+    cardDesc: { fontFamily: fonts.body, fontSize: 13, color: c.dim2, lineHeight: 18, marginBottom: 10 },
     cardName: { fontFamily: fonts.display, fontSize: 18, color: c.fg },
     chip: { borderRadius: 999, paddingHorizontal: 10, paddingVertical: 4 },
     chipTxt: { fontFamily: fonts.bodySemi, fontSize: 11 },

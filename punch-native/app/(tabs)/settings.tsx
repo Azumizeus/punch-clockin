@@ -3,21 +3,23 @@ import { View, Text, TouchableOpacity, ScrollView, StyleSheet, ActivityIndicator
 import { useRouter } from "expo-router";
 import { usePunch, useT, useColors } from "../../lib/punch/store";
 import { fonts } from "../../lib/punch/fonts";
-import { lookGallery } from "../../lib/punch/looks";
+import { lookGallery, lookTokens } from "../../lib/punch/looks";
 import { useLeaveNetwork } from "../../lib/punch/useLeaveNetwork";
 import type { Locale, Theme } from "../../lib/punch/types";
 
 export default function SettingsScreen() {
   const t = useT();
   const c = useColors();
-  const s = useMemo(() => makeStyles(c), [c]);
+  // Réglages : rayons (sections, pills, boutons) suivent l'habillage.
+  const look = usePunch((st) => st.look);
+  const lk = useMemo(() => lookTokens(look), [look]);
+  const s = useMemo(() => makeStyles(c, lk), [c, lk]);
   const router = useRouter();
 
   const locale = usePunch((st) => st.locale);
   const setLocale = usePunch((st) => st.setLocale);
   const theme = usePunch((st) => st.theme);
   const setTheme = usePunch((st) => st.setTheme);
-  const look = usePunch((st) => st.look);
   const screensaverSecs = usePunch((st) => st.screensaverSecs);
   const setScreensaver = usePunch((st) => st.setScreensaver);
   const wallet = usePunch((st) => st.wallet);
@@ -172,14 +174,14 @@ function OptionPill({
   );
 }
 
-function makeStyles(c: ReturnType<typeof useColors>) {
+function makeStyles(c: ReturnType<typeof useColors>, lk: ReturnType<typeof lookTokens>) {
   return StyleSheet.create({
     wrap: { flex: 1, backgroundColor: c.bg },
     content: { paddingTop: 16, paddingHorizontal: 24, paddingBottom: 40 },
     title: { fontFamily: fonts.display, fontSize: 26, color: c.fg, marginBottom: 24 },
     section: {
       backgroundColor: c.card,
-      borderRadius: 16,
+      borderRadius: lk.ctaRadius,
       padding: 16,
       marginBottom: 16,
     },
@@ -196,7 +198,7 @@ function makeStyles(c: ReturnType<typeof useColors>) {
       flex: 1,
       borderWidth: 1,
       borderColor: c.border,
-      borderRadius: 12,
+      borderRadius: lk.ctaRadius,
       paddingVertical: 12,
       alignItems: "center",
     },
@@ -214,7 +216,7 @@ function makeStyles(c: ReturnType<typeof useColors>) {
     dangerBtn: {
       borderWidth: 1,
       borderColor: "#e06060",
-      borderRadius: 12,
+      borderRadius: lk.ctaRadius,
       paddingVertical: 14,
       alignItems: "center",
       marginTop: 8,
@@ -223,7 +225,7 @@ function makeStyles(c: ReturnType<typeof useColors>) {
     looksBtn: { alignItems: "center", paddingVertical: 6 },
     looksBtnMain: { fontFamily: fonts.bodySemi, fontSize: 15, color: c.fg },
     looksBtnSub: { fontFamily: fonts.body, fontSize: 12, color: c.dim, marginTop: 3 },
-    guideBtn: { backgroundColor: c.accent, borderRadius: 12, paddingVertical: 13, alignItems: "center" },
+    guideBtn: { backgroundColor: c.accent, borderRadius: lk.ctaRadius, paddingVertical: 13, alignItems: "center" },
     guideBtnTxt: { fontFamily: fonts.bodySemi, fontSize: 14, color: c.accentFg },
     dangerHint: { fontFamily: fonts.body, fontSize: 11, color: c.dim, textAlign: "center", marginTop: 8, lineHeight: 15 },
   });

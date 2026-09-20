@@ -969,7 +969,7 @@ export const usePunch = create<
           localeChosen: Boolean(p.localeChosen),
           theme:
             p.theme === "light" || p.theme === "gold" || p.theme === "goldLight" ? p.theme : "dark",
-          look: p.look === "a" || p.look === "b" ? p.look : "c",
+          look: p.look === "a" || p.look === "b" || p.look === "c" ? p.look : "c",
           screensaverSecs:
             p.screensaverSecs === 10 || p.screensaverSecs === 30 || p.screensaverSecs === 60
               ? p.screensaverSecs
@@ -1005,25 +1005,13 @@ export function useT() {
 export function useColors() {
   const theme = usePunch((s) => s.theme);
   const look = usePunch((s) => s.look);
-  // Portage CSS PUNCH-ABC : l'habillage change la police GLOBALE (mono pour a,
-  // serif pour b). Mutation synchrone ici, avant les makeStyles des écrans.
+  // Portage web validé : l'habillage change la police GLOBALE (mono pour a,
+  // serif pour b) — mutation synchrone ici, avant les makeStyles des écrans.
   applyLookFonts(look);
-  const base = palettes[theme] ?? palettes.dark;
-  // Le THÈME reste maître : l'habillage applique SA variante pour ce thème —
-  // les 4 thèmes (dark, light, gold, goldLight) ont chacune leur variante par
-  // habillage. Identité fraîche à chaque appel pour que tous les styles se
-  // recalculent au changement d'habillage ou de thème.
-  const variant = lookPalettes[look];
-  const over = variant
-    ? theme === "light"
-      ? variant.light
-      : theme === "gold"
-        ? variant.gold
-        : theme === "goldLight"
-          ? variant.goldLight
-          : variant.dark
-    : undefined;
-  return { ...base, ...(over ?? {}) };
+  // Chaque habillage définit ses 13 tokens pour CHACUN des 4 thèmes (portage
+  // exact de lookPalettes du web validé). Identité fraîche à chaque appel pour
+  // que tous les styles se recalculent au changement d'habillage ou de thème.
+  return lookPalettes[look][theme] ?? palettes[theme] ?? palettes.dark;
 }
 
 export function rehydratePunch() {
@@ -1031,14 +1019,14 @@ export function rehydratePunch() {
 }
 
 /**
- * Formes globales par habillage (portage des radius PUNCH-ABC appliqués à
+ * Formes globales par habillage (portage du --radius du web validé appliqué à
  * toute la page) : A = pilules partout, B = angles vifs 2px, C = doux 16px.
  * Les cartes, rangées et boutons de TOUS les écrans s'en servent — c'est ce
  * qui rend le changement d'habillage visible au-delà de la police.
  */
 export function useShape() {
   const look = usePunch((s) => s.look);
-  if (look === "a") return { card: 32, btn: 999, chip: 999 };
-  if (look === "b") return { card: 2, btn: 2, chip: 2 };
-  return { card: 16, btn: 14, chip: 10 };
+  if (look === "a") return { radius: 999, card: 999, btn: 999, chip: 999, input: 999 };
+  if (look === "b") return { radius: 2, card: 2, btn: 2, chip: 2, input: 2 };
+  return { radius: 16, card: 16, btn: 16, chip: 10, input: 16 };
 }

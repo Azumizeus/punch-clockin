@@ -13,6 +13,7 @@ import {
 import { useRouter } from "expo-router";
 import { usePunch, useT, useColors } from "../lib/punch/store";
 import { fonts } from "../lib/punch/fonts";
+import { lookTokens } from "../lib/punch/looks";
 import { connectSeedVault } from "../lib/solana/wallet";
 import { TopBar } from "../components/TopBar";
 
@@ -21,10 +22,11 @@ const appIcon = require("../assets/images/icon.png");
 export default function ConnectScreen() {
   const t = useT();
   const c = useColors();
-  const s = useMemo(() => makeStyles(c), [c]);
+  const look = usePunch((s) => s.look);
+  const lk = useMemo(() => lookTokens(look), [look]);
+  const s = useMemo(() => makeStyles(c, lk), [c, lk]);
   const connect = usePunch((s) => s.connect);
   const connectReal = usePunch((s) => s.connectReal);
-  const look = usePunch((s) => s.look);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
@@ -116,7 +118,7 @@ export default function ConnectScreen() {
   );
 }
 
-function makeStyles(c: ReturnType<typeof useColors>) {
+function makeStyles(c: ReturnType<typeof useColors>, lk: ReturnType<typeof lookTokens>) {
   return StyleSheet.create({
     screen: { flex: 1, backgroundColor: c.bg },
     wrap: {
@@ -154,7 +156,7 @@ function makeStyles(c: ReturnType<typeof useColors>) {
     },
     btn: {
       backgroundColor: c.accent,
-      borderRadius: 16,
+      borderRadius: lk.ctaRadius,
       paddingVertical: 18,
       alignItems: "center",
       justifyContent: "center",

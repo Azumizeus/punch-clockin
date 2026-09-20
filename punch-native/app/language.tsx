@@ -3,13 +3,17 @@ import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { useRouter } from "expo-router";
 import { usePunch, useColors } from "../lib/punch/store";
 import { fonts } from "../lib/punch/fonts";
+import { lookTokens } from "../lib/punch/looks";
 import type { Locale } from "../lib/punch/types";
 
 export default function LanguageScreen() {
   const chooseLocale = usePunch((s) => s.chooseLocale);
   const router = useRouter();
   const c = useColors();
-  const s = useMemo(() => makeStyles(c), [c]);
+  // Le tout premier écran suit déjà l'habillage (rayons des boutons langue).
+  const look = usePunch((s) => s.look);
+  const lk = useMemo(() => lookTokens(look), [look]);
+  const s = useMemo(() => makeStyles(c, lk), [c, lk]);
 
   function pick(locale: Locale) {
     chooseLocale(locale);
@@ -35,7 +39,7 @@ export default function LanguageScreen() {
   );
 }
 
-function makeStyles(c: ReturnType<typeof useColors>) {
+function makeStyles(c: ReturnType<typeof useColors>, lk: ReturnType<typeof lookTokens>) {
   return StyleSheet.create({
     wrap: {
       flex: 1,
@@ -66,7 +70,7 @@ function makeStyles(c: ReturnType<typeof useColors>) {
       justifyContent: "center",
       gap: 12,
       backgroundColor: c.accent,
-      borderRadius: 16,
+      borderRadius: lk.ctaRadius,
       paddingVertical: 18,
       paddingHorizontal: 32,
       width: "100%",

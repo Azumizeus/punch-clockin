@@ -1,41 +1,42 @@
 import { fonts } from "./fonts";
 import type { Look } from "./types";
 
-// Rayons et polices par habillage, source PUNCH-ABC/src/styles.css :
+// Rayons et polices par habillage, source web validée punch app grok/PUNCH
+// (src/lib/punch/looks.ts — lookShape) :
 //  a = 999px partout + IBM Plex Mono (sans = mono, display = serif)
 //  b = 2px partout + Fraunces partout (sans = serif)
-//  c = rayons du design de base + Figtree/Fraunces
+//  c = 16px + Figtree/Fraunces
 export function lookShape(look: Look): { radius: number; bodyFont: string; displayFont: string } {
   if (look === "a") return { radius: 999, bodyFont: fonts.mono, displayFont: fonts.display };
-  if (look === "b") return { radius: 4, bodyFont: fonts.display, displayFont: fonts.display };
+  if (look === "b") return { radius: 2, bodyFont: fonts.display, displayFont: fonts.display };
   return { radius: 16, bodyFont: fonts.body, displayFont: fonts.display };
 }
 
-// Noms et accroches de la galerie, repris des looks-screen.tsx du workspace web
-// (« Horloge d'usine », « Ticket de pointeuse », « Hardware Seeker »).
+// Noms et accroches de la galerie — texte validé du web (punch app grok/PUNCH
+// src/lib/punch/looks.ts — lookGallery), repris à l'identique.
 export const lookGallery: Record<Look, { name: string; sub: string; desc: { fr: string; en: string } }> = {
   a: {
     name: "Horloge d'usine",
     sub: "SKIN A · CLOCK-MACHINE",
     desc: {
-      fr: "Chiffres monospace, pillules, cadran or sur noir — la beauté de la machine.",
-      en: "Monospace digits, pills, gold dial on black — the beauty of the machine.",
+      fr: "Chiffres monospace, pilules, cadran or — la beauté de la machine.",
+      en: "Monospace figures, pills, gold dial — machine beauty.",
     },
   },
   b: {
     name: "Ticket de pointeuse",
-    sub: "SKIN B · PAPER TICKET",
+    sub: "SKIN B · TIME-CARD",
     desc: {
-      fr: "Papier, serif, angles vifs : chaque pointage devient un reçu.",
-      en: "Paper, serif type, sharp corners: every punch becomes a receipt.",
+      fr: "Papier, pointillés, le reçu est l'écran.",
+      en: "Paper, dashes — the receipt is the screen.",
     },
   },
   c: {
     name: "Hardware Seeker",
-    sub: "SKIN C · HARDWARE",
+    sub: "SKIN C · SEEKER",
     desc: {
-      fr: "Monolithe noir, lignes effacées, chiffres nus. La machine et rien d'autre.",
-      en: "Black monolith, erased lines, bare digits. The machine and nothing else.",
+      fr: "Noir, vide, un éclair. L'app d'un téléphone, pas d'un site.",
+      en: "Black, empty, one bolt. A phone app, not a website.",
     },
   },
 };

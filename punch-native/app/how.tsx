@@ -9,11 +9,15 @@ import {
 import { useRouter } from "expo-router";
 import { usePunch, useT, useColors } from "../lib/punch/store";
 import { fonts } from "../lib/punch/fonts";
+import { lookTokens } from "../lib/punch/looks";
 
 export default function HowScreen() {
   const t = useT();
   const c = useColors();
-  const s = useMemo(() => makeStyles(c), [c]);
+  // Cartes étapes et CTA suivent les rayons de l'habillage.
+  const look = usePunch((st) => st.look);
+  const lk = useMemo(() => lookTokens(look), [look]);
+  const s = useMemo(() => makeStyles(c, lk), [c, lk]);
   const dismissHow = usePunch((s) => s.dismissHow);
   const router = useRouter();
 
@@ -46,7 +50,7 @@ export default function HowScreen() {
   );
 }
 
-function makeStyles(c: ReturnType<typeof useColors>) {
+function makeStyles(c: ReturnType<typeof useColors>, lk: ReturnType<typeof lookTokens>) {
   return StyleSheet.create({
     wrap: { flex: 1, backgroundColor: c.bg },
     content: { paddingTop: 80, paddingBottom: 40, paddingHorizontal: 24 },
@@ -60,7 +64,7 @@ function makeStyles(c: ReturnType<typeof useColors>) {
     },
     step: {
       backgroundColor: c.card,
-      borderRadius: 16,
+      borderRadius: lk.ctaRadius,
       padding: 20,
       marginBottom: 16,
     },
@@ -78,7 +82,7 @@ function makeStyles(c: ReturnType<typeof useColors>) {
     },
     ctaBtn: {
       backgroundColor: c.accent,
-      borderRadius: 12,
+      borderRadius: lk.ctaRadius,
       paddingVertical: 16,
       alignItems: "center",
       marginTop: 32,

@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
 import { useRouter } from "expo-router";
 import { usePunch, useT, useColors } from "../lib/punch/store";
 import { fonts } from "../lib/punch/fonts";
+import { lookTokens } from "../lib/punch/looks";
 
 const appIcon = require("../assets/images/icon.png");
 const LAST = 7;
@@ -10,7 +11,10 @@ const LAST = 7;
 export default function GuideScreen() {
   const t = useT();
   const c = useColors();
-  const s = useMemoStyles(c);
+  // Le guide interactif suit l'habillage : rayons CTA et mono du ticket.
+  const look = usePunch((st) => st.look);
+  const lk = useMemo(() => lookTokens(look), [look]);
+  const s = useMemo(() => makeStyles(c, lk), [c, lk]);
   const router = useRouter();
   const locale = usePunch((st) => st.locale);
   const setLocale = usePunch((st) => st.setLocale);
@@ -259,11 +263,7 @@ function StepPli({ t, s, c, sealed, onSeal }: any) {
   );
 }
 
-function useMemoStyles(c: ReturnType<typeof useColors>) {
-  return makeStyles(c);
-}
-
-function makeStyles(c: ReturnType<typeof useColors>) {
+function makeStyles(c: ReturnType<typeof useColors>, lk: ReturnType<typeof lookTokens>) {
   return StyleSheet.create({
     wrap: { flex: 1, backgroundColor: c.bg, paddingTop: 54 },
     header: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingHorizontal: 16 },
@@ -286,15 +286,15 @@ function makeStyles(c: ReturnType<typeof useColors>) {
     pBig: { fontFamily: fonts.body, fontSize: 15, color: c.dim2, lineHeight: 21, marginTop: 14, textAlign: "center", maxWidth: 280 },
     guideDial: { width: 168, height: 168, borderRadius: 84, alignItems: "center", justifyContent: "center", marginTop: 36 },
     guideDialIcon: { width: 44, height: 44, borderRadius: 10 },
-    ticket: { borderRadius: 6, paddingHorizontal: 18, paddingVertical: 22, marginTop: 20 },
+    ticket: { borderRadius: lk.ticketRadius, paddingHorizontal: 18, paddingVertical: 22, marginTop: 20 },
     ticketHead: { flexDirection: "row", justifyContent: "space-between", alignItems: "center" },
     ticketApp: { fontFamily: fonts.mono, fontSize: 10, textTransform: "uppercase", letterSpacing: 2 },
     ticketIcon: { width: 18, height: 18, borderRadius: 4 },
     ticketIn: { fontFamily: fonts.display, fontSize: 48, marginTop: 16 },
     ticketPlace: { fontFamily: fonts.display, fontSize: 22, marginTop: 6 },
-    ticketRule: { fontFamily: fonts.mono, fontSize: 12, marginTop: 20 },
+    ticketRule: { fontFamily: lk.ticketMono ? fonts.mono : fonts.body, fontSize: 12, marginTop: 20 },
     cutRow: { flexDirection: "row", gap: 8, marginTop: 28 },
-    cutBtn: { flex: 1, borderRadius: 14, paddingVertical: 22, alignItems: "center" },
+    cutBtn: { flex: 1, borderRadius: lk.ctaRadius, paddingVertical: 22, alignItems: "center" },
     cutPct: { fontFamily: fonts.display, fontSize: 26 },
     cutLabel: { fontFamily: fonts.body, fontSize: 11, marginTop: 6, textAlign: "center", lineHeight: 14 },
     globeDial: { width: 176, height: 176, borderRadius: 88, alignItems: "center", justifyContent: "center", marginTop: 28 },
@@ -309,7 +309,7 @@ function makeStyles(c: ReturnType<typeof useColors>) {
     hiRow: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", borderRadius: 14, paddingHorizontal: 16, paddingVertical: 16, marginTop: 20 },
     hiName: { fontFamily: fonts.bodySemi, fontSize: 15 },
     hiMeta: { fontFamily: fonts.body, fontSize: 12, marginTop: 2 },
-    hiBtn: { paddingHorizontal: 16, paddingVertical: 10, borderRadius: 10 },
+    hiBtn: { paddingHorizontal: 16, paddingVertical: 10, borderRadius: lk.ctaRadius },
     hiBtnTxt: { fontFamily: fonts.bodySemi, fontSize: 13 },
     hiNote: { fontFamily: fonts.body, fontSize: 14, marginTop: 14 },
     envelope: { borderRadius: 6, overflow: "hidden", marginTop: 20 },
@@ -323,7 +323,7 @@ function makeStyles(c: ReturnType<typeof useColors>) {
     pliDone: { fontFamily: fonts.display, fontSize: 19, color: c.fg, textAlign: "center", marginTop: 36 },
     footer: { flexDirection: "row", paddingHorizontal: 20, paddingBottom: 24 },
     footerRow: { flexDirection: "row", gap: 8, width: "100%" },
-    btn: { flex: 1, backgroundColor: c.accent, borderRadius: 12, paddingVertical: 15, alignItems: "center" },
+    btn: { flex: 1, backgroundColor: c.accent, borderRadius: lk.ctaRadius, paddingVertical: 15, alignItems: "center" },
     btnFull: { width: "100%" },
     btnSecondary: { backgroundColor: c.card },
     btnDisabled: { opacity: 0.4 },
