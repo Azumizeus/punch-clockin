@@ -22,7 +22,8 @@ const TOKENS: Token[] = ["USDC", "USDT", "SKR"];
 export default function WalletScreen() {
   const t = useT();
   const c = useColors();
-  const s = useMemo(() => makeStyles(c), [c]);
+  const sh = useShape();
+  const s = useMemo(() => makeStyles(c, sh), [c, sh]);
   const wallet = usePunch((s) => s.wallet);
   const rank = usePunch((s) => s.rank);
   const stake = usePunch((s) => s.stake);
@@ -231,8 +232,7 @@ export default function WalletScreen() {
   );
 }
 
-function makeStyles(c: ReturnType<typeof useColors>) {
-  const sh = useShape();
+function makeStyles(c: ReturnType<typeof useColors>, sh: ReturnType<typeof useShape>) {
   return StyleSheet.create({
     wrap: { flex: 1, backgroundColor: c.bg },
     content: { paddingTop: 16, paddingHorizontal: 24, paddingBottom: 40 },

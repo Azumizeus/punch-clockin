@@ -24,7 +24,8 @@ const FILTERS: (Token | "ALL")[] = ["ALL", "USDC", "USDT", "SKR"];
 export default function BoardScreen() {
   const t = useT();
   const c = useColors();
-  const s = useMemo(() => makeStyles(c), [c]);
+  const sh = useShape();
+  const s = useMemo(() => makeStyles(c, sh), [c, sh]);
   const locale = usePunch((st) => st.locale);
   const shifts = usePunch((st) => st.shifts);
   const wallet = usePunch((st) => st.wallet);
@@ -142,8 +143,7 @@ export default function BoardScreen() {
   );
 }
 
-function makeStyles(c: ReturnType<typeof useColors>) {
-  const sh = useShape();
+function makeStyles(c: ReturnType<typeof useColors>, sh: ReturnType<typeof useShape>) {
   return StyleSheet.create({
     wrap: { flex: 1, backgroundColor: c.bg },
     content: { paddingTop: 16, paddingHorizontal: 24, paddingBottom: 40 },
