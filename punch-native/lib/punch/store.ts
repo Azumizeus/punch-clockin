@@ -83,6 +83,7 @@ function seed(): PunchState {
     activeShiftId: null,
     activePliId: null,
     lastReceiptId: null,
+    lastTxError: null,
     lastPunchAt: null,
     streak: 3,
     crewOnline: 847,
@@ -365,6 +366,7 @@ export const usePunch = create<
             );
           } catch (e) {
             console.log("[PUNCH-TX] cashShift:", e);
+            set({ lastTxError: e instanceof Error ? e.message : String(e) });
             return null;
           }
         }
@@ -592,6 +594,7 @@ export const usePunch = create<
             );
           } catch (e) {
             console.log("[PUNCH-TX] postShift:", e);
+            set({ lastTxError: e instanceof Error ? e.message : String(e) });
             return "tx";
           }
         }

@@ -106,6 +106,53 @@ async function ensureAtaIx(
 }
 
 /**
+ * Erreur transaction lisible et honnête — l'app n'avale plus la vraie raison.
+ * Devnet public rate-limite (429) surtout depuis un réseau mobile ; une mission
+ * payée par le trésor qui échoue doit dire POURQUOI, pas juste "échouée".
+ */
+export function readableTxError(e: unknown): string {
+  const raw = e instanceof Error ? e.message : String(e ?? "");
+  if (/429|Too Many Requests|rate.?limit|-32005/i.test(raw))
+    return "RPC devnet saturé (limite de débit) — réessaie dans quelques secondes.";
+  if (/fetch failed|Network request failed|network request|timeout|aborted/i.test(raw))
+    return "Connexion réseau perdue — vérifie internet et réessaie.";
+  if (/simulation failed/i.test(raw)) {
+    const log = raw.match(/Instruction \d+[^\n"]*/)?.[0] ?? "";
+    return "Refusée on-chain : " + (log || raw).slice(0, 120);
+  }
+  if (/insufficient/i.test(raw)) return "Fonds insuffisants pour cette opération.";
+  return raw.slice(0, 140);
+}
+
+/**
+ * Soumission signée trésor avec retries : mêmes principes que signByUserAndSubmit.
+ * Le retry re-signe la MÊME transaction (même blockhash → même signature), donc
+ * c'est idempotent : jamais de double paiement, même si la 1re tentative avait
+ * atterri on-chain pendant qu'on attendait une confirmation expirée.
+ */
+async function sendTreasuryTxWithRetry(
+  connection: Connection,
+  tx: Transaction,
+  treasury: Keypair,
+  attempts = 3
+): Promise<string> {
+  let lastErr: unknown;
+  for (let attempt = 0; attempt < attempts; attempt++) {
+    try {
+      return await sendAndConfirmTransaction(connection, tx, [treasury], {
+        commitment: "confirmed",
+      });
+    } catch (e) {
+      lastErr = e;
+      if (attempt < attempts - 1) {
+        await new Promise((r) => setTimeout(r, 1500 * (attempt + 1)));
+      }
+    }
+  }
+  throw new Error(readableTxError(lastErr));
+}
+
+/**
  * Envoie un peu de SOL devnet du trésor vers le nouveau wallet, pour qu'il
  * puisse payer les frais de ses propres transactions signées (sans ça, un
  * wallet Seed Vault flambant neuf ne peut rien signer). Réel, pas simulé.
@@ -115,7 +162,7 @@ export async function sendTreasurySol(connection: Connection, userPubkey: Public
   const tx = new Transaction().add(
     SystemProgram.transfer({ fromPubkey: treasury.publicKey, toPubkey: userPubkey, lamports })
   );
-  return sendAndConfirmTransaction(connection, tx, [treasury], { commitment: "confirmed" });
+  return sendTreasuryTxWithRetry(connection, tx, treasury);
 }
 
 /**
@@ -162,5 +209,5 @@ export async function sendTreasuryToUserTransfer(
   instructions.push(createTransferInstruction(fromAta, toAta, treasury.publicKey, amountBaseUnits));
 
   const tx = new Transaction().add(...instructions);
-  return sendAndConfirmTransaction(connection, tx, [treasury], { commitment: "confirmed" });
+  return sendTreasuryTxWithRetry(connection, tx, treasury);
 }

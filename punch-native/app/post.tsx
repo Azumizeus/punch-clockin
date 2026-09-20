@@ -49,7 +49,7 @@ export default function PostScreen() {
         return;
       }
       if (err === "tx") {
-        Alert.alert(t.txFailed);
+        Alert.alert(t.txFailed, usePunch.getState().lastTxError ?? undefined);
         return;
       }
       router.back();

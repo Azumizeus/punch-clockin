@@ -44,10 +44,11 @@ export default function ShiftScreen() {
 
   async function finish() {
     setSigning(true);
+    usePunch.setState({ lastTxError: null });
     try {
       const rec = await cashShift(shift.id, title);
       if (!rec) {
-        Alert.alert(t.txFailed);
+        Alert.alert(t.txFailed, usePunch.getState().lastTxError ?? undefined);
         return;
       }
       router.push("/receipt");

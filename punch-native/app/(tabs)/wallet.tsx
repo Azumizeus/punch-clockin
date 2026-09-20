@@ -98,7 +98,7 @@ export default function WalletScreen() {
     setStaking(true);
     try {
       const ok = await stake(amt);
-      if (!ok) Alert.alert(t.txFailed);
+      if (!ok) Alert.alert(t.txFailed, usePunch.getState().lastTxError ?? undefined);
       else router.push("/receipt");
     } finally {
       setStaking(false);
@@ -116,7 +116,7 @@ export default function WalletScreen() {
     setUnstaking(true);
     try {
       const ok = await unstake(amt);
-      if (!ok) Alert.alert(t.txFailed);
+      if (!ok) Alert.alert(t.txFailed, usePunch.getState().lastTxError ?? undefined);
       else router.push("/receipt");
     } finally {
       setUnstaking(false);

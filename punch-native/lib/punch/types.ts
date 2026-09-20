@@ -98,6 +98,7 @@ export interface PunchState {
   activeShiftId: string | null;
   activePliId: string | null;
   lastReceiptId: string | null;
+  lastTxError: string | null;
   lastPunchAt: number | null;
   streak: number;
   crewOnline: number;
