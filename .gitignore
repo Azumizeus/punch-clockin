@@ -17,3 +17,4 @@ build-apk.log
 
 # debris d'un filter-branch avorte (montage reseau, non supprimable, inoffensif)
 .git-rewrite.bak/
+.git-junk-refs/
