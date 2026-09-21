@@ -207,20 +207,6 @@ canvas {
   );
 }
 
-html[data-skin="a"] button {
-  border-radius: 999px;
-}
-
-html[data-skin="a"] nav.punch-nav {
-  left: 50%;
-  width: calc(100% - 1.5rem);
-  max-width: calc(28rem - 1.5rem);
-  border-radius: 999px;
-  border: 1px solid var(--color-line-strong);
-  margin-bottom: 0.6rem;
-  background: var(--color-surface);
-}
-
 html[data-skin="b"] .rounded-xl,
 html[data-skin="b"] .rounded-2xl,
 html[data-skin="b"] .rounded-lg {
@@ -246,10 +232,6 @@ html[data-skin="c"] nav.punch-nav {
   border-radius: var(--ticket-radius, 2px);
   background: var(--color-paper);
   color: var(--color-paper-fg);
-}
-
-html[data-ticket-border] .look-ticket {
-  border: 1px solid var(--color-line-strong);
 }
 
 html[data-ticket-dashed] .look-ticket {

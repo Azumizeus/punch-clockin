@@ -1,6 +1,6 @@
 export type Locale = "en" | "fr";
-export type Theme = "dark" | "light" | "gold" | "goldLight";
-export type Look = "a" | "b" | "c";
+export type Theme = "dark" | "light" | "gold";
+export type Look = "b" | "c";
 export type Skin = Look;
 export type Token = "USDC" | "USDT" | "SKR";
 export type Product = "punch" | "pli";

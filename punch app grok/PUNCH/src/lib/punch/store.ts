@@ -54,8 +54,8 @@ function seedWallet() {
 function seed(): PunchState {
   return {
     locale: "fr",
-    theme: "goldLight",
-    skin: "a",
+    theme: "gold",
+    skin: "b",
     seenHow: false,
     product: "punch",
     tab: "punch",
@@ -162,7 +162,7 @@ export const usePunch = create<
       },
       setLocale: (locale) => set({ locale }),
       setTheme: (theme) => set({ theme }),
-      setSkin: (skin) => set({ skin }),
+      setSkin: (skin) => set({ skin: skin === "c" ? "c" : "b" }),
       dismissHow: () => set({ seenHow: true, view: "app", tab: "punch" }),
       setProduct: (product) => {
         set({
@@ -661,7 +661,7 @@ export const usePunch = create<
       },
     }),
     {
-      name: "punch-v6",
+      name: "punch-v7",
       skipHydration: true,
       partialize: (s) => ({
         locale: s.locale,
@@ -686,11 +686,8 @@ export const usePunch = create<
           ...current,
           ...p,
           locale: p.locale === "en" ? "en" : "fr",
-          theme:
-            p.theme === "dark" || p.theme === "light" || p.theme === "gold" || p.theme === "goldLight"
-              ? p.theme
-              : "goldLight",
-          skin: p.skin === "b" || p.skin === "c" ? p.skin : "a",
+          theme: p.theme === "dark" || p.theme === "light" ? p.theme : "gold",
+          skin: p.skin === "c" ? "c" : "b",
           seenHow: Boolean(p.seenHow),
           greetedIds: Array.isArray(p.greetedIds) ? p.greetedIds : [],
           view: "app",

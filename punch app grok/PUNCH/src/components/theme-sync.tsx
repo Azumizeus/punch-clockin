@@ -34,7 +34,7 @@ export function ThemeSync() {
 
   return (
     <Toaster
-      theme={product === "pli" ? "light" : theme === "dark" || theme === "gold" ? "dark" : "light"}
+      theme={product === "pli" ? "light" : theme === "light" ? "light" : "dark"}
       position="top-center"
       toastOptions={{
         className: "bg-surface text-fg shadow-border",

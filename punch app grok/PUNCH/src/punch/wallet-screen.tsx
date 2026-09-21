@@ -6,6 +6,7 @@ import { usePunch, useT } from "@/lib/punch/store";
 import type { Token } from "@/lib/punch/types";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { GoldBadge } from "@/components/gold-badge";
 
 const TOKENS: Token[] = ["USDC", "USDT", "SKR"];
 
@@ -62,6 +63,10 @@ export function WalletScreen() {
       <p className="mt-2 text-sm leading-relaxed text-muted">{t.moneyUsdc}</p>
       <p className="mt-1 text-sm leading-relaxed text-muted">{t.moneySkr}</p>
       <p className="mt-2 text-sm font-medium">{t.openRanks[rank]}</p>
+
+      {/* Badge SEEKER PREMIUM : même emplacement que le natif — entre le rang
+          et les soldes, porté sur le thème gold, wallet connecté. */}
+      <GoldBadge />
 
       <div className="mt-6 space-y-2">
         <Bal token="USDC" liquid={wallet.usdc} />

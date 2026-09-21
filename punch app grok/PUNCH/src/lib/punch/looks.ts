@@ -1,18 +1,10 @@
 import type { Look, LookPalette, LookShape, LookTokens, Theme } from "./types";
 
-export const LOOKS: Look[] = ["a", "b", "c"];
+export const LOOKS: Look[] = ["b", "c"];
 
-export const THEMES: Theme[] = ["dark", "light", "gold", "goldLight"];
+export const THEMES: Theme[] = ["dark", "light", "gold"];
 
 export const lookGallery: Record<Look, { name: string; sub: string; desc: { fr: string; en: string } }> = {
-  a: {
-    name: "Horloge d’usine",
-    sub: "SKIN A · CLOCK-MACHINE",
-    desc: {
-      fr: "Chiffres monospace, pilules, cadran or — la beauté de la machine.",
-      en: "Monospace figures, pills, gold dial — machine beauty.",
-    },
-  },
   b: {
     name: "Ticket de pointeuse",
     sub: "SKIN B · TIME-CARD",
@@ -32,29 +24,11 @@ export const lookGallery: Record<Look, { name: string; sub: string; desc: { fr: 
 };
 
 export const lookShape: Record<Look, LookShape> = {
-  a: { radius: 999, body: '"IBM Plex Mono", ui-monospace, Menlo, monospace', display: '"Fraunces", ui-serif, Georgia, serif' },
   b: { radius: 2, body: '"Fraunces", ui-serif, Georgia, serif', display: '"Fraunces", ui-serif, Georgia, serif' },
   c: { radius: 16, body: '"Figtree", ui-sans-serif, system-ui, sans-serif', display: '"Fraunces", ui-serif, Georgia, serif' },
 };
 
 export const lookTokens: Record<Look, LookTokens> = {
-  a: {
-    monoTitle: true,
-    monoUi: true,
-    labels: false,
-    upper: true,
-    titleSpacing: 3,
-    ctaRadius: 999,
-    dialInnerAccent: false,
-    dialRing: "gold",
-    clockTag: "dash",
-    hwNav: false,
-    ticketRadius: 24,
-    ticketBorder: false,
-    ticketDashed: false,
-    pressTilt: false,
-    ticketMono: true,
-  },
   b: {
     monoTitle: false,
     monoUi: true,
@@ -91,85 +65,43 @@ export const lookTokens: Record<Look, LookTokens> = {
   },
 };
 
-const C_MONO: LookPalette = {
+/** Gold Seeker Premium — one gold. Ink + champagne. Not brass yellow. */
+// Bordures alignées sur punch-native (v1.6.2) : or vrai #d4af37 à 0.55/0.28 —
+// sur fond noir les surfaces ne se lisent que par leurs contours, jamais fantômes.
+const GOLD_B: LookPalette = {
+  bg: "#12100c",
+  fg: "#f3e6c8",
+  dim: "#a89068",
+  dim2: "#c4b08a",
+  card: "#1c1912",
+  input: "#262218",
+  border: "rgba(212,175,55,0.55)",
+  borderLight: "rgba(212,175,55,0.28)",
+  accent: "#c9a24a",
+  accentFg: "#12100c",
+  paper: "#f3e6c8",
+  paperFg: "#1a140c",
+  paperMuted: "#7a6848",
+};
+
+const GOLD_C: LookPalette = {
   bg: "#0c0c0d",
-  fg: "#f2f1ee",
-  dim: "#6e6c68",
-  dim2: "#9c9a96",
+  fg: "#f3e6c8",
+  dim: "#8a7a58",
+  dim2: "#b8a478",
   card: "#0c0c0d",
-  input: "#141416",
-  border: "rgba(242,241,238,0.18)",
-  borderLight: "transparent",
-  accent: "#f2f1ee",
+  input: "#16140f",
+  // Même règle que GOLD_B : contours visibles 0.55/0.28 (alignement native).
+  border: "rgba(212,175,55,0.55)",
+  borderLight: "rgba(212,175,55,0.28)",
+  accent: "#c9a24a",
   accentFg: "#0c0c0d",
-  paper: "#ebe6dc",
-  paperFg: "#1a1916",
-  paperMuted: "#6a6560",
+  paper: "#f3e6c8",
+  paperFg: "#1a140c",
+  paperMuted: "#7a6848",
 };
 
 export const lookPalettes: Record<Look, Record<Theme, LookPalette>> = {
-  a: {
-    dark: {
-      bg: "#0c0a07",
-      fg: "#f0e0ad",
-      dim: "#8a7030",
-      dim2: "#a09060",
-      card: "#16120c",
-      input: "#1e1910",
-      border: "rgba(212,175,55,0.35)",
-      borderLight: "rgba(212,175,55,0.18)",
-      accent: "#d4af37",
-      accentFg: "#0c0a07",
-      paper: "#ebe1c4",
-      paperFg: "#1a1308",
-      paperMuted: "#8a7040",
-    },
-    light: {
-      bg: "#f6f1e4",
-      fg: "#2a1a00",
-      dim: "#7a5600",
-      dim2: "#5c3d00",
-      card: "#fff8e6",
-      input: "#fff3b0",
-      border: "rgba(42,26,0,0.28)",
-      borderLight: "rgba(42,26,0,0.12)",
-      accent: "#2a1a00",
-      accentFg: "#fff8e6",
-      paper: "#fffaf0",
-      paperFg: "#2a1a00",
-      paperMuted: "#7a5600",
-    },
-    gold: {
-      bg: "#1a1408",
-      fg: "#f0c14b",
-      dim: "#a0844c",
-      dim2: "#c4a35a",
-      card: "#241c0c",
-      input: "#2e2410",
-      border: "rgba(240,193,75,0.4)",
-      borderLight: "rgba(240,193,75,0.2)",
-      accent: "#f0c14b",
-      accentFg: "#1a1408",
-      paper: "#f0e0ad",
-      paperFg: "#1a1408",
-      paperMuted: "#8a7040",
-    },
-    goldLight: {
-      bg: "#f0c14b",
-      fg: "#2a1a00",
-      dim: "#7a5600",
-      dim2: "#5c3d00",
-      card: "#ffe08a",
-      input: "#fff3b0",
-      border: "rgba(42,26,0,0.35)",
-      borderLight: "rgba(42,26,0,0.18)",
-      accent: "#2a1a00",
-      accentFg: "#f0c14b",
-      paper: "#fff8e6",
-      paperFg: "#2a1a00",
-      paperMuted: "#7a5600",
-    },
-  },
   b: {
     dark: {
       bg: "#120e09",
@@ -201,49 +133,51 @@ export const lookPalettes: Record<Look, Record<Theme, LookPalette>> = {
       paperFg: "#2c1810",
       paperMuted: "#6b5344",
     },
-    gold: {
-      bg: "#1c160c",
-      fg: "#e8d5a0",
-      dim: "#a0844c",
-      dim2: "#c4a35a",
-      card: "#261e10",
-      input: "#2e2414",
-      border: "rgba(232,213,160,0.3)",
-      borderLight: "rgba(232,213,160,0.14)",
-      accent: "#e8d5a0",
-      accentFg: "#1c160c",
-      paper: "#f4ead0",
-      paperFg: "#1c160c",
-      paperMuted: "#8a7040",
-    },
-    goldLight: {
-      bg: "#cfc3a8",
-      fg: "#2c1810",
-      dim: "#8a7364",
-      dim2: "#6b5344",
-      card: "#f4efe4",
-      input: "#fffaf0",
-      border: "rgba(44,24,16,0.22)",
-      borderLight: "rgba(44,24,16,0.1)",
-      accent: "#2c1810",
-      accentFg: "#f4efe4",
-      paper: "#fffaf0",
-      paperFg: "#2c1810",
-      paperMuted: "#6b5344",
-    },
+    gold: GOLD_B,
   },
   c: {
-    dark: C_MONO,
-    light: C_MONO,
-    gold: C_MONO,
-    goldLight: C_MONO,
+    dark: {
+      bg: "#0c0c0d",
+      fg: "#f2f1ee",
+      dim: "#6e6c68",
+      dim2: "#9c9a96",
+      card: "#0c0c0d",
+      input: "#141416",
+      border: "rgba(242,241,238,0.18)",
+      borderLight: "transparent",
+      accent: "#f2f1ee",
+      accentFg: "#0c0c0d",
+      paper: "#ebe6dc",
+      paperFg: "#1a1916",
+      paperMuted: "#6a6560",
+    },
+    light: {
+      bg: "#f4efe6",
+      fg: "#1a1916",
+      dim: "#7a7468",
+      dim2: "#9c9688",
+      card: "#f4efe6",
+      input: "#ece6dc",
+      border: "rgba(26,25,22,0.14)",
+      borderLight: "transparent",
+      accent: "#1a1916",
+      accentFg: "#f4efe6",
+      paper: "#fffaf0",
+      paperFg: "#1a1916",
+      paperMuted: "#7a7468",
+    },
+    gold: GOLD_C,
   },
 };
 
 export function resolveTheme(raw: unknown): Theme {
-  if (raw === "gold" || raw === "goldLight" || raw === "dark") return raw;
-  if (raw === "light") return "light";
-  return "goldLight";
+  if (raw === "dark" || raw === "light" || raw === "gold") return raw;
+  if (raw === "goldLight") return "gold";
+  return "gold";
+}
+
+export function resolveLook(raw: unknown): Look {
+  return raw === "c" ? "c" : "b";
 }
 
 let applied = "";
@@ -275,15 +209,15 @@ export function applyLook(look: Look, theme: Theme) {
     "--cta-radius": `${tok.ctaRadius}px`,
     "--ticket-radius": `${tok.ticketRadius}px`,
     "--title-spacing": `${tok.titleSpacing}px`,
-    "--dial-ring": tok.dialRing === "gold" ? "#d4af37" : pal.accent,
+    "--dial-ring": tok.dialRing === "gold" ? "#c9a24a" : pal.accent,
   };
   const r = shape.radius;
-  map["--radius-xs"] = r > 100 ? "999px" : `${Math.max(2, r / 8)}px`;
-  map["--radius-sm"] = r > 100 ? "999px" : `${Math.max(2, r / 4)}px`;
-  map["--radius-md"] = r > 100 ? "999px" : `${Math.max(2, r / 2)}px`;
-  map["--radius-lg"] = r > 100 ? "999px" : `${r}px`;
-  map["--radius-xl"] = r > 100 ? "999px" : `${r}px`;
-  map["--radius-2xl"] = r > 100 ? "999px" : `${r}px`;
+  map["--radius-xs"] = `${Math.max(2, r / 8)}px`;
+  map["--radius-sm"] = `${Math.max(2, r / 4)}px`;
+  map["--radius-md"] = `${Math.max(2, r / 2)}px`;
+  map["--radius-lg"] = `${r}px`;
+  map["--radius-xl"] = `${r}px`;
+  map["--radius-2xl"] = `${r}px`;
   for (const [k, v] of Object.entries(map)) el.style.setProperty(k, v);
 
   el.setAttribute("data-theme", theme);
@@ -293,7 +227,6 @@ export function applyLook(look: Look, theme: Theme) {
   el.toggleAttribute("data-mono-ui", tok.monoUi);
   el.toggleAttribute("data-labels", tok.labels);
   el.toggleAttribute("data-upper", tok.upper);
-  el.toggleAttribute("data-ticket-border", tok.ticketBorder);
   el.toggleAttribute("data-ticket-dashed", tok.ticketDashed);
   el.toggleAttribute("data-press-tilt", tok.pressTilt);
   el.toggleAttribute("data-ticket-mono", tok.ticketMono);

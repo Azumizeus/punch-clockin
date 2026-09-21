@@ -6,7 +6,7 @@ import { usePunch } from "@/lib/punch/store";
 function Page() {
   const setSkin = usePunch((s) => s.setSkin);
   useEffect(() => {
-    setSkin("a");
+    setSkin("b");
   }, [setSkin]);
   return <PunchApp />;
 }

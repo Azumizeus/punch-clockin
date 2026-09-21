@@ -4,7 +4,6 @@ import { lookGallery } from "@/lib/punch/looks";
 import type { Skin } from "@/lib/punch/types";
 
 const LOOKS: Array<{ id: Skin; src: string }> = [
-  { id: "a", src: "/looks/a.jpg" },
   { id: "b", src: "/looks/b.jpg" },
   { id: "c", src: "/looks/c.jpg" },
 ];
@@ -24,11 +23,11 @@ export function LooksScreen() {
         <Link to="/" className="flex h-11 items-center text-sm text-muted">
           ← Mode d’emploi
         </Link>
-        <p className="font-mono text-xs uppercase tracking-widest text-muted">3 habillages</p>
+        <p className="font-mono text-xs uppercase tracking-widest text-muted">2 habillages</p>
       </header>
-      <h1 className="px-5 pt-3 font-display text-3xl font-medium tracking-tight">Choisir un thème</h1>
+      <h1 className="px-5 pt-3 font-display text-3xl font-medium tracking-tight">Habillage</h1>
       <p className="px-5 pt-2 text-sm text-muted">
-        A, B ou C habille toute l’app : accueil, missions, globe, argent, nav.
+        B ticket ou C hardware. Couleur à part : clair, sombre, Gold Seeker Premium.
       </p>
       <div className="mt-4 flex flex-col gap-4 px-5 pb-10">
         {LOOKS.map((l) => (

@@ -33,12 +33,8 @@ export function PunchSplash() {
           <p className="font-mono text-[10px] uppercase tracking-[0.35em]">PUNCH</p>
           <p className="mt-4 font-display text-6xl font-medium leading-none">IN</p>
         </article>
-      ) : skin === "c" ? (
-        <Bolt className="size-8" />
       ) : (
-        <div className="relative grid size-36 place-items-center rounded-full border-2 border-accent">
-          <Bolt className="size-12" />
-        </div>
+        <Bolt className="size-8" />
       )}
     </div>
   );
