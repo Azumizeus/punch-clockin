@@ -29,6 +29,11 @@ yarn-error.*
 # notes locales (signatures devnet de test)
 sigs.txt
 
+# artefacts de controle d appareil (regenerables)
+_tour-report.txt
+ui_probe.xml
+scripts/device/__pycache__/
+
 # macOS
 .DS_Store
 *.pem

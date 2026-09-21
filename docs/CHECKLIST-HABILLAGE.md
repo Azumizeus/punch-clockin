@@ -145,9 +145,6 @@ Ticket papier complet (`paper`/`paperFg`/`paperMuted`, `ticketRadius`/`ticketDas
 ### 5.12 `app/guide.tsx` — tour guidé
 Cartes d'étapes (`card`) · surbrillance de l'élément ciblé · bulles (`paper`) · boutons suivant/quitter
 
-### 5.13 `app/how.tsx` — mode d'emploi
-Cartes de sections (`card`, `accent`) · corps de texte (`fg`/`dim2`)
-
 ### 5.14 `app/looks.tsx` — galerie des skins
 Cartes preview par skin (`input`/`card`/`borderLight`) · état sélectionné (`accent`) · nom + accroche FR/EN · bouton A B C dans TopBar
 

@@ -23,7 +23,6 @@ PUNCH transforme le pointage en preuve on-chain : tu pointes une fois par jour, 
   history.tsx    historique des tickets (100 derniers reçus)
   language.tsx   choix de la langue au premier lancement
   looks.tsx      galerie d'identité (Seeker Premium / Seeker Nuit)
-  how.tsx        écran d'aide (plus référencé par la navigation — à retirer)
   post.tsx       publier une mission
   receipt.tsx    ticket / reçu détaillé
   shift.tsx      détail d'une mission
