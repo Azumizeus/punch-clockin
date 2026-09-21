@@ -1,23 +1,57 @@
-"""Tour automatique PUNCH sur Seeker (adb) — habillages, thèmes, écrans.
+# -*- coding: utf-8 -*-
+"""Tour automatique PUNCH sur Seeker — porté sur la sonde durcie ui_probe.
 
-Hypothèses de coordonnées (Seeker 1200x2670 px, densité 2.55x, ~470x1047 dp) :
-- TopBar : boutons A B C puis Sombre Clair Or(FR intouché) à y≈184 px.
-- Barre d'onglets : 6 onglets répartis sur 1200 px, y≈2612 px.
-Chaque action produit une capture dans _shots/ + vérification par diff.
+Pourquoi : `uiautomator dump` échoue en silence sur l'accueil (horloge live +
+anneau pulsant = UI jamais idle) et un script naïf relit alors un XML périmé —
+d'où le faux bug « tap Accueil mort ». Cette version :
+  - ne fait JAMAIS confiance à un dump non vérifié (fresh_dump → None) ;
+  - identifie les écrans par marqueurs textuels quand le dump réussit ;
+  - retombe sur la comparaison d'images (screen_diff, crop stable) quand il
+    échoue, au lieu d'inventer un état.
+
+Parcours : thèmes (TopBar) → onglets → écrans (deep links) → retour défaut.
+NOTE : les coordonnées TopBar A/B/C datent des habillages multiples ; depuis
+l'identité unique (v1.5.0+) il ne reste que les thèmes Sombre/Clair/Or.
 """
 import os
-import subprocess
 import sys
 import time
-from PIL import Image
 
-sys.stdout.reconfigure(errors="replace")  # console Windows cp1252 : ne jamais crasher sur ✦/é
+import ui_probe
 
-ADB = os.path.join(os.environ["LOCALAPPDATA"], "Android", "Sdk", "platform-tools", "adb.exe")
+sys.stdout.reconfigure(errors="replace")
+
 OUT = "_shots"
 os.makedirs(OUT, exist_ok=True)
-
 LOG = []
+
+TAB_X = {"punch": 100, "board": 300, "globe": 500, "hellos": 643,
+         "wallet": 771, "split": 943, "settings": 1114}
+TAB_Y = 2592
+THEME = {"DARK": (752, 184), "LIGHT": (880, 184), "GOLD": (995, 184)}
+# Libellés de la barre d'onglets : présents sur TOUS les écrans, jamais
+# utilisables comme marqueurs d'écran.
+MARKERS_TAB = {"Accueil", "Missions", "Monde", "Bonjours", "Argent", "La part", "Réglages"}
+
+# Marqueurs par écran : indicatifs seulement (un libellé peut exister sur
+# plusieurs écrans) — state() rapporte les textes bruts, jamais un nom déduit.
+MARKERS = {
+    "connect": ["Ouvrir mon portefeuille", "CLOCK IN"],
+    "home": ["Registre de session", "Session ledger"],
+    "board": ["Les missions sont ouvertes", "Missions"],
+    "globe": ["Le monde", "Monde"],
+    "hellos": ["Bonjours"],
+    "wallet": ["Changer de monnaie", "Argent"],
+    "split": ["La part"],
+    "settings": ["IDENTITÉ", "Réglages"],
+    "looks": ["Galerie", "HABILLAGE"],
+    "guide": ["Mode d'emploi"],
+    "post": ["Publier", "Payer quelqu'un"],
+    "receipt": ["Reçu", "Ticket"],
+    "shift": ["Mission"],
+    "history": ["Historique"],
+    "language": ["Français"],
+}
 
 
 def L(msg):
@@ -25,109 +59,71 @@ def L(msg):
     LOG.append(msg)
 
 
-def adb(*args, timeout=40):
-    return subprocess.run([ADB, *args], timeout=timeout, capture_output=True)
-
-
-def shell(cmd, timeout=40):
-    return adb("shell", cmd, timeout=timeout)
+def tap(x, y, wait=2.0):
+    ui_probe.tap(x, y, wait)
 
 
 def shot(name):
-    r = adb("exec-out", "screencap", "-p")
-    path = os.path.join(OUT, f"{name}.png")
-    with open(path, "wb") as f:
-        f.write(r.stdout)
-    return path
+    return ui_probe.screenshot(os.path.join(OUT, f"{name}.png"))
 
 
-def tap(x, y, wait=1.8):
-    shell(f"input tap {x} {y}")
-    time.sleep(wait)
+def state():
+    """(preuve_textuelle, dump_ok) — jamais un état inventé.
 
-
-def stats(path):
-    im = Image.open(path).convert("RGB").resize((60, 133))
-    px = list(im.getdata())
-    n = len(px)
-    return tuple(sum(p[i] for p in px) // n for i in range(3))
-
-
-def diff(a, b):
-    ia = Image.open(a).convert("L").resize((80, 178))
-    ib = Image.open(b).convert("L").resize((80, 178))
-    da, db = list(ia.getdata()), list(ib.getdata())
-    return sum(abs(x - y) for x, y in zip(da, db)) / len(da)
-
-
-# --- coordonnées -----------------------------------------------------------
-TOP = {"A": (445, 184), "B": (543, 184), "C": (640, 184),
-       "DARK": (752, 184), "LIGHT": (880, 184), "GOLD": (995, 184)}
-TABS = {"punch": 100, "board": 300, "globe": 500,
-        "wallet": 700, "split": 900, "settings": 1100}
-TY = 2612
-
-
-def deeplink(route):
-    r = shell(f'am start -W -a android.intent.action.VIEW -d "punchnative://{route}"', timeout=25)
-    time.sleep(2.2)
-    ok = b"Status: ok" in r.stdout or b"Status: complete" in r.stdout
-    return ok, r.stdout.decode(errors="replace")[:120].replace("\n", " | ")
+    Retourne les 3 premiers textes NON COMMUNS capturés (preuve brute), pas un
+    nom déduit : les marqueurs simples trompent (un libellé d'onglet comme
+    « Missions » existe sur TOUS les écrans via la barre du bas)."""
+    root = ui_probe.fresh_dump()
+    if root is None:
+        return "non-idle", False
+    communs = set(MARKERS_TAB) | {"PUNCH", "EN", "FR", "✦"}
+    txts = []
+    for t, d, _b in ui_probe.texts(root):
+        v = (t or d).strip()
+        # Exclure les glyphes d'icônes (plage private-use Unicode U+E000..F8FF)
+        picto = v and 0xE000 <= ord(v[0]) <= 0xF8FF
+        if len(v) > 2 and v not in communs and not picto:
+            txts.append(v)
+        if len(txts) >= 3:
+            break
+    return " | ".join(txts) if txts else "(écran sans texte)", True
 
 
 def main():
     L("=== 0. État de départ ===")
-    p0 = shot("00-start")
-    L(f"capture départ: moyenne RGB={stats(p0)}")
+    name, ok = state()
+    L(f"départ: écran={name} (dump={'ok' if ok else 'IMPOSSIBLE/non-idle'})")
 
-    L("=== 1. Habillages A / B / C (onglet PUNCH, thème sombre) ===")
-    tap(*TOP["A"], wait=2.0)
-    pa = shot("01-look-A")
-    L(f"look A: moyenne={stats(pa)}")
-    tap(*TOP["B"], wait=2.0)
-    pb = shot("02-look-B")
-    L(f"look B: moyenne={stats(pb)}  diff vs A={diff(pa, pb):.1f}")
-    tap(*TOP["C"], wait=2.0)
-    pc = shot("03-look-C")
-    L(f"look C: moyenne={stats(pc)}  diff vs B={diff(pb, pc):.1f}")
+    L("=== 1. Thèmes depuis la TopBar (tous écrans) ===")
+    for tname, (x, y) in THEME.items():
+        tap(x, y, 1.6)
+        n, ok = state()
+        L(f"thème {tname}: écran={n} (dump={'ok' if ok else 'non-idle'})")
 
-    L("=== 2. Thèmes (look A) ===")
-    tap(*TOP["A"], wait=1.6)
-    tap(*TOP["GOLD"], wait=2.0)
-    pg = shot("04-theme-gold")
-    L(f"or ✦: moyenne={stats(pg)}  diff vs C={diff(pc, pg):.1f}")
-    tap(*TOP["GOLD"], wait=2.0)  # ✦ -> ✧ (or clair)
-    pgl = shot("05-theme-goldLight")
-    L(f"or clair ✧: moyenne={stats(pgl)}  diff vs or={diff(pg, pgl):.1f}")
-    tap(*TOP["LIGHT"], wait=2.0)
-    pl = shot("06-theme-light")
-    L(f"clair: moyenne={stats(pl)}  diff vs orClair={diff(pgl, pl):.1f}")
-    tap(*TOP["DARK"], wait=2.0)
-    pd = shot("07-theme-dark")
-    L(f"sombre: moyenne={stats(pd)}  diff vs clair={diff(pl, pd):.1f}")
+    L("=== 2. Onglets ===")
+    for tname, x in TAB_X.items():
+        tap(x, TAB_Y, 2.2)
+        n, ok = state()
+        L(f"onglet {tname}: écran={n} (dump={'ok' if ok else 'non-idle'})")
 
-    L("=== 3. Onglets ===")
-    for name, x in TABS.items():
-        tap(x, TY, wait=2.0)
-        p = shot(f"10-tab-{name}")
-        L(f"onglet {name}: moyenne={stats(p)}")
+    L("=== 3. Écrans empilés (deep links) ===")
+    for route in ("history", "looks", "guide", "post", "receipt", "language"):
+        r = ui_probe.sh(f'am start -W -a android.intent.action.VIEW -d "punchnative://{route}"')
+        time.sleep(2.2)
+        okstart = "Status: ok" in r.stdout or "Status: complete" in r.stdout
+        n, ok = state()
+        L(f"deeplink /{route}: start={'ok' if okstart else 'KO'} écran={n} (dump={'ok' if ok else 'non-idle'})")
+        ui_probe.sh("input keyevent KEYCODE_BACK")
+        time.sleep(1.2)
 
-    L("=== 4. Écrans hors onglets (deep links) ===")
-    for route in ("looks", "guide", "how", "post", "shift", "receipt", "connect", "language"):
-        ok, out = deeplink(route)
-        p = shot(f"20-{route}")
-        L(f"deeplink /{route}: start={'ok' if ok else 'KO'} ({out}) moyenne={stats(p)}")
+    L("=== 4. Retour à l'accueil (preuve du tap onglet) ===")
+    for tname, x in (("settings", 1114), ("punch", 100)):
+        tap(x, TAB_Y, 2.2)
+        n, ok = state()
+        L(f"tap {tname}: écran={n} (dump={'ok' if ok else 'non-idle — vérifier par diff image'})")
+    shot("90-final")
 
-    L("=== 5. Retour à l'état par défaut ===")
-    shell("input keyevent KEYCODE_BACK")
-    time.sleep(1.0)
-    tap(*TOP["DARK"], wait=1.2)
-    tap(*TOP["A"], wait=1.2)
-    tap(TABS["punch"], TY, wait=1.6)
-    pf = shot("90-final")
-    L(f"final: moyenne={stats(pf)}")
-
-    print("\nTOUR-DONE")
+    print("\nTOUR-DONE", flush=True)
 
 
 if __name__ == "__main__":
