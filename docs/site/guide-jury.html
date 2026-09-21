@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PUNCH — Judge guide (How to test)</title>
+<style>
+  :root{--bg:#0a0908;--fg:#f4ecd8;--card:#161310;--dim:#8a7a56;--accent:#d4af37;--line:rgba(212,175,55,.28)}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--fg);font:17px/1.65 Georgia,'Times New Roman',serif;padding:56px 22px}
+  .wrap{max-width:820px;margin:0 auto}
+  .tag{display:inline-block;font:12px/1 ui-monospace,monospace;letter-spacing:2px;color:var(--dim);border:1px solid var(--line);border-radius:999px;padding:6px 14px;margin-bottom:18px}
+  h1{font-size:40px;margin-bottom:6px}
+  h1 span{color:var(--accent)}
+  .sub{color:var(--dim);font-style:italic;margin-bottom:30px}
+  h2{font-size:22px;color:var(--accent);margin:34px 0 10px}
+  ol{margin:0 0 0 22px}
+  li{margin-bottom:10px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin:12px 0}
+  .card h3{font-size:16px;margin-bottom:4px;color:var(--accent)}
+  .card p,.card li{color:var(--fg);font-size:15px}
+  .mono{font-family:ui-monospace,'Cascadia Mono',monospace;font-size:13px;color:var(--dim);word-break:break-all}
+  .btn{display:inline-block;background:var(--accent);color:#0a0908;font-weight:bold;text-decoration:none;border-radius:8px;padding:12px 20px;font-size:15px;margin-bottom:24px}
+  .btn.ghost{background:transparent;color:var(--accent);border:1px solid var(--accent)}
+  .note{border-left:3px solid var(--accent);background:var(--card);border-radius:8px;padding:14px 18px;margin:18px 0;font-size:15px}
+  footer{margin-top:44px;color:var(--dim);font-size:13px;text-align:center;font-style:italic}
+  a{color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="tag">JUDGE GUIDE — 15 MINUTES — REAL DEVNET</div>
+  <h1>How to test PUNCH <span>·</span> step by step</h1>
+  <div class="sub">Everything money-related in the app is a real signed devnet transaction. Nothing is simulated.</div>
+
+  <a class="btn" href="https://github.com/Azumizeus/punch-clockin/releases/latest">1 · Download the signed APK (arm64)</a>
+
+  <ol>
+    <li><b>Install</b> the APK on the Solana Seeker (or any Android with an MWA wallet on devnet). No account, no signup.</li>
+    <li><b>Open the app → “Ouvrir mon portefeuille”.</b> The system Seed Vault sheet asks for a real authorization on devnet.</li>
+    <li><b>A welcome grant arrives</b> from the treasury within seconds if your wallet is empty: 0.05 SOL + 5 USDC + 20 USDT + 5,000 SKR. Check your address on the explorer — it's a real transfer.</li>
+    <li><b>Tap the bolt (CLOCK IN).</b> Seed Vault asks for your signature — a real memo transaction. The paper ticket shows time, country, the 92/3/5 rule and an on-chain stamp (clickable signature).</li>
+    <li><b>Try the money features</b> — each one asks for a real signature: Wallet → Swap SKR⇄USDC · Stake/Unstake (honest 1.5% fee) · Board missions · Say hi to a nearby Seeker (0.10 USDC from the treasury).</li>
+    <li><b>Leave the network</b> (Settings): a real signed transaction that honestly decrements the shared counters.</li>
+  </ol>
+
+  <div class="note">
+    <b>What to verify as a judge:</b> every action triggers the Seed Vault prompt · the treasury address
+    <span class="mono">FUiCbnDhEEJtz9Zcj66hGB54iGMGeyjRKD7CsTwpihJn</span>
+    moves on <a href="https://explorer.solana.com/address/FUiCbnDhEEJtz9Zcj66hGB54iGMGeyjRKD7CsTwpihJn?cluster=devnet">explorer.solana.com (cluster=devnet)</a>
+    · every receipt's signature is clickable · failures show the exact reason and change nothing.
+  </div>
+
+  <h2>In the box</h2>
+  <div class="card"><h3>Two identities, one composition</h3><p><b>Gold Seeker Premium</b> (default) and <b>Seeker Nuit</b> — Settings → Identité. Serif Fraunces, 2 px angles, LOCAL TIME clock.</p></div>
+  <div class="card"><h3>Proof of work</h3><p>Guided tour: Settings → <b>“Commencer le mode d'emploi”</b> (8 screens). Receipt history: Wallet → <b>Historique des tickets</b> (100 receipts, all signatures clickable). Test harness: <span class="mono">node scripts/test-store-economy.mjs</span> (54 offline checks of the 92/3/5 split and fees).</p></div>
+
+  <a class="btn ghost" href="index.html">← Back</a>
+  <footer>PUNCH — built for CLOCK IN · v1.6.5 · guide source: docs/GUIDE-JURY.md</footer>
+</div>
+</body>
+</html>
