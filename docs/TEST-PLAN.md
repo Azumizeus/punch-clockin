@@ -1,6 +1,6 @@
 ---
 titre: Plan de test — validation avant démo / soumission hackathon
-mise à jour: 19 septembre 2026
+mise à jour: 21 septembre 2026
 ---
 
 > **Note (EN):** This test plan is in French. For a bilingual step-by-step walkthrough of the app, read `GUIDE-JURY.md` (English first, then French).
@@ -22,7 +22,7 @@ npx tsc --noEmit
 npx expo start -c
 ```
 
-`tsc` peut sortir quelques erreurs pré-existantes bénignes (types manquants pour `@solana/spl-token`, un `shift` possiblement `undefined` dans `shift.tsx`, un souci de type MMKV) — ce ne sont pas des régressions, elles existaient avant. Toute NOUVELLE erreur doit être corrigée avant de continuer.
+`tsc` doit passer **sans aucune erreur** (état v1.6.5 : zéro erreur vérifié). Toute nouvelle erreur est une régression à corriger avant de continuer.
 
 ## 2. Vérifier l'état du trésor AVANT de tester
 
@@ -61,10 +61,18 @@ Globe :
 - [ ] Glisser le globe change la vitesse de rotation, relâcher laisse un momentum qui ralentit progressivement.
 - [ ] Taper un pays sélectionne bien ce pays (pas un drag accidentel).
 
-Thèmes et langue :
-- [ ] Dark, Light, Gold changent bien toute l'app.
-- [ ] Le thème choisi survit à la fermeture complète de l'app (pas juste mise en arrière-plan).
+Identité et langue :
+- [ ] Réglages → Identité : la bascule ✦ Gold / ☾ Nuit change toute l'app (couleurs uniquement, même composition).
+- [ ] L'identité choisie survit à la fermeture complète de l'app (pas juste mise en arrière-plan).
 - [ ] FR/EN change tous les textes visibles, y compris dans le guide.
+
+Historique :
+- [ ] Les tickets (missions, bonjours, échanges, staking) apparaissent dans Argent → Historique des tickets, rouvrables.
+- [ ] Les 100 derniers reçus maximum sont conservés (pas de croissance infinie du stockage).
+
+Bonjours :
+- [ ] Dire bonjour paie 0,10 USDC réels et crédite le bonus SKR.
+- [ ] Les compteurs semaine/mois/année/total et le classement se mettent à jour dans l'onglet Bonjours.
 
 Mode d'emploi (Réglages → Commencer le mode d'emploi) :
 - [ ] Les 8 étapes s'enchaînent, le bouton "Suivant" reste désactivé tant que l'étape n'est pas complétée quand c'est demandé.
@@ -72,9 +80,10 @@ Mode d'emploi (Réglages → Commencer le mode d'emploi) :
 
 ## 4. Tests de robustesse (cas d'échec)
 
-- [ ] Couper le réseau du téléphone pendant une transaction : l'app doit afficher une erreur ("transaction refusée ou échouée"), jamais planter ni faire semblant que ça a marché.
-- [ ] Refuser une signature dans le wallet : même chose, message d'erreur propre, aucun solde local modifié.
-- [ ] RPC devnet public parfois limité (429) : un échec ponctuel ne doit pas casser l'app, l'utilisateur peut réessayer.
+- [ ] Couper le réseau du téléphone pendant une transaction : l'app doit afficher la VRAIE raison ("Connexion réseau perdue — vérifie internet et réessaie."), jamais planter ni faire semblant que ça a marché.
+- [ ] Refuser une signature dans le wallet : "Signature refusée ou feuille fermée — ton argent n'a pas bougé, réessaie.", aucun solde local modifié.
+- [ ] RPC devnet public parfois limité (429) : "RPC devnet saturé (limite de débit) — réessaie dans quelques secondes." — un échec ponctuel ne casse pas l'app, l'utilisateur peut réessayer.
+- [ ] Chaque flux (pointage, mission, bonjour, échange, staking) affiche la raison de son échec à côté du titre — jamais une erreur avalée.
 
 ## 5. Prêt pour la démo / le jury
 

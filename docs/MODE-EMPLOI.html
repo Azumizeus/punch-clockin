@@ -63,12 +63,12 @@
 <div class="wrap">
   <span class="badge">Mode d'emploi</span>
   <h1>PUNCH — mode d'emploi</h1>
-  <div class="sub">mise à jour 20 sept. 2026 — v jury devnet</div>
+  <div class="sub">mise à jour 21 sept. 2026 — v1.6.5 · jury devnet</div>
 
   <div class="tabs">
     <div class="tab active" data-s="s0">Commencer</div>
     <div class="tab" data-s="s1">Le quotidien</div>
-    <div class="tab" data-s="s2">12 apparences</div>
+    <div class="tab" data-s="s2">2 thèmes</div>
     <div class="tab" data-s="s3">Dépannage</div>
     <div class="tab" data-s="s4">Script jury</div>
   </div>
@@ -96,19 +96,12 @@
   </div>
 
   <div class="sec" id="s2">
-    <h2>12 apparences : 4 thèmes × 3 habillages</h2>
-    <p>Thèmes (couleurs) : <b>Sombre</b>, <b>Clair</b>, <b>Or noir</b> ✦, <b>Or clair</b> ✧. Habillages (forme + typo + composition) : boutons <b>A B C</b> dans la barre du haut, sur tous les écrans. Le choix persiste après fermeture complète.</p>
+    <h2>Identité Seeker Premium : 2 thèmes, un seul look</h2>
+    <p>Depuis v1.5.0, l'app a une identité unique assumée (serif, angles 2 px, horloge LOCAL TIME). Thèmes : <b>Or</b> ✦ (par défaut) et <b>Nuit</b> — dans <b>Réglages → Identité</b>. Le choix persiste après fermeture complète.</p>
     <div class="sim">
       <div class="simRow" id="rowTheme">
-        <button class="simBtn on" data-t="dark">Sombre</button>
-        <button class="simBtn" data-t="light">Clair</button>
-        <button class="simBtn" data-t="gold">Or noir ✦</button>
-        <button class="simBtn" data-t="goldL">Or clair ✧</button>
-      </div>
-      <div class="simRow" id="rowLook">
-        <button class="simBtn on" data-l="a">A — Horloge d'usine</button>
-        <button class="simBtn" data-l="b">B — Ticket de pointeuse</button>
-        <button class="simBtn" data-l="c">C — Hardware Seeker</button>
+        <button class="simBtn on" data-t="gold">Or ✦</button>
+        <button class="simBtn" data-t="dark">Nuit</button>
       </div>
       <div class="phone" id="phone">
         <div class="ptag" id="ptag">— 14:32:07 —</div>
@@ -135,8 +128,8 @@
     <details><summary>Désinstallation / mise à jour</summary>
       <div class="body">Désinstaller efface tes réglages locaux et fait re-partir le lot de bienvenue (le trésor paie un nouveau wallet). Pour une simple mise à jour : installer l'APK <b>par-dessus</b> (<span class="kbd">adb install -r</span>), sans désinstaller.</div>
     </details>
-    <details><summary>Écran de veille</summary>
-      <div class="body">Réglages → <b>Veille</b> → 10 s / 30 s / 60 s / Off. Après le délai, l'écran affiche <b>ton</b> style CLOCK IN (ta combinaison) avec l'heure en direct. Un tap réveille l'app où tu l'avais laissée.</div>
+    <details><summary>Où changer de thème ?</summary>
+      <div class="body">Réglages → <b>Identité</b> → <b>Or</b> ✦ (par défaut) ou <b>Nuit</b>. L'identité Seeker Premium (typo serif, angles 2 px, horloge LOCAL TIME) est le même look partout — c'est la signature de l'app.</div>
     </details>
   </div>
 
@@ -148,9 +141,7 @@
       <label class="chk"><input type="checkbox"><span><b>Pointer</b> → signer → montrer le ticket et sa signature sur l'explorateur</span></label>
       <label class="chk"><input type="checkbox"><span><b>Argent</b> → Swap 500 SKR → USDC → signer → reçu</span></label>
       <label class="chk"><input type="checkbox"><span><b>Stake</b> 1 000 SKR → reçu. Puis <b>Unstake</b> → frais 1,5 % visibles</span></label>
-      <label class="chk"><input type="checkbox"><span>Barre du haut → taper <b>A</b>, <b>B</b>, <b>C</b> : l'app change de design en direct</span></label>
-      <label class="chk"><input type="checkbox"><span>✦ / ✧ : balayer les 4 thèmes</span></label>
-      <label class="chk"><input type="checkbox"><span>Poser le téléphone → écran de veille → tap pour réveiller</span></label>
+      <label class="chk"><input type="checkbox"><span>Réglages → <b>Identité</b> → basculer <b>Or</b> / <b>Nuit</b> en direct</span></label>
     </div>
     <div class="note" style="margin-top:20px"><b>Règles du produit (jamais négociables)</b> — la règle 92/3/5 est affichée sur chaque reçu ; aucune géolocalisation précise n'est stockée (le pays seulement) ; aucune fonctionnalité qui touche à l'argent n'est simulée : une vraie transaction ou rien.</div>
   </div>
@@ -166,52 +157,37 @@
     });
   });
 
-  // Simulateur des 12 apparences
+  // Simulateur : 2 thèmes, identité Seeker Premium
   var T = {
-    dark:{bg:'#0c0c0d',fg:'#f2f1ee',card:'#141416',dim:'#9c9a96',accent:'#d7d2cb',afg:'#0c0c0d',line:'rgba(242,241,238,0.18)'},
-    light:{bg:'#f3e6c1',fg:'#1a1308',card:'#faeecf',dim:'#a0844c',accent:'#b8892a',afg:'#fff8e6',line:'rgba(184,137,42,0.38)'},
     gold:{bg:'#0a0908',fg:'#f4ecd8',card:'#161310',dim:'#8a7a56',accent:'#d4af37',afg:'#0a0908',line:'rgba(212,175,55,0.28)'},
-    goldL:{bg:'#f6ecd2',fg:'#241a06',card:'#fbf4dd',dim:'#9a7f3e',accent:'#a67c1a',afg:'#fffbe8',line:'rgba(150,116,30,0.38)'}
+    dark:{bg:'#0c0c0d',fg:'#f2f1ee',card:'#141416',dim:'#9c9a96',accent:'#d7d2cb',afg:'#0c0c0d',line:'rgba(242,241,238,0.18)'}
   };
-  var LK = {
-    a:{name:"A — HORLOGE D'USINE",dial:'#d4af37',dialFg:'#0c0a07',titleFont:"var(--mono)",titleSpacing:'6px',radius:'999px',cardRadius:'999px',tag:function(v){return '— '+v+' —';}},
-    b:{name:'B — TICKET DE POINTEUSE',dial:'var(--display)',dialFg:null,titleFont:"var(--display)",titleSpacing:'0',radius:'2px',cardRadius:'2px',tag:function(v){return 'TIME '+v;}},
-    c:{name:'C — HARDWARE SEEKER',dial:null,dialFg:null,titleFont:"var(--body)",titleSpacing:'0',radius:'6px',cardRadius:'6px',tag:function(v){return 'LOCAL TIME '+v;}}
-  };
-  var curT='dark', curL='a';
+  var curT='gold';
   function tick(){var d=new Date(),p=function(n){return (n<10?'0':'')+n;};return p(d.getHours())+':'+p(d.getMinutes())+':'+p(d.getSeconds());}
   function paint(){
-    var t=T[curT], l=LK[curL], ph=document.getElementById('phone');
+    var t=T[curT], ph=document.getElementById('phone');
     ph.style.background=t.bg; ph.style.color=t.fg; ph.style.borderColor=t.line;
     var pt=document.getElementById('ptitle');
-    pt.style.fontFamily=l.titleFont; pt.style.letterSpacing=l.titleSpacing;
-    pt.textContent = curL==='a' ? '— CLOCK IN —' : 'CLOCK IN';
-    if(curL==='a'){pt.style.fontFamily='var(--mono)';pt.style.fontSize='22px';}else{pt.style.fontSize='24px';}
+    pt.textContent='CLOCK IN';
     var pd=document.getElementById('pdial');
-    if(curL==='b'){pd.textContent='⏱';pd.style.fontSize='40px';}else{pd.textContent='PUNCH';pd.style.fontSize='13px';}
-    pd.style.background = curL==='a' ? '#f0e0ad' : (curT==='dark'||curT==='gold' ? t.card : (curL==='c' ? '#0c0c0d' : t.accent));
-    pd.style.color = curL==='a' ? '#0c0a07' : (curL==='c' ? '#f2f1ee' : t.afg);
-    pd.style.borderRadius='999px'; pd.style.border='2px solid '+(curL==='a'?'#d4af37':t.accent);
-    document.getElementById('ptag').textContent=l.tag(tick());
+    pd.textContent='PUNCH'; pd.style.fontSize='13px';
+    pd.style.background='transparent';
+    pd.style.color=t.fg;
+    pd.style.borderRadius='2px'; pd.style.border='none';
+    document.getElementById('ptag').textContent='LOCAL TIME '+tick();
     var pc=document.getElementById('pcard');
-    pc.style.background = curL==='c' ? 'transparent' : (curL==='b' ? '#fffaf0' : t.card);
-    pc.style.color = curL==='b' ? '#2c1810' : (curL==='c' ? t.fg : t.fg);
-    pc.style.borderRadius=l.cardRadius;
-    pc.style.border = curL==='b' ? '1px dashed #2c1810' : (curL==='c' ? '1px solid rgba(242,241,238,0.14)' : '1px solid '+t.line);
-    document.getElementById('pnav').style.opacity = curL==='c' ? '1' : '0.8';
+    pc.style.background='transparent';
+    pc.style.color=t.fg;
+    pc.style.borderRadius='2px';
+    pc.style.border='1px solid '+t.line;
+    document.getElementById('pnav').style.opacity='1';
     document.getElementById('simname').textContent =
-      ({dark:'SOMBRE',light:'CLAIR',gold:'OR NOIR',goldL:'OR CLAIR'})[curT] + ' × ' + l.name;
+      ({gold:'OR ✦',dark:'NUIT'})[curT] + ' — SEEKER PREMIUM';
   }
   document.querySelectorAll('#rowTheme .simBtn').forEach(function(b){
     b.addEventListener('click',function(){
       document.querySelectorAll('#rowTheme .simBtn').forEach(function(x){x.classList.remove('on');});
       b.classList.add('on'); curT=b.dataset.t; paint();
-    });
-  });
-  document.querySelectorAll('#rowLook .simBtn').forEach(function(b){
-    b.addEventListener('click',function(){
-      document.querySelectorAll('#rowLook .simBtn').forEach(function(x){x.classList.remove('on');});
-      b.classList.add('on'); curL=b.dataset.l; paint();
     });
   });
   setInterval(paint,1000); paint();

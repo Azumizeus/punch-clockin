@@ -1,12 +1,14 @@
 ---
 titre: Checklist complète — générer un habillage (skin) PUNCH
-usage: à donner tel quel à l'IA ou au designer qui génère les 3 nouveaux habillages
-mise à jour: 20 septembre 2026
+usage: à donner tel quel à l'IA ou au designer qui génère un NOUVEL habillage optionnel (le natif n'en a plus qu'un, figé)
+mise à jour: 21 septembre 2026
 ---
 
 # Checklist habillage PUNCH — liste exhaustive des éléments à générer
 
-> Un habillage (skin) PUNCH n'est pas juste une palette : c'est **typographie globale + formes + composition des écrans clés + 4 variantes couleur**. Chaque nouveau skin DOIT définir TOUS les éléments de cette liste. Les 3 skins existants (A Horloge d'usine, B Ticket de pointeuse, C Hardware Seeker) servent d'exemples de complétude.
+> **⚠️ État actuel (21 sept 2026, v1.6.5)** — le natif porte **UNE identité unique** : **Seeker Premium** (fusion B+C), avec deux identités de couleur (✦ Gold / ☾ Nuit). Les habillages multiples et la veille ont été **retirés** de l'app (`looks.ts` figé sur `"b"`). Ce document reste la référence de complétude **si un jour un habillage optionnel D/E/F est demandé** ; dans ce cas, tout ce qui suit s'applique littéralement (screens, tokens, flags, états).
+>
+> Un habillage (skin) PUNCH n'est pas juste une palette : c'est **typographie globale + formes + composition des écrans clés + variantes couleur**. Le skin B (Ticket de pointeuse) est l'exemple de complétude incorporé dans l'app actuelle.
 >
 > Base de vérité : `punch-native/lib/punch/` (types.ts, looks.ts, fonts.ts, theme.ts) et le CSS source `punch app grok/PUNCH-ABC/src/styles.css`.
 

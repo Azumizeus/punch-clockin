@@ -1,6 +1,6 @@
 ---
 titre: Feuille de route — PUNCH
-mise à jour: 20 septembre 2026
+mise à jour: 21 septembre 2026
 ---
 
 # Feuille de route
@@ -30,6 +30,18 @@ mise à jour: 20 septembre 2026
 - [x] Persistance durcie : purge du token d'autorisation à chaque relance (exigence Seed Vault), garde-fous sur les anciennes données persistées.
 
 > **Décision du 20 sept.** — Le jury est présenté avec l'app sur **SPL standard devnet** (déjà vivant : trésor 4,9 SOL, mints, tous les flux signés vérifiables). Le programme Anchor de staking reste en Phase 1 : c'est un plus de vérifiabilité, pas un prérequis de démo — on le construit sans pression, après le hackathon.
+
+### Sprint 21 septembre — identité, fiabilité, nettoyage (fait)
+
+- [x] **Identité unique Seeker Premium (v1.5.0–v1.6.x)** : fusion assumée des habillages B+C (serif Fraunces, angles 2 px, onglets hardware, LOCAL TIME) ; un seul design, deux identités de couleur — **Gold** (défaut) et **Nuit** (option). Sélecteurs A/B/C et thèmes multiples retirés ; badge lingot `GoldBadge`.
+- [x] **Onglet Bonjours (hellos)** : dire bonjour paie 0,10 USDC en réel (trésor → wallet) + bonus 25 SKR (assumé hors chaîne, écrit sur l'écran) ; compteurs semaine/mois/année/total et classement.
+- [x] **Historique des tickets** : les 100 derniers reçus persistés (MMKV), rouvrables, signature cliquable vers l'explorer.
+- [x] **Frais protocole réels** sur pointage (0,02 USDC), sortie du réseau (0,02 USDC) et unstake (1,5 %) — répartis protocole/stakers avec rachat SKR.
+- [x] **Erreurs de transaction cohérentes et lisibles** : tous les flux (swap, stake/unstake, missions, bonjours, post) affichent la VRAIE raison (`readableTxError`) — « RPC devnet saturé », « réseau perdu »… ardoise `lastTxError` remise à zéro par tentative, jamais simulé.
+- [x] **Horloge de l'accueil économe** : re-render seulement quand la seconde affichée change, gel hors focus/ AppState (bug sec/ms de la v1.6.4 corrigé en v1.6.5). L'anneau pulsant du cadran reste volontairement infini (design).
+- [x] **Nettoyage** : écran de veille supprimé (armait une veille au milieu des transactions lentes), écran mort `how.tsx` retiré (remplacé par `guide.tsx`) — **17 écrans** au total (7 onglets + 10 écrans).
+- [x] **Outillage de contrôle appareil durci** : `scripts/device/ui_probe.py` (uiautomator dump vérifié, diff image sinon — l'accueil est non-idle), tours adaptés, audit on-chain du trésor, driver du test réseau coupé.
+- [x] APK signé **v1.6.5** (versionCode 19) installé et validé sur Seeker réel : punch-in réel tamponné on-chain, swap jusqu'à la feuille Seed Vault, zéro crash logcat.
 
 ## Phase 1 — Juste après le hackathon
 

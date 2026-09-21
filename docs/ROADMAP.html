@@ -38,11 +38,12 @@
 <div class="wrap">
   <span class="badge">Feuille de route</span>
   <h1>Roadmap PUNCH</h1>
-  <div class="sub">mise à jour 20 sept. 2026 — clique un onglet</div>
+  <div class="sub">mise à jour 21 sept. 2026 — clique un onglet</div>
 
   <div class="tabs">
     <div class="tab active" data-p="p0">Phase 0 — Hackathon</div>
     <div class="tab" data-p="s20">Sprint 20 sept — Fiabilité & habillages</div>
+    <div class="tab" data-p="s21">Sprint 21 sept — Identité Seeker Premium</div>
     <div class="tab" data-p="p1">Phase 1 — Post-hackathon</div>
     <div class="tab" data-p="p2">Phase 2 — Mainnet</div>
     <div class="tab" data-p="p3">Phase 3 — Écosystème Nexus</div>
@@ -78,6 +79,20 @@
     <div class="note" style="background:var(--card);border-left:3px solid var(--accent);border-radius:8px;padding:14px 18px;margin-top:14px;font-size:14px">
       <b>Décision du 20 sept.</b> — Le jury est présenté avec l'app sur <b>SPL standard devnet</b> (déjà vivant : trésor, mints, tous les flux signés vérifiables). Le programme Anchor de staking reste en Phase 1 : plus de vérifiabilité, pas un prérequis de démo.
     </div>
+  </div>
+
+  <div class="phase" id="s21">
+    <h2>Sprint 21 septembre — identité Seeker Premium et fiabilité (fait)</h2>
+    <ul class="tasks">
+      <li><span class="chip done">✓</span><b>Identité unique « Seeker Premium »</b> : fusion assumée des habillages B+C (serif Fraunces, angles 2 px, onglets hardware, horloge LOCAL TIME). Le sélecteur A/B/C est retiré — un seul look, deux thèmes (Or par défaut, Nuit).</li>
+      <li><span class="chip done">✓</span><b>Onglet Hellos</b> : bonjour payé 0,1 USDC réellement envoyé par le trésor + bonus 25 SKR hors-chaîne assumé honnêtement, compteurs semaine/mois/année/total + classement.</li>
+      <li><span class="chip done">✓</span><b>Historique des tickets</b> : 100 reçus persistés (MMKV), rouvrables, signature cliquable vers l'explorer devnet.</li>
+      <li><span class="chip done">✓</span><b>Erreurs de transaction cohérentes partout</b> : greetNearby/cashShift/postShift affichent la vraie raison lisible (RPC saturé, réseau perdu…), comme swap et unstake.</li>
+      <li><span class="chip done">✓</span><b>Écran mort supprimé</b> (how.tsx remplacé par guide) — <b>17 routes</b> : 7 onglets + 10 écrans, graphe de navigation vérifié.</li>
+      <li><span class="chip done">✓</span><b>Horloge live optimisée</b> : re-render uniquement quand la seconde affichée change, gelée hors écran (batterie) — et le bug sec/ms introduit puis corrigé le jour même, validé sur appareil.</li>
+      <li><span class="chip done">✓</span><b>Outillage de contrôle durci</b> : sonde ui_probe (détection des dumps non-idle), tours de contrôle par diff d'image — exécutés sur Seeker, 7 onglets / 7 naviguent.</li>
+      <li><span class="chip done">✓</span><b>APK v1.6.5</b> signé, installé sur Seeker : punch-in réel tamponné on-chain, swap et Seed Vault vérifiés en conditions réelles.</li>
+    </ul>
   </div>
 
   <div class="phase" id="p1">

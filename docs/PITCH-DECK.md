@@ -102,7 +102,7 @@ Aucun faux chiffre dans le stockage local. Nulle part.
 **Slide 7 — UX & plaisir**
 - Un globe à vraie physique de glissement : chaque pointage dans le monde ajoute un point en direct.
 - « Dire bonjour » à un Seeker à côté vous paie 0,10 $ chacun — un geste social devenu vraie micro-transaction.
-- 3 habillages × 4 thèmes (dont Solana Seeker Gold), écran miroir en veille, visite guidée interactive.
+- Identité unique **Seeker Premium** (✦ Gold / ☾ Nuit), historique des tickets avec signatures cliquables, visite guidée interactive.
 100 % natif (Expo/React Native) — APK signé, pas besoin d'Expo Go pour le jury.
 
 **Slide 8 — Marché & rétention**

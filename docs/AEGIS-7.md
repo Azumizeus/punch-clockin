@@ -1,7 +1,7 @@
 ---
 titre: AEGIS-7 — document cerveau du projet PUNCH
 usage: à lire en premier par tout assistant IA (Claude, Grok, autre) ou dev qui reprend le projet
-mise à jour: 19 septembre 2026
+mise à jour: 21 septembre 2026
 ---
 
 > **Note (EN):** This document is in French. It is the project's internal "brain" — decisions and pitfalls for any AI or developer resuming the work. Jury-facing documents are in `docs/` and bilingual (English first): `PITCH-JURY.md`, `GUIDE-JURY.md`, `MODE-EMPLOI.md`.
@@ -24,7 +24,7 @@ L'idée centrale : la preuve de présence humaine (un vrai téléphone Seeker, p
 Il y a DEUX projets distincts, ne jamais les confondre :
 
 1. **`punch-native`** (`C:\Users\admin\Desktop\PUNCH\punch-native`) — l'app mobile Expo/React Native. **C'est celle-ci qui compte pour le hackathon.** C'est un vrai clone/miroir fonctionnel du design de l'app de base, plus des fonctionnalités premium ajoutées (voir section 5).
-2. **L'app de base web** (Grok/xAI App Builder, dossier le plus récent : `C:\Users\admin\Desktop\PUNCH\punch app grok\PUNCH-CLOCK-IN-19sept2026`) — React/TanStack Router, construite dans un autre outil IA. C'est la **source de vérité du design** : polices, couleurs, copy, structure d'écran. Le native doit toujours suivre ce que fait cette base, pas l'inverse.
+2. **L'app de base web** (Grok/xAI App Builder) — React/TanStack Router, construite dans un autre outil IA (`punch app grok\PUNCH` = l'itération la plus récente, alignée sur l'identité du native ; `PUNCH-ABC` et `PUNCH-CLOCK-IN-19sept2026` = exports datés). C'est la **source de vérité du design** : polices, couleurs, copy, structure d'écran. Le native doit toujours suivre ce que fait cette base, pas l'inverse.
 
 Règle d'or répétée plusieurs fois par l'utilisateur : **"un clone, un jumeau, un miroir"**. Toute divergence visuelle ou de copy avec l'app de base est un bug, sauf pour les fonctionnalités premium explicitement demandées en plus (section 5).
 
@@ -34,9 +34,10 @@ Règle d'or répétée plusieurs fois par l'utilisateur : **"un clone, un jumeau
 - Zustand (`lib/punch/store.ts`) avec `persist` (stockage MMKV).
 - `@solana-mobile/mobile-wallet-adapter-protocol-web3js` pour Seed Vault (`transact()`).
 - `@solana/web3.js` + `@solana/spl-token` pour les transactions et transferts de tokens réels.
-- Polices : Fraunces (titres), Figtree (corps), IBM Plex Mono (mono / reçus).
-- Thèmes : `dark`, `light`, `gold` (Solana Seeker Mobile Gold, premium) — `lib/punch/theme.ts`.
+- Polices : Fraunces (corps + titres, identité Seeker Premium), IBM Plex Mono (mono / horodatages).
+- Identité : **une seule composition** (fusion B+C : serif Fraunces, angles 2 px, onglets hardware, LOCAL TIME) et **deux identités de couleur** — `gold` (défaut) et `nuit` — dans `lib/punch/theme.ts` (`premiumPalettes`). L'habillage est figé sur `"b"` (les sélecteurs A/B/C et la veille ont été retirés en v1.5.0/v1.6.1).
 - Traductions FR/EN complètes dans `lib/punch/copy.ts`.
+- Onglets (7) : punch, board, globe, hellos, wallet, split, settings — + connect, guide, history, language, looks, post, receipt, shift (17 routes).
 
 ## 4. Économie réelle sur devnet — ne JAMAIS revenir à du faux
 
@@ -65,7 +66,13 @@ Explicitement demandées par l'utilisateur, en plus du clone :
 4. Bouton "Quitter le réseau" avec vraie transaction blockchain obligatoire (section 4), plutôt qu'un simple reset local.
 5. Thème premium **"Solana Seeker Mobile Gold"** (palette noir/or) sélectionnable dans Réglages et via un raccourci ✦ dans la barre du haut.
 6. Frais protocole réels sur les mouvements d'argent qui n'en avaient pas (entrée/sortie du réseau, retrait de staking) — pour que le trésor de l'app soit vraiment rémunéré, pas juste affiché.
-7. Un onglet Réglages en plus des 5 onglets de l'app de base (garder cet onglet — demande explicite).
+7. Un onglet Réglages en plus des onglets de l'app de base (garder cet onglet — demande explicite).
+8. **Onglet Bonjours** : dire bonjour paie 0,10 USDC réels (trésor → wallet) + bonus 25 SKR assumé hors chaîne ; compteurs semaine/mois/année + classement (`lib/punch/hellos.ts`).
+9. **Historique des tickets** : 100 derniers reçus persistés, rouvrables (`app/history.tsx`).
+10. **Identité Seeker Premium** (v1.5.0+) : fusion B+C assumée, badge lingot `GoldBadge`, deux identités de couleur Gold/Nuit.
+11. **Frais protocole réels** : entrée 0,02 USDC, sortie 0,02 USDC, unstake 1,5 % — répartis protocole/stakers avec rachat SKR.
+12. **Erreurs lisibles partout** : `readableTxError` sur tous les flux, ardoise `lastTxError` remise à zéro par tentative.
+13. **Horloge de l'accueil économe** : re-render seulement si la seconde affichée change, gel hors focus/ AppState — ATTENTION au piège sec/ms : l'état `useLiveClock` est en **millisecondes** (`setNow(sec * 1000)`), la v1.6.4 a affiché 1970 pendant une demi-journée pour ça.
 
 ## 6. Habillage visuel — état actuel (19 sept 2026)
 
@@ -76,6 +83,8 @@ L'app de base a été mise à jour avec un nouvel habillage (dossier `PUNCH-CLOC
 - **Mode d'emploi interactif** : 8 étapes (`app/guide.tsx`), accessible depuis Réglages. Adapté pour PUNCH seul — l'étape PLI reste informative, sans bouton fonctionnel (PLI n'est pas construit ici).
 
 ## 7. Pièges déjà rencontrés (ne pas refaire)
+
+- **Contrôle adb** : `uiautomator dump` ÉCHOUE EN SILENCE sur l'accueil (anneau pulsant + horloge = UI jamais idle) et le XML précédent reste sur disque — toujours vérifier "dumped" dans la sortie (voir `scripts/device/ui_probe.py`) ou prouver l'état par diff d'images. Un faux bug "tap Accueil mort" a failli être "corrigé" à cause de ça : le tap fonctionne (preuve diff 0,00 contre la référence accueil).
 
 - Ne jamais généraliser un rayon de bordure : certains boutons sont des pilules (`999`), d'autres non (`8`/`12`/`16` selon la taille cva `sm`/`md`/`lg`). Vérifier le vrai `button.tsx` de l'app de base avant de "corriger".
 - Ne jamais confondre le dossier `punch-app/src` (ancien, supprimé) avec `punch-app/punch-app/src` (bon) ou les nouveaux exports datés type `PUNCH-CLOCK-IN-19sept2026` (le plus récent fait foi).

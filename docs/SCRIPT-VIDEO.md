@@ -57,7 +57,7 @@ langues: English then Français
 
 - **Alterne** : écran physique filmé en gros plan (crédibilité) + screen recording net (lisibilité). Au minimum : le pointage ET la signature Seed Vault filmés sur le téléphone réel.
 - **Montre l'explorer 5 secondes** après une transaction (explorer.solana.com, cluster=devnet, adresse du trésor) — c'est LA preuve que le jury cherche.
-- **Thème Gold ou habillage A** pour la démo (le plus lisible en vidéo), montre le sélecteur A/B/C 2 secondes.
+- **Identité ✦ Gold Seeker Premium** pour la démo (la plus lisible en vidéo) ; montre 2 secondes la bascule ☾ Seeker Nuit dans Réglages → Identité.
 - Voix off EN obligatoire (jury anglophone) ; sous-titres FR optionnels.
 - Outils gratuits : OBS Studio (screen record), CapCut/DaVinci (montage), sous-titres auto.
 - Nom de fichier suggéré : `punch-clockin-demo.mp4` — à héberger sur YouTube (public ou répertorié) et à lier dans la soumission.
