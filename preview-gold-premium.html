@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>APERÇU — Gold Seeker Premium v1.3.0</title>
+<style>
+  :root{
+    --bg:#0b0a07; --fg:#f5ead0; --dim:#8a7a56; --dim2:#c2a768;
+    --card:#151210; --input:#1e1a12;
+    --border:rgba(212,175,55,.32); --borderL:rgba(212,175,55,.16);
+    --accent:#d4af37; --accentFg:#0b0a07;
+    --paper:#f2e6c8; --paperFg:#1a1510; --paperMuted:#7a6b4a;
+    --gold-hi:#f3dc8e; --gold-mid:#d4af37; --gold-low:#8a6d1f; --badge:#191510;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:#060505;color:var(--fg);font-family:'Figtree',system-ui,sans-serif;padding:20px;display:flex;flex-direction:column;align-items:center;gap:24px}
+  h1{font-size:13px;letter-spacing:3px;color:var(--dim2);font-weight:600;margin-top:6px}
+  .phone{width:360px;border-radius:28px;overflow:hidden;border:1px solid var(--border);background:var(--bg);box-shadow:0 20px 60px rgba(0,0,0,.6)}
+  .topbar{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-bottom:1px solid var(--borderL)}
+  .brand{display:flex;align-items:center;gap:6px;color:var(--dim);font-weight:700;font-size:12px;letter-spacing:1px}
+  .brand .dot{width:14px;height:14px;border-radius:4px;background:linear-gradient(135deg,var(--gold-hi),var(--gold-low))}
+  .tb{display:flex;gap:5px}
+  .tb span{border:1px solid var(--border);color:var(--dim);font-size:10px;padding:4px 7px;border-radius:6px;font-weight:700}
+  .tb span.on{background:var(--accent);color:var(--accentFg);border-color:var(--accent)}
+  .body{padding:16px}
+  /* badge */
+  .badge{margin:0 0 16px;border-radius:12px;padding:2px;background:linear-gradient(180deg,var(--gold-hi),var(--gold-mid) 50%,var(--gold-low));box-shadow:0 6px 18px rgba(212,175,55,.25)}
+  .badge-inner{background:var(--badge);border-radius:10px;padding:11px 15px;display:flex;align-items:center;gap:10px}
+  .spark{color:var(--gold-hi);font-size:19px}
+  .bt{font-size:12px;letter-spacing:2.5px;color:var(--gold-hi);font-weight:600}
+  .bs{font-size:8.5px;letter-spacing:3px;color:var(--gold-mid);margin-top:3px;font-family:ui-monospace,monospace}
+  /* cadran */
+  .dialwrap{display:flex;flex-direction:column;align-items:center;padding:8px 0 4px;position:relative}
+  .ring{width:150px;height:150px;border-radius:50%;border:2px solid rgba(212,175,55,.2);display:grid;place-items:center;position:relative}
+  .ring::before{content:"";position:absolute;inset:9px;border-radius:50%;border:1.5px solid var(--gold-mid);animation:pulse 2.4s ease-out infinite}
+  @keyframes pulse{0%{transform:scale(1);opacity:.35}100%{transform:scale(1.18);opacity:0}}
+  .core{width:108px;height:108px;border-radius:50%;background:var(--accent);display:grid;place-items:center;color:var(--accentFg);font-size:40px;font-weight:800}
+  .lbl{margin-top:14px;font-size:11px;letter-spacing:2px;color:var(--dim);text-transform:uppercase}
+  .clock{margin-top:4px;font-family:ui-monospace,monospace;font-size:15px;color:var(--dim2);letter-spacing:2px}
+  /* ticket */
+  .ticket{margin-top:16px;background:var(--paper);color:var(--paperFg);border-radius:6px;padding:16px;animation:receipt-in .4s cubic-bezier(.22,1,.36,1) both;animation-delay:.5s}
+  @keyframes receipt-in{from{opacity:0;transform:translateY(16px) scale(.98)}to{opacity:1;transform:none}}
+  .thead{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+  .ttitle{font-weight:700;font-size:14px}
+  .chip{background:rgba(212,175,55,.16);color:#8a6d1f;font-size:10px;font-weight:700;padding:3px 8px;border-radius:4px}
+  .trow{display:flex;justify-content:space-between;font-size:12px;color:var(--paperMuted);padding:5px 0;border-bottom:1px solid rgba(26,21,16,.08)}
+  .trow:last-child{border:none;font-weight:700;color:var(--paperFg)}
+  .goldline{color:#8a6d1f}
+  .cap{font-size:11px;color:var(--dim);text-align:center;max-width:360px;line-height:1.5}
+  .cap b{color:var(--dim2)}
+</style>
+</head>
+<body>
+<h1>APERÇU · GOLD SEEKER PREMIUM · HABILLAGE C</h1>
+<div class="phone">
+  <div class="topbar">
+    <div class="brand"><span class="dot"></span>PUNCH</div>
+    <div class="tb"><span class="on">B</span><span>C</span><span>○</span><span>●</span><span class="on" style="background:none;border-color:var(--gold-mid);color:var(--gold-mid)">✦</span></div>
+  </div>
+  <div class="body">
+    <div class="badge">
+      <div class="badge-inner">
+        <span class="spark">✦</span>
+        <div><div class="bt">SEEKER PREMIUM</div><div class="bs">SKR STAKED</div></div>
+      </div>
+    </div>
+    <div class="dialwrap">
+      <div class="ring"><div class="core">⚡</div></div>
+      <div class="lbl">Clock In</div>
+      <div class="clock">07:31:24</div>
+    </div>
+    <div class="ticket">
+      <div class="thead"><span class="ttitle">Échange SKR → USDC</span><span class="chip">USDC</span></div>
+      <div class="trow"><span>Tu paies</span><span>100,00 SKR</span></div>
+      <div class="trow"><span>Tu reçois</span><span>1,82 USDC</span></div>
+      <div class="trow"><span>Ta part gardien</span><span class="goldline">+0,0019 SKR ✦</span></div>
+    </div>
+  </div>
+</div>
+<p class="cap"><b>Ce que tu vois :</b> badge métallique en dégradé or (reflet → métal → ombre), anneau de pulse avant pointage (2,4 s), ticket avec entrée <i>receipt-in</i>. Le badge n'apparaît <b>que</b> sur le thème ✦.</p>
+</body>
+</html>

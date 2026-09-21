@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>APERÇU — Identité Seeker Premium · Gold ↔ Nuit (v1.6.0)</title>
+<style>
+  /* ═══ IDENTITÉ SEEKER PREMIUM — les deux palettes exactes de theme.ts ═══ */
+  :root, .theme-gold {
+    --bg:#0b0a07; --fg:#f5ead0; --dim:#8a7a56; --dim2:#c2a768;
+    --accent:#d4af37; --accentFg:#0b0a07;
+    --paper:#f2e6c8; --paperFg:#1a1510; --paperMuted:#7a6b4a;
+    --border:rgba(212,175,55,.32); --borderL:rgba(212,175,55,.16);
+    --mHi:#f3dc8e; --mMid:#d4af37; --mLow:#8a6d1f; --mInk:#191510;
+    --brandName:"SEEKER PREMIUM"; --brandSub:"IDENTITÉ OR · v1.6";
+  }
+  .theme-nuit {
+    --bg:#07090d; --fg:#dfe5ee; --dim:#5f6a7d; --dim2:#9aa5b8;
+    --accent:#c0c7d1; --accentFg:#07090d;
+    --paper:#dfe3ea; --paperFg:#10151d; --paperMuted:#6b7484;
+    --border:rgba(192,199,209,.30); --borderL:rgba(192,199,209,.14);
+    --mHi:#f0f4f9; --mMid:#c0c7d1; --mLow:#7c8698; --mInk:#11151c;
+    --brandName:"SEEKER NUIT"; --brandSub:"IDENTITÉ LUNE · v1.6";
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    background:#05060a; color:#c9cdd6; font-family:Georgia, "Times New Roman", serif;
+    display:flex; flex-direction:column; align-items:center; gap:18px; padding:26px 14px; min-height:100vh;
+  }
+  .pageTitle { color:#8a8f9a; font-family:'Courier New',monospace; font-size:12px; letter-spacing:3px; text-transform:uppercase; }
+  .switch { display:flex; gap:8px; }
+  .switch button {
+    font-family:'Courier New',monospace; font-size:12px; letter-spacing:2px; cursor:pointer;
+    background:#101218; color:#8a8f9a; border:1px solid #23262e; border-radius:2px; padding:10px 22px; transition:.2s;
+  }
+  .switch button.on { background:#d4af37; color:#0b0a07; border-color:#f3dc8e; font-weight:bold; }
+  .switch button.on.nuit-on { background:#c0c7d1; color:#07090d; border-color:#f0f4f9; }
+
+  /* ═══ LE TÉLÉPHONE ═══ */
+  .phone {
+    width:340px; background:var(--bg); border-radius:26px; border:1px solid #1c1e26;
+    box-shadow:0 30px 80px rgba(0,0,0,.7); overflow:hidden; transition:background .35s;
+  }
+  .topbar { display:flex; justify-content:space-between; align-items:center; padding:16px 16px 8px; }
+  .brand { display:flex; align-items:center; gap:6px; color:var(--dim); font-family:'Courier New',monospace; font-size:10px; letter-spacing:2px; }
+  .brand .mark { color:var(--mMid); font-size:11px; }
+  .lang { color:var(--dim); font-family:'Courier New',monospace; font-size:11px; letter-spacing:1px; border:1px solid var(--borderL); border-radius:2px; padding:6px 9px; }
+  .screen { padding:6px 18px 26px; }
+
+  h1 { color:var(--fg); font-size:34px; letter-spacing:-1.4px; margin:10px 0 2px; }
+  .sub { color:var(--dim); font-size:13px; margin-bottom:14px; }
+  .hwNav { display:flex; gap:14px; font-family:'Courier New',monospace; font-size:10px; letter-spacing:2px; color:var(--dim); margin-bottom:14px; }
+  .hwNav b { color:var(--fg); font-weight:normal; border-bottom:1px solid var(--accent); padding-bottom:2px; }
+
+  /* Le cadran — anneau or machine, disque accent */
+  .dialWrap { position:relative; width:190px; height:190px; margin:8px auto 18px; }
+  .dialRing { position:absolute; inset:0; border-radius:50%; border:2px dashed var(--mMid); opacity:.9; }
+  .dial {
+    position:absolute; inset:12px; border-radius:50%; background:var(--accent);
+    display:flex; align-items:center; justify-content:center; flex-direction:column;
+  }
+  .dial .time { font-family:'Courier New',monospace; font-size:38px; color:var(--accentFg); letter-spacing:-2px; }
+  .dial .punch { font-family:'Courier New',monospace; font-size:10px; letter-spacing:3px; color:var(--accentFg); opacity:.75; margin-top:4px; }
+
+  /* Le badge gravé */
+  .badge {
+    display:flex; align-items:center; gap:12px; border-radius:2px; padding:13px 16px; margin-bottom:14px;
+    background:linear-gradient(135deg, var(--mHi) 0%, var(--mMid) 52%, var(--mLow) 100%);
+    border:1px solid rgba(255,255,255,.35);
+  }
+  .badge .spark { font-size:20px; color:var(--mInk); opacity:.85; }
+  .badge .bt { flex:1; }
+  .badge .t1 { font-family:'Courier New',monospace; font-size:12px; letter-spacing:2px; color:var(--mInk); font-weight:bold; }
+  .badge .t2 { font-family:'Courier New',monospace; font-size:9px; letter-spacing:1.5px; color:var(--mInk); opacity:.6; margin-top:2px; }
+  .badge .t3 { font-family:'Courier New',monospace; font-size:8.5px; letter-spacing:1px; color:var(--mInk); opacity:.82; margin-top:4px; border-top:1px solid rgba(0,0,0,.18); padding-top:4px; }
+
+  /* Le ticket de reçu — papier, encre brûlée, déchirure */
+  .ticket {
+    background:var(--paper); color:var(--paperFg); border-radius:2px; padding:14px 16px; position:relative;
+  }
+  .ticket::before {
+    content:""; position:absolute; top:-5px; left:0; right:0; height:0;
+    border-top:2px dashed var(--paperMuted); opacity:.5;
+  }
+  .ticket .lbl { font-family:'Courier New',monospace; font-size:9px; letter-spacing:2px; color:var(--paperMuted); }
+  .ticket .big { font-size:26px; margin:2px 0 8px; }
+  .ticket .big .or { color:#a4822a; }
+  .theme-nuit .ticket .big .or { color:#4a5468; }
+  .ticket .row { display:flex; justify-content:space-between; font-size:12.5px; padding:5px 0; border-bottom:1px solid rgba(0,0,0,.07); }
+  .ticket .row:last-child { border-bottom:none; }
+  .ticket .row .k { color:var(--paperMuted); }
+  .ticket .row .v { font-family:'Courier New',monospace; }
+  .ticket .row .v.gold { color:#a4822a; }
+  .theme-nuit .ticket .row .v.gold { color:#4a5468; }
+  .ticket .sig { font-family:'Courier New',monospace; font-size:8.5px; color:var(--paperMuted); margin-top:8px; letter-spacing:.5px; }
+
+  /* La barre d'onglets — papier + déchirure pointillée */
+  .tabbar {
+    display:flex; justify-content:space-around; background:var(--paper);
+    border-top:2px dashed var(--accent); padding:10px 0 12px; transition:background .35s;
+  }
+  .tab { font-family:'Courier New',monospace; font-size:8px; letter-spacing:1px; text-align:center; color:var(--paperMuted); }
+  .tab.on { color:var(--paperFg); }
+  .tab .ic { font-size:15px; display:block; margin-bottom:2px; }
+
+  .paletteNote { font-family:'Courier New',monospace; font-size:10px; color:#6a7080; letter-spacing:1px; text-align:center; max-width:360px; line-height:1.7; }
+</style>
+</head>
+<body class="theme-gold">
+  <div class="pageTitle">APERÇU · IDENTITÉ FUSION B+C · MONOLITHE + TICKETS IVOIRE</div>
+  <div class="switch">
+    <button id="btnGold" class="on" onclick="setTheme('gold')">✦ GOLD SEEKER PREMIUM</button>
+    <button id="btnNuit" onclick="setTheme('nuit')">☾ SEEKER NUIT</button>
+  </div>
+
+  <div class="phone">
+    <div class="topbar">
+      <div class="brand">PUNCH <span class="mark">✦</span></div>
+      <div class="lang">EN</div>
+    </div>
+    <div class="screen">
+      <h1>CLOCK IN</h1>
+      <div class="sub">Nexus paie la présence.</div>
+      <div class="hwNav">‖ <b>DOM</b> · 2 VUE</div>
+
+      <div class="badge">
+        <div class="spark">✦</div>
+        <div class="bt">
+          <div class="t1" id="bName">SEEKER PREMIUM</div>
+          <div class="t2" id="bSub">IDENTITÉ OR · v1.6</div>
+          <div class="t3">✦ 3 JOURS · GARDE 7 000 SKR · OR</div>
+        </div>
+      </div>
+
+      <div class="dialWrap">
+        <div class="dialRing"></div>
+        <div class="dial">
+          <div class="time">08:12</div>
+          <div class="punch">POINTER</div>
+        </div>
+      </div>
+
+      <div class="ticket">
+        <div class="lbl">REÇU · MISSION SCAN</div>
+        <div class="big">+<span class="or">1,84</span> USDC</div>
+        <div class="row"><span class="k">Tu gardes (92 %)</span><span class="v">1,69</span></div>
+        <div class="row"><span class="k">Gardiens SKR (3 %)</span><span class="v">0,06</span></div>
+        <div class="row"><span class="k">L'app (5 %)</span><span class="v">0,09</span></div>
+        <div class="sig">SIGNÉ · 5ND9…Z5vh · Voir sur l'explorateur ↗</div>
+      </div>
+    </div>
+    <div class="tabbar">
+      <div class="tab on"><span class="ic">◉</span>POINTER</div>
+      <div class="tab"><span class="ic">▤</span>MISSIONS</div>
+      <div class="tab"><span class="ic">◈</span>ARGENT</div>
+      <div class="tab"><span class="ic">✂</span>LA PART</div>
+    </div>
+  </div>
+
+  <div class="paletteNote" id="note">
+    GOLD · monolithe #0b0a07 · or #d4af37 · reflet #f3dc8e · ombre #8a6d1f · ticket #f2e6c8
+  </div>
+
+<script>
+  const NOTES = {
+    gold: "GOLD · monolithe #0b0a07 · or #d4af37 · reflet #f3dc8e · ombre #8a6d1f · ticket #f2e6c8",
+    nuit: "NUIT · monolithe #07090d · argent #c0c7d1 · reflet #f0f4f9 · ombre #7c8698 · ticket #dfe3ea",
+  };
+  function setTheme(t) {
+    document.body.className = "theme-" + t;
+    document.getElementById("btnGold").className = t === "gold" ? "on" : "";
+    document.getElementById("btnNuit").className = t === "nuit" ? "on nuit-on" : "";
+    document.getElementById("bName").textContent = t === "gold" ? "SEEKER PREMIUM" : "SEEKER NUIT";
+    document.getElementById("bSub").textContent = t === "gold" ? "IDENTITÉ OR · v1.6" : "IDENTITÉ LUNE · v1.6";
+    document.getElementById("note").textContent = NOTES[t];
+  }
+</script>
+</body>
+</html>
