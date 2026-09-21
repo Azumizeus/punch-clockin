@@ -16,14 +16,19 @@ PUNCH transforme le pointage en preuve on-chain : tu pointes une fois par jour, 
 
 ## Structure
 
-```
-app/
-  (tabs)/        punch, board, globe, wallet, split, settings
+```app/
+  (tabs)/        7 onglets : punch (accueil), board, globe, hellos, wallet, split, settings
   connect.tsx    écran d'entrée "CLOCK IN"
   guide.tsx      mode d'emploi interactif (8 étapes)
-  shift.tsx, post.tsx, receipt.tsx
+  history.tsx    historique des tickets (100 derniers reçus)
+  language.tsx   choix de la langue au premier lancement
+  looks.tsx      galerie d'identité (Seeker Premium / Seeker Nuit)
+  how.tsx        écran d'aide (plus référencé par la navigation — à retirer)
+  post.tsx       publier une mission
+  receipt.tsx    ticket / reçu détaillé
+  shift.tsx      détail d'une mission
 lib/
-  punch/         store Zustand, thèmes (dark/light/gold), traductions FR/EN, formules
+  punch/         store Zustand (MMKV), identité Seeker Premium, traductions FR/EN, formules
   solana/        wallet Seed Vault, transferts SPL réels, config devnet
 ```
 
