@@ -518,7 +518,11 @@ function useLiveClock() {
       const sec = Math.floor(Date.now() / 1000);
       if (sec !== lastRenderedSec.current) {
         lastRenderedSec.current = sec;
-        setNow(sec);
+        // now reste en MILLISECONDES (comme l'état initial Date.now()) —
+        // v1.6.4 stockait des secondes ici et l'horloge affichait une heure
+        // dérivée de 1970 dès le premier tick. C'est le bug « pas la bonne
+        // heure dans l'app ».
+        setNow(sec * 1000);
       }
     };
     tick();
