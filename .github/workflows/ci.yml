@@ -1,0 +1,40 @@
+name: CI
+
+# Verrouille la qualite a chaque push : economie + types des deux apps.
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+
+jobs:
+  economy-and-types:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      # 1) Harnais economiques — 54 verifications offline (split 92/3/5, frais,
+      #    soldes, compteurs). Aucune dependance, aucun reseau.
+      - name: Harnais economiques
+        run: node punch-native/scripts/test-store-economy.mjs
+
+      # 2) Typecheck app native (le code economique y vit aussi)
+      - name: Install native deps
+        working-directory: punch-native
+        run: npm ci
+
+      - name: Typecheck native
+        working-directory: punch-native
+        run: npx tsc --noEmit
+
+      # 3) Typecheck app web (partage la meme economie)
+      - name: Install web deps
+        working-directory: "punch app grok/PUNCH"
+        run: npm ci
+
+      - name: Typecheck web
+        working-directory: "punch app grok/PUNCH"
+        run: npx tsc --noEmit

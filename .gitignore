@@ -30,3 +30,6 @@ scan_target.py
 # artefacts de build lourds : captures QA et APKs signes (releases/)
 punch-native/_shots/
 punch-native/releases/
+
+# la video demo est trackee (attachee aux GitHub Releases)
+!punch-native/releases/punch-clockin-demo.mp4
