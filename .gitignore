@@ -18,3 +18,15 @@ build-apk.log
 # debris d'un filter-branch avorte (montage reseau, non supprimable, inoffensif)
 .git-rewrite.bak/
 .git-junk-refs/
+
+# debris de controle d'appareil (dumps uiautomator + captures adb, regenerables)
+t_*.xml
+ui_dump.xml
+ui_p.xml
+wallet_full.xml
+ui_now.png
+scan_target.py
+
+# artefacts de build lourds : captures QA et APKs signes (releases/)
+punch-native/_shots/
+punch-native/releases/
