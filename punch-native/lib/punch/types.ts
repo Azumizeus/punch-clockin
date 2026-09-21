@@ -6,6 +6,11 @@ export type Theme = "gold" | "nuit";
 /** Habillage : champ conservé pour compat (tout migre vers "b" = fusion
  * Seeker Premium). Un seul design à partir de v1.5.0. */
 export type Look = "b";
+/** Rendu de la composition : "flat" = l'actuel (angles bruts, surfaces à
+ * plat), "depth3d" = le même design en relief — isométrie légère, badge
+ * métallique en 3 nuances, anneaux pulsés, ticket papier avec ombre. Les
+ * 13 tokens et les deux thèmes (gold/nuit) restent LA source de couleur. */
+export type Skin = "flat" | "depth3d";
 export type Token = "USDC" | "USDT" | "SKR";
 export type Product = "punch" | "pli";
 export type Tab = "punch" | "board" | "wallet" | "split" | "box" | "write" | "globe" | "hellos";
@@ -109,6 +114,8 @@ export interface PunchState {
   localeChosen: boolean;
   theme: Theme;
   look: Look;
+  /** Habillage de rendu : à plat (héritage) ou en relief 3D vectoriel. */
+  skin: Skin;
   seenHow: boolean;
   product: Product;
   tab: Tab;

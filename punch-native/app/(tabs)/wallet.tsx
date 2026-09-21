@@ -9,7 +9,8 @@ import {
   Alert,
   ActivityIndicator,
 } from "react-native";
-import { Connection, PublicKey } from "@solana/web3.js";
+import { PublicKey } from "@solana/web3.js";
+import { activeConnection } from "../../lib/solana/rpc";
 import { useRouter } from "expo-router";
 import { GoldBadge } from "../../components/GoldBadge";
 import { usePunch, useT, useColors, useShape } from "../../lib/punch/store";
@@ -63,7 +64,7 @@ export default function WalletScreen() {
       return false;
     }
     try {
-      const conn = new Connection("https://api.devnet.solana.com");
+      const conn = activeConnection();
       // Plafonné à 4 s : sous rate-limit devnet, ce pré-check ne doit JAMAIS
       // laisser le bouton mort en silence — passé ce délai on tente quand
       // même, le vault affichera son erreur s'il y en a une.

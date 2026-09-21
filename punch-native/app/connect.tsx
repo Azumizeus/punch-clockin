@@ -9,6 +9,7 @@ import {
   Image,
   Pressable,
   Animated,
+  Platform,
 } from "react-native";
 import { useRouter } from "expo-router";
 import { usePunch, useT, useColors } from "../lib/punch/store";
@@ -42,6 +43,14 @@ export default function ConnectScreen() {
       await connectReal(address, authToken);
       router.replace("/");
     } catch {
+      // Web : pas de Mobile Wallet Adapter, et Alert.alert est un no-op sur
+      // web (la modale n'existe pas) — on entre donc directement en mode
+      // démo, exactement ce que fait le bouton OK de l'Alert sur mobile.
+      if (Platform.OS === "web") {
+        connect("punch");
+        router.replace("/");
+        return;
+      }
       Alert.alert("Wallet", "Mobile Wallet Adapter not available. Entering demo mode.", [
         { text: "OK", onPress: () => { connect("punch"); router.replace("/"); } },
       ]);

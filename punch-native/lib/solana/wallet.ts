@@ -14,7 +14,9 @@ import {
   createTransferInstruction,
   getAssociatedTokenAddress,
 } from "@solana/spl-token";
-import { toByteArray } from "react-native-quick-base64";
+// Résolution par plateforme : quick-base64 (natif JSI) sur iOS/Android,
+// atob du navigateur sur web (le module natif crash à l'import sur web).
+import { toByteArray } from "./base64";
 import { TREASURY_PUBKEY } from "./devnetConfig";
 import { TREASURY_SECRET_KEY_DEVNET } from "./treasurySecretDEVNET";
 

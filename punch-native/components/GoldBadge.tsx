@@ -4,6 +4,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { usePunch, useT } from "../lib/punch/store";
 import { fonts } from "../lib/punch/fonts";
 import { metalKit } from "../lib/punch/theme";
+import { MetalBadge3D, useSkin3d } from "./Skin3D";
 
 /**
  * SEEKER PREMIUM — le badge d'origine (celui de l'aperçu validé).
@@ -17,8 +18,29 @@ export function GoldBadge() {
   const theme = usePunch((s) => s.theme);
   const locale = usePunch((s) => s.locale);
   const wallet = usePunch((s) => s.wallet);
+  const skin3dOn = useSkin3d();
   const m = useMemo(() => metalKit(theme), [theme]);
   if (!wallet.connected) return null;
+
+  // HABILLAGE RELIEF (skin 3D) : le badge devient une pièce métallique avec
+  // biseau clair/sombre, rivet et ombre portée — mêmes textes gravés.
+  if (skin3dOn) {
+    return (
+      <MetalBadge3D
+        theme={theme}
+        title={theme === "nuit" ? "SEEKER NUIT" : "SEEKER PREMIUM"}
+        sub={
+          theme === "nuit"
+            ? locale === "fr"
+              ? "IDENTITÉ LUNE · v1.6"
+              : "MOON IDENTITY · v1.6"
+            : locale === "fr"
+              ? "IDENTITÉ OR · v1.6"
+              : "GOLD IDENTITY · v1.6"
+        }
+      />
+    );
+  }
 
   return (
     <LinearGradient

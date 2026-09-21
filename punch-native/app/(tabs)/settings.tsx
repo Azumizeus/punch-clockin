@@ -1,7 +1,8 @@
-import { useMemo } from "react";
-import { View, Text, TouchableOpacity, ScrollView, StyleSheet, ActivityIndicator } from "react-native";
+import { useMemo, useState } from "react";
+import { View, Text, TouchableOpacity, ScrollView, StyleSheet, ActivityIndicator, TextInput, Alert } from "react-native";
 import { useRouter } from "expo-router";
 import { usePunch, useT, useColors } from "../../lib/punch/store";
+import { DEFAULT_RPC, getRpcUrl, isCustomRpc, pingRpc, rebuildConnection, setRpcUrl } from "../../lib/solana/rpc";
 import { fonts } from "../../lib/punch/fonts";
 import { lookGallery, lookTokens } from "../../lib/punch/looks";
 import { useLeaveNetwork } from "../../lib/punch/useLeaveNetwork";
@@ -20,8 +21,49 @@ export default function SettingsScreen() {
   const setLocale = usePunch((st) => st.setLocale);
   const theme = usePunch((st) => st.theme);
   const setTheme = usePunch((st) => st.setTheme);
+  const skin = usePunch((st) => st.skin);
+  const setSkin = usePunch((st) => st.setSkin);
   const wallet = usePunch((st) => st.wallet);
   const { leaving, confirmLeave, walletReal } = useLeaveNetwork();
+
+  // Réseau : l'endpoint RPC est un choix de l'utilisateur, persisté localement.
+  // Sauver déclenche un ping de preuve — pas de bouton qui "espère".
+  const [rpcDraft, setRpcDraft] = useState(() => getRpcUrl());
+  const [rpcCustom, setRpcCustom] = useState(() => isCustomRpc());
+  const [rpcTesting, setRpcTesting] = useState(false);
+  const [rpcMsg, setRpcMsg] = useState<{ ok: boolean; text: string } | null>(null);
+
+  const testRpc = async (url: string) => {
+    setRpcTesting(true);
+    setRpcMsg(null);
+    const r = await pingRpc(url);
+    setRpcTesting(false);
+    setRpcMsg(
+      r.ok && r.ms != null
+        ? { ok: true, text: t.netOk(r.ms) }
+        : { ok: false, text: t.netFail(r.error ?? "?") },
+    );
+  };
+
+  const saveRpc = () => {
+    const url = rpcDraft.trim();
+    if (!/^https?:\/\/.+/i.test(url)) {
+      Alert.alert(t.netInvalid);
+      return;
+    }
+    setRpcUrl(url);
+    rebuildConnection();
+    setRpcCustom(isCustomRpc());
+    void testRpc(url); // preuve immédiate que ça répond
+  };
+
+  const resetRpc = () => {
+    setRpcUrl(null);
+    rebuildConnection();
+    setRpcDraft(DEFAULT_RPC);
+    setRpcCustom(false);
+    setRpcMsg(null);
+  };
 
   return (
     <ScrollView style={s.wrap} contentContainerStyle={s.content}>
@@ -85,6 +127,32 @@ export default function SettingsScreen() {
         </TouchableOpacity>
       </Section>
 
+      <Section title={t.skin3dTitle} s={s}>
+        {/* Le RENDU de la composition : à plat (héritage) ou en relief 3D
+            vectoriel. La couleur reste portée par l'identité (or / nuit). */}
+        <Text style={s.identityTag}>{t.skin3dTag}</Text>
+        <TouchableOpacity
+          style={[s.identityCard, { backgroundColor: c.card }, skin === "flat" && { borderColor: c.accent, borderWidth: 2 }]}
+          onPress={() => setSkin("flat")}
+          activeOpacity={0.85}
+        >
+          <View style={s.identityTxt}>
+            <Text style={s.identityMain}>{t.skin3dFlat}</Text>
+          </View>
+          {skin === "flat" && <Text style={[s.identityCheck, { color: c.accent }]}>✓</Text>}
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[s.identityCard, { backgroundColor: c.card }, skin === "depth3d" && { borderColor: c.accent, borderWidth: 2 }]}
+          onPress={() => setSkin("depth3d")}
+          activeOpacity={0.85}
+        >
+          <View style={s.identityTxt}>
+            <Text style={s.identityMain}>✦ {t.skin3dDepth}</Text>
+          </View>
+          {skin === "depth3d" && <Text style={[s.identityCheck, { color: c.accent }]}>✓</Text>}
+        </TouchableOpacity>
+      </Section>
+
       <Section title={t.look} s={s}>
         {/* La composition est unique (fusion B+C) — la vitrine reste
             consultable pour voir la palette complète. */}
@@ -115,10 +183,44 @@ export default function SettingsScreen() {
         </TouchableOpacity>
       </Section>
 
+      <Section title={t.netSection} s={s}>
+        <Text style={s.identityTag}>{t.netTag}</Text>
+        <TextInput
+          style={s.rpcInput}
+          value={rpcDraft}
+          onChangeText={setRpcDraft}
+          placeholder={t.netPlaceholder}
+          placeholderTextColor={c.dim}
+          autoCapitalize="none"
+          autoCorrect={false}
+          keyboardType="url"
+          numberOfLines={1}
+        />
+        <View style={s.row}>
+          <TouchableOpacity style={s.rpcBtn} onPress={saveRpc} activeOpacity={0.8}>
+            <Text style={s.rpcBtnTxt}>{t.netSave}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={s.rpcBtn} onPress={() => void testRpc(rpcDraft)} disabled={rpcTesting} activeOpacity={0.8}>
+            {rpcTesting ? <ActivityIndicator size="small" color={c.accent} /> : <Text style={s.rpcBtnTxt}>{t.netTest}</Text>}
+          </TouchableOpacity>
+        </View>
+        {rpcMsg && (
+          <Text style={[s.rpcMsg, { color: rpcMsg.ok ? "#5fae6f" : "#e06060" }]}>
+            {rpcMsg.text}
+          </Text>
+        )}
+        <Text style={s.identityTag}>{rpcCustom ? t.netUsingCustom : t.netUsingDefault}</Text>
+        {rpcCustom && (
+          <TouchableOpacity style={s.rpcResetBtn} onPress={resetRpc} activeOpacity={0.8}>
+            <Text style={s.rpcResetTxt}>{t.netReset}</Text>
+          </TouchableOpacity>
+        )}
+      </Section>
+
       <Section title={t.settingsAbout} s={s}>
         <View style={s.infoRow}>
           <Text style={s.infoLabel}>{t.settingsVersion}</Text>
-          <Text style={s.infoVal}>1.6.2</Text>
+          <Text style={s.infoVal}>1.6.6</Text>
         </View>
       </Section>
 
@@ -246,6 +348,29 @@ function makeStyles(c: ReturnType<typeof useColors>, lk: ReturnType<typeof lookT
     identityMain: { fontFamily: fonts.bodySemi, fontSize: 14, color: c.fg },
     identitySub: { fontFamily: fonts.body, fontSize: 11, color: c.dim, marginTop: 2 },
     identityCheck: { fontFamily: fonts.bodySemi, fontSize: 16 },
+    rpcInput: {
+      borderWidth: 1,
+      borderColor: c.border,
+      borderRadius: lk.ctaRadius,
+      paddingHorizontal: 12,
+      paddingVertical: 10,
+      fontFamily: fonts.bodySemi,
+      fontSize: 12,
+      color: c.fg,
+      marginBottom: 10,
+    },
+    rpcBtn: {
+      flex: 1,
+      borderWidth: 1,
+      borderColor: c.border,
+      borderRadius: lk.ctaRadius,
+      paddingVertical: 11,
+      alignItems: "center",
+    },
+    rpcBtnTxt: { fontFamily: fonts.bodySemi, fontSize: 13, color: c.fg },
+    rpcMsg: { fontFamily: fonts.bodySemi, fontSize: 12, marginTop: 10 },
+    rpcResetBtn: { alignItems: "center", paddingVertical: 8 },
+    rpcResetTxt: { fontFamily: fonts.body, fontSize: 12, color: c.dim },
     guideBtn: { backgroundColor: c.accent, borderRadius: lk.ctaRadius, paddingVertical: 13, alignItems: "center" },
     guideBtnTxt: { fontFamily: fonts.bodySemi, fontSize: 14, color: c.accentFg },
     dangerHint: { fontFamily: fonts.body, fontSize: 11, color: c.dim, textAlign: "center", marginTop: 8, lineHeight: 15 },

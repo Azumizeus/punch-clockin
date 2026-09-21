@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 import * as Haptics from "expo-haptics";
-import { Connection, PublicKey } from "@solana/web3.js";
+import { PublicKey } from "@solana/web3.js";
 import { copy } from "./copy";
 import {
   readableTxError,
@@ -10,6 +10,7 @@ import {
   sendUserToTreasuryTransfer,
 } from "../solana/wallet";
 import { getTokenBalance, mintFor, toBaseUnits } from "../solana/tokens";
+import { activeConnection } from "../solana/rpc";
 import {
   DEMO_ADDRESS,
   FEED_POOL,
@@ -44,6 +45,7 @@ import type {
   Rank,
   Receipt,
   Shift,
+  Skin,
   Tab,
   Theme,
   Token,
@@ -60,7 +62,9 @@ const ENTRY_FEE_USDC = 0.02; // pointage (validation) — prélevé sur le walle
 const EXIT_FEE_USDC = 0.02; // quitter le réseau — crédité même si le wallet démo est remis à zéro
 const WITHDRAW_FEE_PCT = 0.015; // 1.5% sur chaque retrait de SKR misé (unstake)
 
-const devnetConn = new Connection("https://api.devnet.solana.com", "confirmed");
+// Connexion RPC active — endpoint au choix de l'utilisateur (Réglages →
+// Réseau), sinon le devnet public. Partagée par tous les flux on-chain.
+const devnetConn = activeConnection();
 
 function seedWallet() {
   return {
@@ -82,6 +86,7 @@ function seed(): PunchState {
     localeChosen: false,
     theme: "gold", // UNE identité : Gold Seeker Premium (les sélecteurs ○/●/✦ ont été retirés)
     look: "b" as Look,
+    skin: "flat" as Skin, // habillage hérité par défaut ; "depth3d" = relief vectoriel
     seenHow: false,
     product: "punch",
     tab: "punch",
@@ -142,6 +147,7 @@ export const usePunch = create<
     setLocale: (locale: Locale) => void;
     chooseLocale: (locale: Locale) => void;
     setTheme: (theme: Theme) => void;
+    setSkin: (skin: Skin) => void;
     setLook: (look: Look) => void;
     dismissHow: () => void;
     setProduct: (product: Product) => void;
@@ -200,6 +206,7 @@ export const usePunch = create<
       setLocale: (locale) => set({ locale }),
       chooseLocale: (locale) => set({ locale, localeChosen: true }),
       setTheme: (theme) => set({ theme }),
+      setSkin: (skin) => set({ skin }),
       setLook: (look) => set({ look }),
       dismissHow: () => set({ seenHow: true, view: "app", tab: "punch" }),
       setProduct: (product) => {
@@ -996,6 +1003,7 @@ export const usePunch = create<
         localeChosen: s.localeChosen,
         theme: s.theme,
         look: s.look,
+        skin: s.skin,
         seenHow: s.seenHow,
         country: s.country,
         streak: s.streak,
@@ -1026,6 +1034,7 @@ export const usePunch = create<
           // habillages (a et c) migrent vers b — un seul design de composition.
           theme: p.theme === "nuit" ? "nuit" : "gold",
           look: "b",
+          skin: p.skin === "depth3d" ? "depth3d" : "flat",
           seenHow: Boolean(p.seenHow),
           greetedIds: Array.isArray(p.greetedIds) ? p.greetedIds : [],
           view: "app",

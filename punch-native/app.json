@@ -2,7 +2,7 @@
   "expo": {
     "name": "Punch Clock'in",
     "slug": "punch-native",
-    "version": "1.6.5",
+    "version": "1.6.6",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "punchnative",
@@ -18,10 +18,11 @@
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
       "predictiveBackGestureEnabled": false,
-      "package": "com.anonymous.punchnative"
+      "package": "com.anonymous.punchnative",
+      "versionCode": 20
     },
     "web": {
-      "output": "static",
+      "output": "single",
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [

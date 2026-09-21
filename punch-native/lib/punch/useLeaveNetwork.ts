@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Alert } from "react-native";
 import { useRouter } from "expo-router";
-import { Connection, PublicKey } from "@solana/web3.js";
+import { PublicKey } from "@solana/web3.js";
+import { activeConnection } from "../solana/rpc";
 import { usePunch, useT } from "./store";
 import { sendPunchMemo } from "../solana/wallet";
 
@@ -23,7 +24,7 @@ export function useLeaveNetwork() {
       if (wallet.real && wallet.authToken) {
         // Vraie transaction signée sur devnet : preuve on-chain que ce
         // Seeker quitte le réseau. Sans ça, pas de reset — pas de faux chiffres.
-        const conn = new Connection("https://api.devnet.solana.com");
+        const conn = activeConnection();
         const pubkey = new PublicKey(wallet.address);
         await sendPunchMemo(conn, wallet.authToken, pubkey, `PUNCH LEAVE ${Date.now()}`);
       }
