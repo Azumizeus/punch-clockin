@@ -324,6 +324,7 @@ export const usePunch = create<
         const spreadUsd =
           from === "SKR" ? amount * SKR_USD * SPREAD : to === "SKR" ? amount * SPREAD : amount * SPREAD;
         const half = round2(spreadUsd / 2);
+        const halfProto = round2(spreadUsd - half); // le centime d'arrondi va au protocole — half*2 peut déborder du spread
         const rec: Receipt = {
           id: `r-${Date.now()}`,
           at: Date.now(),
@@ -344,7 +345,7 @@ export const usePunch = create<
             wallet,
             receipts: [rec, ...prev.receipts],
             lastReceiptId: rec.id,
-            protocolUsdc: round2(prev.protocolUsdc + half),
+            protocolUsdc: round2(prev.protocolUsdc + halfProto),
             stakerUsdc: round2(prev.stakerUsdc + half),
             skrBought: prev.skrBought + roundSkr((half * 0.4) / SKR_USD),
             view: "receipt",

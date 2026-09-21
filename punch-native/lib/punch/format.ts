@@ -50,11 +50,13 @@ export function rankMeets(have: Rank, need: Rank) {
 }
 
 export function splitOf(gross: number) {
-  return {
-    worker: round2(gross * FEE.worker),
-    stakers: round2(gross * FEE.stakers),
-    protocol: round2(gross * FEE.protocol),
-  };
+  const stakers = round2(gross * FEE.stakers);
+  const protocol = round2(gross * FEE.protocol);
+  // Conservation garantie : worker = gross - stakers - protocol. Arrondir les
+  // trois parts indépendamment peut créer un centime fantôme (ex. 1234.56 →
+  // 1234.57) — ce qui contredit la règle imprimée sur chaque reçu.
+  const worker = round2(gross - stakers - protocol);
+  return { worker, stakers, protocol };
 }
 
 export function round2(n: number) {
