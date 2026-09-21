@@ -11,8 +11,10 @@ import {
   Image,
   Pressable,
   Linking,
+  AppState,
 } from "react-native";
-import { useRouter } from "expo-router";
+import type { AppStateStatus } from "react-native";
+import { useRouter, useFocusEffect } from "expo-router";
 import { usePunch, useT, useColors } from "../../lib/punch/store";
 import { fonts } from "../../lib/punch/fonts";
 import { formatUsd, rankFromStake, isRealSig, txUrl } from "../../lib/punch/format";
@@ -489,13 +491,65 @@ function RingProgress({ size, radius, progress, color, trackColor }: { size: num
 }
 
 // Horloge temps réel (pour les tags — HH:MM:SS — de A et LOCAL TIME de C).
+// Économe ET idle-compatible pour uiautomator : ne re-render QUE quand la
+// seconde affichée change réellement, et se met en PAUSE quand l'écran est
+// caché (AppState) — avant, un setInterval 1 Hz re-rendait en permanence,
+// même applicatif caché, et l'UI n'était jamais « idle » pour uiautomator
+// (faux « could not get idle state » en contrôle adb, batteries en plus).
 function useLiveClock() {
-  const [now, setNow] = useState(() => new Date());
-  useEffect(() => {
-    const id = setInterval(() => setNow(new Date()), 1000);
-    return () => clearInterval(id);
+  const [now, setNow] = useState(() => Date.now());
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const lastRenderedSec = useRef(Math.floor(Date.now() / 1000));
+  // L'horloge ne tourne que si l'app est active ET l'onglet Accueil focus
+  // (react-navigation garde les écrans montés : sans ça, elle tiquerait en
+  // arrière-plan de tous les autres onglets).
+  const gate = useRef({ appActive: true, tabFocused: true });
+
+  const stop = useCallback(() => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
   }, []);
-  return now.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+
+  const start = useCallback(() => {
+    if (intervalRef.current || !(gate.current.appActive && gate.current.tabFocused)) return;
+    const tick = () => {
+      const sec = Math.floor(Date.now() / 1000);
+      if (sec !== lastRenderedSec.current) {
+        lastRenderedSec.current = sec;
+        setNow(sec);
+      }
+    };
+    tick();
+    intervalRef.current = setInterval(tick, 250);
+  }, []);
+
+  useEffect(() => {
+    const sub = AppState.addEventListener("change", (s: AppStateStatus) => {
+      gate.current.appActive = s === "active";
+      if (s === "active") start();
+      else stop();
+    });
+    start();
+    return () => {
+      sub.remove();
+      stop();
+    };
+  }, [start, stop]);
+
+  useFocusEffect(
+    useCallback(() => {
+      gate.current.tabFocused = true;
+      start();
+      return () => {
+        gate.current.tabFocused = false;
+        stop();
+      };
+    }, [start, stop]),
+  );
+
+  return new Date(now).toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
 }
 
 function makeStyles(
