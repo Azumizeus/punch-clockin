@@ -41,6 +41,7 @@ Tap the bolt. This signs a real memo transaction (`PUNCH <date>`) on devnet thro
 - Every action above should trigger your wallet's signing prompt. If it doesn't, something is wrong.
 - The treasury address is `FUiCbnDhEEJtz9Zcj66hGB54iGMGeyjRKD7CsTwpihJn` — check it on a devnet explorer (e.g. explorer.solana.com, cluster=devnet) before and after your actions to see balances move for real.
 - The globe (World tab) uses real drag physics — grab it and let go, it keeps spinning and decays naturally.
+- **Settings → Network**: paste YOUR OWN RPC endpoint (Helius, QuickNode…) and hit **Test connection** — a real `getSlot` ping shows the latency or the honest failure reason. Nothing leaves the phone, and every on-chain flow switches to your endpoint instantly. The public devnet rate-limits; your endpoint doesn't have to.
 - Try the interactive guide from Settings ("Start the tour") for a scripted walkthrough of the whole economy.
 - Try the identities in Settings — **Gold Seeker Premium** (default) and **Seeker Nuit**: two color identities, one composition. Your tickets are stored in **History** (Settings → History) with every signature clickable on the devnet explorer.
 - Every failure is honest: if a transaction can't land (offline, RPC rate-limited, signature refused), the app shows the exact reason and nothing changes. Try airplane mode during a swap: you get a clean error, and the explorer proves nothing happened.
@@ -83,6 +84,7 @@ Touche l'éclair. Ça signe une vraie transaction mémo (`PUNCH <date>`) sur dev
 - Chaque action ci-dessus doit déclencher la fenêtre de signature de ton wallet. Si ce n'est pas le cas, quelque chose ne va pas.
 - L'adresse du trésor est `FUiCbnDhEEJtz9Zcj66hGB54iGMGeyjRKD7CsTwpihJn` — vérifie-la sur un explorateur devnet (ex. explorer.solana.com, cluster=devnet) avant/après tes actions pour voir les soldes bouger pour de vrai.
 - Le globe (onglet Monde) utilise une vraie physique de glissement — attrape-le et lâche-le, il continue de tourner et ralentit naturellement.
+- **Réglages → Réseau** : colle TON endpoint RPC (Helius, QuickNode…) et appuie sur **Tester la connexion** — un vrai ping `getSlot` affiche la latence ou la vraie raison de l'échec. Rien ne quitte le téléphone, et tous les flux on-chain passent instantanément sur ton endpoint. Le devnet public sature ; le tien n'a pas à le faire.
 - Essaie le mode d'emploi interactif depuis Réglages ("Commencer le mode d'emploi") pour une visite guidée de toute l'économie.
 - Essaie les identités dans Réglages — **Gold Seeker Premium** (défaut) et **Seeker Nuit** : deux identités de couleur, une seule composition. Tes tickets sont conservés dans l'**Historique** (Réglages → Historique) avec chaque signature cliquable vers l'explorer devnet.
 - Chaque échec est honnête : si une transaction n'aboutit pas (hors ligne, RPC saturé, signature refusée), l'app affiche la vraie raison et rien ne bouge. Essaie le mode avion pendant un échange : erreur propre, et l'explorer prouve que rien n'a eu lieu.
