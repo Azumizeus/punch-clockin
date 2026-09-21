@@ -18,6 +18,7 @@ import { fonts } from "../../lib/punch/fonts";
 import { formatUsd, rankFromStake, isRealSig, txUrl } from "../../lib/punch/format";
 import { NEARBY } from "../../lib/punch/shifts";
 import { countryByCode } from "../../lib/punch/globe";
+import { helloCountInPeriod, helloSkr } from "../../lib/punch/hellos";
 import { Connection, PublicKey } from "@solana/web3.js";
 import { sendPunchMemo } from "../../lib/solana/wallet";
 import { lookTokens, lookShape } from "../../lib/punch/looks";
@@ -47,6 +48,7 @@ export default function HomeScreen() {
   const dismissHow = usePunch((s) => s.dismissHow);
   const greetNearby = usePunch((s) => s.greetNearby);
   const greetedIds = usePunch((s) => s.greetedIds) ?? [];
+  const helloEvents = usePunch((s) => s.helloEvents) ?? [];
   const country = usePunch((s) => s.country);
   const pulse = usePunch((s) => s.globePulse);
   const [greetingId, setGreetingId] = useState<string | null>(null);
@@ -144,10 +146,12 @@ export default function HomeScreen() {
           <Text
             style={[
               s.clockIn,
+              // Le tracking du titre suit l'habillage pour TOUS les looks
+              // (CSS skin C : h1 { letter-spacing: -0.04em } ; b : tight).
+              { letterSpacing: lk.titleSpacing },
               lk.monoTitle && {
                 fontFamily: fonts.mono,
                 fontSize: 34,
-                letterSpacing: lk.titleSpacing,
               },
             ]}
           >
@@ -318,6 +322,11 @@ export default function HomeScreen() {
 
       <Text style={s.sectionTitle}>{t.nearby}</Text>
       <Text style={s.sectionSub}>{t.greetPay}</Text>
+      {/* Compteur de bonjours : cumuls et classement complets sur l'onglet Bonjours. */}
+      <Text style={s.helloTally}>
+        {t.hellos} · {helloCountInPeriod(helloEvents, "week")} {t.hellosWeek.toLowerCase()} · +
+        {helloSkr(helloEvents).toLocaleString("fr-FR")} SKR
+      </Text>
       {NEARBY.map((p) => {
         const done = greetedIds.includes(p.id);
         return (
@@ -406,11 +415,10 @@ function PunchDial({
   const ringColor = lk.dialRing === "gold" ? "#d4af37" : c.accent;
   useEffect(() => {
     if (punched) return;
+    // pulse-ring du CSS source : 2,4 s ease-out infini, scale 1→1.18,
+    // opacité 0.35→0 — le cycle repart doucement, sans saut.
     const loop = Animated.loop(
-      Animated.sequence([
-        Animated.timing(pulse, { toValue: 1.15, duration: 1200, easing: Easing.out(Easing.ease), useNativeDriver: true }),
-        Animated.timing(pulse, { toValue: 1, duration: 0, useNativeDriver: true }),
-      ]),
+      Animated.timing(pulse, { toValue: 1.18, duration: 2400, easing: Easing.out(Easing.quad), useNativeDriver: true }),
     );
     loop.start();
     return () => loop.stop();
@@ -425,7 +433,7 @@ function PunchDial({
           pointerEvents="none"
           style={[
             s.pulseRing,
-            { borderColor: c.border, transform: [{ scale: pulse }], opacity: pulse.interpolate({ inputRange: [1, 1.15], outputRange: [0.35, 0] }) },
+            { borderColor: c.border, transform: [{ scale: pulse }], opacity: pulse.interpolate({ inputRange: [1, 1.18], outputRange: [0.35, 0] }) },
           ]}
         />
       )}
@@ -496,7 +504,7 @@ function makeStyles(
 ) {
   return StyleSheet.create({
     wrap: { flex: 1, backgroundColor: c.bg },
-    content: { alignItems: "center", paddingTop: 8, paddingBottom: 40, paddingHorizontal: 20 },
+    content: { alignItems: "center", paddingTop: 8, paddingBottom: 140, paddingHorizontal: 20 },
     genesis: { fontFamily: fonts.bodySemi, fontSize: 12, color: c.dim2, alignSelf: "flex-start", marginBottom: 8 },
     preWrap: { width: "100%", alignItems: "center" },
     clockIn: { fontFamily: fonts.display, fontSize: 40, color: c.fg, textAlign: "center", letterSpacing: -0.5, marginTop: 8 },
@@ -554,7 +562,8 @@ function makeStyles(
     statV: { fontFamily: fonts.display, fontSize: 17, color: c.fg, marginTop: 4 },
     statSub: { fontFamily: fonts.body, fontSize: 11, color: c.dim, marginTop: 2 },
     sectionTitle: { fontFamily: fonts.display, fontSize: 17, color: c.fg, alignSelf: "flex-start", marginBottom: 4 },
-    sectionSub: { fontFamily: fonts.body, fontSize: 13, color: c.dim2, alignSelf: "flex-start", marginBottom: 12, lineHeight: 18 },
+    sectionSub: { fontFamily: fonts.body, fontSize: 13, color: c.dim2, alignSelf: "flex-start", marginBottom: 4, lineHeight: 18 },
+    helloTally: { fontFamily: fonts.mono, fontSize: 11, color: c.accent, alignSelf: "flex-start", letterSpacing: 0.5, marginBottom: 12 },
     nearbyRow: {
       flexDirection: "row",
       alignItems: "center",

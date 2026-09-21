@@ -9,9 +9,10 @@ import {
 } from "react-native";
 import { useRouter } from "expo-router";
 import { usePunch, useT, useColors } from "../lib/punch/store";
+import { ReceiptIn } from "../components/motion";
 import { fonts } from "../lib/punch/fonts";
 import { tokenColors } from "../lib/punch/theme";
-import { formatAmt, shortAddr, isRealSig, txUrl } from "../lib/punch/format";
+import { formatAmt, shortAddr, isRealSig, txUrl, roundSkr } from "../lib/punch/format";
 import { lookTokens } from "../lib/punch/looks";
 
 export default function ReceiptScreen() {
@@ -44,6 +45,9 @@ export default function ReceiptScreen() {
       <ScrollView contentContainerStyle={s.content}>
         <Text style={s.eyebrow}>{t.cashed}</Text>
 
+        {/* receipt-enter du CSS source : le ticket arrive du bas (16 px) en
+            400 ms avec un léger dézoom 0.98 → 1. */}
+        <ReceiptIn>
         <View style={s.card}>
           <View style={s.cardHead}>
             <View style={s.cardHeadText}>
@@ -55,7 +59,30 @@ export default function ReceiptScreen() {
             </View>
           </View>
 
-          {receipt.kind === "stake" ? (
+          {receipt.kind === "swap" && receipt.swapIn && receipt.swapOut ? (
+            // Reçu d'échange : les VRAIS chiffres (payé / reçu), pas la découpe
+            // 92/3/5 — un petit swap imprimait des 0,00 partout faute de détail.
+            <View style={s.rows}>
+              <Row s={s} k={t.youPay} v={`${formatAmt(receipt.swapIn.amount, receipt.swapIn.token)} ${receipt.swapIn.token}`} />
+              <Row
+                s={s}
+                k={t.youGet}
+                v={`${formatAmt(receipt.swapOut.amount, receipt.swapOut.token)} ${receipt.swapOut.token}`}
+                strong
+                last={!receipt.stakerSkrPaid && receipt.gross < 0.01}
+              />
+              {receipt.gross >= 0.01 ? (
+                // Frais affichés seulement s'ils atteignent un centime —
+                // sinon ce serait un « 0,00 $ » de plus sur le ticket.
+                <Row s={s} k={t.swapFee} v={`${formatAmt(receipt.gross, "USDC")} $US`} last={!receipt.stakerSkrPaid} />
+              ) : null}
+              {receipt.stakerSkrPaid ? (
+                // Détenteur de SKR staké : les 3 % de gardiens tombent
+                // RÉELLEMENT dans ce wallet — affichés sur le ticket.
+                <Row s={s} k={t.stakerPaid} v={`+${roundSkr(receipt.stakerSkrPaid)} SKR`} strong last />
+              ) : null}
+            </View>
+          ) : receipt.kind === "stake" ? (
             // Reçu stake/unstake : pas de découpe 92/3/5 — montant, frais, net.
             <View style={s.rows}>
               {receipt.worker === 0 ? (
@@ -73,7 +100,15 @@ export default function ReceiptScreen() {
               <Row s={s} k={t.gross} v={`${formatAmt(receipt.gross, receipt.token)} ${receipt.token}`} />
               <Row s={s} k={t.worker} v={`${formatAmt(receipt.worker, receipt.token)}  92%`} strong />
               <Row s={s} k={t.stakers} v={`${formatAmt(receipt.stakers, receipt.token)}  3%`} />
-              <Row s={s} k={t.protocol} v={`${formatAmt(receipt.protocol, receipt.token)}  5%`} last />
+              {receipt.kind === "hello" && receipt.bonusSkr ? (
+                // Bonus SKR du bonjour : visible sur le reçu, cumulé sur l'onglet Bonjours.
+                <>
+                  <Row s={s} k={t.protocol} v={`${formatAmt(receipt.protocol, receipt.token)}  5%`} />
+                  <Row s={s} k={t.hellos} v={`+${roundSkr(receipt.bonusSkr)} SKR`} strong last />
+                </>
+              ) : (
+                <Row s={s} k={t.protocol} v={`${formatAmt(receipt.protocol, receipt.token)}  5%`} last />
+              )}
             </View>
           )}
 
@@ -88,6 +123,7 @@ export default function ReceiptScreen() {
             <Text style={s.sig} numberOfLines={1}>{t.tx} {shortAddr(receipt.signature)}</Text>
           )}
         </View>
+        </ReceiptIn>
       </ScrollView>
 
       <View style={s.footerRow}>

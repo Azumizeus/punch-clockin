@@ -1,139 +1,79 @@
 import { fonts } from "./fonts";
 import type { Look } from "./types";
 
-// Rayons et polices par habillage, source web validée punch app grok/PUNCH
-// (src/lib/punch/looks.ts — lookShape) :
-//  a = 999px partout + IBM Plex Mono (sans = mono, display = serif)
-//  b = 2px partout + Fraunces partout (sans = serif)
-//  c = 16px + Figtree/Fraunces
+// GOLD SEEKER PREMIUM — LA COMPOSITION UNIQUE (v1.5.0).
+// Fusion assumée de B (serif Fraunces, angles bruts 2 px, étiquettes TIME,
+// nav pointillée, pressTilt) et de C (onglets hardware, espacement éditorial
+// des titres, monolithe) : une seule manière d'être affiché.
+
+// Polices : le corps entier en Fraunces serif (héritage B), titres Fraunces,
+// mono réservé aux horodatages et aux codes. C'était la signature de B.
 export function lookShape(look: Look): { radius: number; bodyFont: string; displayFont: string } {
-  if (look === "a") return { radius: 999, bodyFont: fonts.mono, displayFont: fonts.display };
-  if (look === "b") return { radius: 2, bodyFont: fonts.display, displayFont: fonts.display };
-  return { radius: 16, bodyFont: fonts.body, displayFont: fonts.display };
+  return { radius: 2, bodyFont: fonts.display, displayFont: fonts.display };
 }
 
-// Noms et accroches de la galerie — texte validé du web (punch app grok/PUNCH
-// src/lib/punch/looks.ts — lookGallery), repris à l'identique.
+// Nom et accroche de l'identité — un seul habillage dorénavant.
 export const lookGallery: Record<Look, { name: string; sub: string; desc: { fr: string; en: string } }> = {
-  a: {
-    name: "Horloge d'usine",
-    sub: "SKIN A · CLOCK-MACHINE",
-    desc: {
-      fr: "Chiffres monospace, pilules, cadran or — la beauté de la machine.",
-      en: "Monospace figures, pills, gold dial — machine beauty.",
-    },
-  },
   b: {
-    name: "Ticket de pointeuse",
-    sub: "SKIN B · TIME-CARD",
+    name: "Seeker Premium",
+    sub: "GOLD EDITION · FUSION B+C",
     desc: {
-      fr: "Papier, pointillés, le reçu est l'écran.",
-      en: "Paper, dashes — the receipt is the screen.",
-    },
-  },
-  c: {
-    name: "Hardware Seeker",
-    sub: "SKIN C · SEEKER",
-    desc: {
-      fr: "Noir, vide, un éclair. L'app d'un téléphone, pas d'un site.",
-      en: "Black, empty, one bolt. A phone app, not a website.",
+      fr: "Le monolithe noir à lampe or, les tickets ivoire à encre brûlée — une seule identité.",
+      en: "The warm-black monolith with its gold lamp, ivory tickets in burnt ink — one identity.",
     },
   },
 };
 
-// Les 3 habillages redéfinissent l'expérience CLOCK IN (titre, cadran, ticket,
-// boutons) comme les maquettes public/looks de l'export 19 sept. :
-//  - a = "Pointeuse" : mono industriel, cadran ivoire, angles vifs
-//  - b = "Ticket papier" : étiquettes TIME / COUNTRY / SPLIT, angles bruts
-//  - c = "Éditorial" (défaut) : serif Fraunces, angles doux — le look actuel
-// Les thèmes (dark / light / gold) restent la palette de couleurs ; l'habillage
-// change la typographie, les formes et la composition. Les deux se combinent.
+// Les flags de composition de la fusion — un seul jeu pour toute l'app.
 export interface LookTokens {
-  /** Titre CLOCK IN en mono industriel (look a). */
+  /** Titre CLOCK IN en mono industriel. */
   monoTitle: boolean;
   /** Libellés UI (CTA, sous-titres) en mono + capitales. */
   monoUi: boolean;
-  /** Étiquettes TIME / COUNTRY / SPLIT sur le ticket (look b). */
+  /** Étiquettes TIME / COUNTRY / SPLIT sur le ticket (héritage B). */
   labels: boolean;
   /** Capitales sur les valeurs du ticket. */
   upper: boolean;
   titleSpacing: number;
-  /** Rayon des boutons : 4 (industriel), 999 (pilule), 16 (éditorial). */
+  /** Rayon des boutons : 2 px bruts — la signature ticket. */
   ctaRadius: number;
-  /** true = cadran couleur accent ; false = cadran ivoire (c.fg, look a). */
+  /** true = cadran couleur accent ; false = cadran ivoire. */
   dialInnerAccent: boolean;
-  /** Anneau du cadran : "gold" = or machine #d4af37 quel que soit le thème
-   * (maquette a.jpg + accent a.dark du CSS source), "accent" = couleur thème. */
+  /** Anneau du cadran : or machine. */
   dialRing: "accent" | "gold";
-  /** Horloge live sous le titre : "—" encadré (a), "LOCAL TIME" mono (c). */
+  /** Horloge live sous le titre. */
   clockTag: false | "dash" | "mono";
-  /** Onglets hardware ‖ DOM / 2 VUE sous le titre (look c, fidèle à home.tsx). */
+  /** Onglets hardware ‖ DOM / 2 VUE sous le titre (héritage C). */
   hwNav: boolean;
   ticketRadius: number;
-  /** Bordure franche autour du ticket (look a). */
+  /** Bordure franche autour du ticket. */
   ticketBorder: boolean;
-  /** Bordure POINTILLÉE façon déchirure de ticket (look b, nav.punch-nav CSS). */
+  /** Bordure POINTILLÉE façon déchirure de ticket (héritage B). */
   ticketDashed: boolean;
-  /** Le ticket s'enfonce au toucher (look b, transform home.tsx). */
+  /** Le ticket s'enfonce au toucher (héritage B). */
   pressTilt: boolean;
-  /** Ticket entièrement en mono (look a). */
+  /** Ticket entièrement en mono. */
   ticketMono: boolean;
 }
 
 export function lookTokens(look: Look): LookTokens {
-  if (look === "a") {
-    return {
-      monoTitle: true,
-      monoUi: true,
-      labels: false,
-      upper: true,
-      titleSpacing: 3,
-      ctaRadius: 999,
-      dialInnerAccent: false,
-      dialRing: "gold",
-      clockTag: "dash",
-      hwNav: false,
-      ticketRadius: 24,
-      ticketBorder: false,
-      ticketDashed: false,
-      pressTilt: false,
-      ticketMono: true,
-    };
-  }
-  if (look === "b") {
-    return {
-      monoTitle: false,
-      monoUi: true,
-      labels: true,
-      upper: true,
-      titleSpacing: -0.5,
-      ctaRadius: 4,
-      dialInnerAccent: true,
-      dialRing: "accent",
-      clockTag: false,
-      hwNav: false,
-      ticketRadius: 2,
-      ticketBorder: false,
-      ticketDashed: true,
-      pressTilt: true,
-      ticketMono: false,
-    };
-  }
   return {
     monoTitle: false,
-    monoUi: false,
-    labels: false,
-    upper: false,
-    titleSpacing: -0.5,
-    ctaRadius: 16,
+    monoUi: true,
+    labels: true,
+    upper: true,
+    titleSpacing: -1.6, // espacement éditorial C (letter-spacing -0.04em)
+    ctaRadius: 2,
     dialInnerAccent: true,
-    dialRing: "accent",
-    clockTag: "mono",
+    dialRing: "gold", // anneau or machine, signature de l'identité
+    clockTag: "mono", // LOCAL TIME de C — utile sur un Seeker
     hwNav: true,
-    ticketRadius: 6,
+    ticketRadius: 2,
     ticketBorder: false,
-    ticketDashed: false,
-    pressTilt: false,
+    ticketDashed: true,
+    pressTilt: true,
     ticketMono: false,
   };
 }
+
+export const isB = (look: Look) => look === "b";

@@ -5,7 +5,7 @@ import { usePunch, useT, useColors } from "../../lib/punch/store";
 import { fonts } from "../../lib/punch/fonts";
 import { lookGallery, lookTokens } from "../../lib/punch/looks";
 import { useLeaveNetwork } from "../../lib/punch/useLeaveNetwork";
-import type { Locale, Theme } from "../../lib/punch/types";
+import type { Locale } from "../../lib/punch/types";
 
 export default function SettingsScreen() {
   const t = useT();
@@ -20,8 +20,6 @@ export default function SettingsScreen() {
   const setLocale = usePunch((st) => st.setLocale);
   const theme = usePunch((st) => st.theme);
   const setTheme = usePunch((st) => st.setTheme);
-  const screensaverSecs = usePunch((st) => st.screensaverSecs);
-  const setScreensaver = usePunch((st) => st.setScreensaver);
   const wallet = usePunch((st) => st.wallet);
   const { leaving, confirmLeave, walletReal } = useLeaveNetwork();
 
@@ -46,49 +44,54 @@ export default function SettingsScreen() {
         </Row>
       </Section>
 
-      <Section title={t.settingsAppearance} s={s}>
-        <Row s={s}>
-          <OptionPill
-            label={t.themeDark}
-            active={theme === "dark"}
-            onPress={() => setTheme("dark" as Theme)}
-            s={s}
-          />
-          <OptionPill
-            label={t.themeLight}
-            active={theme === "light"}
-            onPress={() => setTheme("light" as Theme)}
-            s={s}
-          />
-          <OptionPill
-            label={`✦ ${t.themeGold}`}
-            active={theme === "gold"}
-            onPress={() => setTheme("gold" as Theme)}
-            s={s}
-          />
-          <OptionPill
-            label={`✧ ${t.themeGoldLight}`}
-            active={theme === "goldLight"}
-            onPress={() => setTheme("goldLight" as Theme)}
-            s={s}
-          />
-        </Row>
-      </Section>
-
-      <Section title={t.looks} s={s}>
-        <TouchableOpacity style={s.looksBtn} onPress={() => router.push("/looks" as never)} activeOpacity={0.8}>
-          <Text style={s.looksBtnMain}>{lookGallery[look].name}</Text>
-          <Text style={s.looksBtnSub}>{lookGallery[look].desc[locale]}</Text>
+      <Section title={t.identity} s={s}>
+        {/* DEUX identités de couleur, UNE composition : l'or Seeker Premium
+            est l'original, la Nuit est l'option lunaire. L'aperçu de chaque
+            carte montre sa vraie palette (échantillons réels). */}
+        <Text style={s.identityTag}>{t.identityTag}</Text>
+        <TouchableOpacity
+          style={[s.identityCard, { backgroundColor: c.card }, theme === "gold" && { borderColor: c.accent, borderWidth: 2 }]}
+          onPress={() => setTheme("gold")}
+          activeOpacity={0.85}
+        >
+          <View style={s.identitySwatchRow}>
+            <View style={[s.identitySwatch, { backgroundColor: "#0b0a07", borderColor: c.borderLight }]} />
+            <View style={[s.identitySwatch, { backgroundColor: "#d4af37" }]} />
+            <View style={[s.identitySwatch, { backgroundColor: "#f3dc8e" }]} />
+            <View style={[s.identitySwatch, { backgroundColor: "#f2e6c8" }]} />
+          </View>
+          <View style={s.identityTxt}>
+            <Text style={s.identityMain}>✦ {t.identityGold}</Text>
+            <Text style={s.identitySub}>{t.identityGoldSub}</Text>
+          </View>
+          {theme === "gold" && <Text style={[s.identityCheck, { color: c.accent }]}>✓</Text>}
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[s.identityCard, { backgroundColor: c.card }, theme === "nuit" && { borderColor: c.accent, borderWidth: 2 }]}
+          onPress={() => setTheme("nuit")}
+          activeOpacity={0.85}
+        >
+          <View style={s.identitySwatchRow}>
+            <View style={[s.identitySwatch, { backgroundColor: "#07090d", borderColor: c.borderLight }]} />
+            <View style={[s.identitySwatch, { backgroundColor: "#c0c7d1" }]} />
+            <View style={[s.identitySwatch, { backgroundColor: "#f0f4f9" }]} />
+            <View style={[s.identitySwatch, { backgroundColor: "#dfe3ea" }]} />
+          </View>
+          <View style={s.identityTxt}>
+            <Text style={s.identityMain}>☾ {t.identityNuit}</Text>
+            <Text style={s.identitySub}>{t.identityNuitSub}</Text>
+          </View>
+          {theme === "nuit" && <Text style={[s.identityCheck, { color: c.accent }]}>✓</Text>}
         </TouchableOpacity>
       </Section>
 
-      <Section title={t.settingsScreensaver} s={s}>
-        <Row s={s}>
-          <OptionPill label={t.screensaverOff} active={screensaverSecs === 0} onPress={() => setScreensaver(0)} s={s} />
-          <OptionPill label={t.screensaverSecs(10)} active={screensaverSecs === 10} onPress={() => setScreensaver(10)} s={s} />
-          <OptionPill label={t.screensaverSecs(30)} active={screensaverSecs === 30} onPress={() => setScreensaver(30)} s={s} />
-          <OptionPill label={t.screensaverSecs(60)} active={screensaverSecs === 60} onPress={() => setScreensaver(60)} s={s} />
-        </Row>
+      <Section title={t.look} s={s}>
+        {/* La composition est unique (fusion B+C) — la vitrine reste
+            consultable pour voir la palette complète. */}
+        <TouchableOpacity style={s.looksBtn} onPress={() => router.push("/looks" as never)} activeOpacity={0.8}>
+          <Text style={s.looksBtnMain}>{t.lookFixed}</Text>
+          <Text style={s.looksBtnSub}>{t.lookTag}</Text>
+        </TouchableOpacity>
       </Section>
 
       <Section title={t.settingsAccount} s={s}>
@@ -115,7 +118,7 @@ export default function SettingsScreen() {
       <Section title={t.settingsAbout} s={s}>
         <View style={s.infoRow}>
           <Text style={s.infoLabel}>{t.settingsVersion}</Text>
-          <Text style={s.infoVal}>1.0.0</Text>
+          <Text style={s.infoVal}>1.6.2</Text>
         </View>
       </Section>
 
@@ -177,11 +180,13 @@ function OptionPill({
 function makeStyles(c: ReturnType<typeof useColors>, lk: ReturnType<typeof lookTokens>) {
   return StyleSheet.create({
     wrap: { flex: 1, backgroundColor: c.bg },
-    content: { paddingTop: 16, paddingHorizontal: 24, paddingBottom: 40 },
+    content: { paddingTop: 16, paddingHorizontal: 24, paddingBottom: 140 },
     title: { fontFamily: fonts.display, fontSize: 26, color: c.fg, marginBottom: 24 },
     section: {
       backgroundColor: c.card,
       borderRadius: lk.ctaRadius,
+      borderWidth: 1,
+      borderColor: c.borderLight,
       padding: 16,
       marginBottom: 16,
     },
@@ -200,8 +205,7 @@ function makeStyles(c: ReturnType<typeof useColors>, lk: ReturnType<typeof lookT
       borderColor: c.border,
       borderRadius: lk.ctaRadius,
       paddingVertical: 12,
-      alignItems: "center",
-    },
+      alignItems: "center",    },
     pillActive: { borderColor: c.accent, backgroundColor: c.accent },
     pillText: { fontFamily: fonts.bodySemi, fontSize: 14, color: c.dim },
     pillTextActive: { color: c.accentFg },
@@ -225,6 +229,23 @@ function makeStyles(c: ReturnType<typeof useColors>, lk: ReturnType<typeof lookT
     looksBtn: { alignItems: "center", paddingVertical: 6 },
     looksBtnMain: { fontFamily: fonts.bodySemi, fontSize: 15, color: c.fg },
     looksBtnSub: { fontFamily: fonts.body, fontSize: 12, color: c.dim, marginTop: 3 },
+    identityTag: { fontFamily: fonts.body, fontSize: 12, color: c.dim, marginBottom: 10 },
+    identityCard: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: 12,
+      borderRadius: 2,
+      borderWidth: 1,
+      borderColor: c.borderLight,
+      padding: 12,
+      marginBottom: 10,
+    },
+    identitySwatchRow: { flexDirection: "row", gap: 5 },
+    identitySwatch: { width: 26, height: 26, borderRadius: 2, borderWidth: 0.5, borderColor: c.borderLight },
+    identityTxt: { flex: 1 },
+    identityMain: { fontFamily: fonts.bodySemi, fontSize: 14, color: c.fg },
+    identitySub: { fontFamily: fonts.body, fontSize: 11, color: c.dim, marginTop: 2 },
+    identityCheck: { fontFamily: fonts.bodySemi, fontSize: 16 },
     guideBtn: { backgroundColor: c.accent, borderRadius: lk.ctaRadius, paddingVertical: 13, alignItems: "center" },
     guideBtnTxt: { fontFamily: fonts.bodySemi, fontSize: 14, color: c.accentFg },
     dangerHint: { fontFamily: fonts.body, fontSize: 11, color: c.dim, textAlign: "center", marginTop: 8, lineHeight: 15 },

@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { useRouter } from "expo-router";
 import { usePunch, useT, useColors, useShape } from "../../lib/punch/store";
+import { StaggerIn } from "../../components/motion";
 import { fonts } from "../../lib/punch/fonts";
 import { tokenColors } from "../../lib/punch/theme";
 import { formatAmt, rankMeets } from "../../lib/punch/format";
@@ -91,6 +92,9 @@ export default function BoardScreen() {
 
         {list.length === 0 && <Text style={s.empty}>{t.emptyBoard}</Text>}
 
+        {/* stagger-in du CSS source : chaque carte de mission arrive en
+            cascade (punch-in 420 ms, délais 40/90/140/190/240/290 ms). */}
+        <StaggerIn>
         {list.map((sh) => {
           const lockedRank = !rankMeets(rank(), sh.rank);
           const lockedGen = sh.genesisRequired && !wallet.genesis;
@@ -138,6 +142,7 @@ export default function BoardScreen() {
             </View>
           );
         })}
+        </StaggerIn>
       </ScrollView>
     </View>
   );
@@ -146,7 +151,7 @@ export default function BoardScreen() {
 function makeStyles(c: ReturnType<typeof useColors>, sh: ReturnType<typeof useShape>) {
   return StyleSheet.create({
     wrap: { flex: 1, backgroundColor: c.bg },
-    content: { paddingTop: 16, paddingHorizontal: 24, paddingBottom: 40 },
+    content: { paddingTop: 16, paddingHorizontal: 24, paddingBottom: 140 },
     title: { fontFamily: fonts.display, fontSize: 26, color: c.fg, marginBottom: 8 },
     subtitle: { fontFamily: fonts.body, fontSize: 14, color: c.dim2, lineHeight: 20, marginBottom: 16 },
     postBtn: {

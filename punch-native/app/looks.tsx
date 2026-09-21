@@ -6,60 +6,30 @@ import {
   ScrollView,
   StyleSheet,
   Image,
-  useWindowDimensions,
 } from "react-native";
 import * as Haptics from "expo-haptics";
 import { useRouter, Stack } from "expo-router";
 import { usePunch, useT, useColors } from "../lib/punch/store";
 import { fonts } from "../lib/punch/fonts";
 import { lookGallery } from "../lib/punch/looks";
-import type { Look } from "../lib/punch/types";
 
-// Les 3 habillages viennent de l'export web (public/looks) : trois directions
-// artistiques de l'écran d'accueil — a = pointeuse industrielle (cadran ivoire),
-// b = ticket papier brutaliste, c = éditorial serif (habillage par défaut).
-const LOOK_IMAGES = {
-  a: require("../assets/images/looks/a.jpg"),
-  b: require("../assets/images/looks/b.jpg"),
-  c: require("../assets/images/looks/c.jpg"),
-} as const;
-
-const LOOK_ORDER: Look[] = ["a", "b", "c"];
-// Texte validé de la galerie web (looks-screen + lookGallery) : noms,
-// sur-titres SKIN et descriptions — plus de libellés « Pointeuse / Editorial ».
-const LOOK_NAME: Record<Look, { en: string; fr: string }> = {
-  a: { en: "Horloge d'usine", fr: "Horloge d'usine" },
-  b: { en: "Ticket de pointeuse", fr: "Ticket de pointeuse" },
-  c: { en: "Hardware Seeker", fr: "Hardware Seeker" },
-};
+// L'IDENTITÉ UNIQUE — Seeker Premium. Ancienne galerie d'habillages (A/B/C ×
+// thèmes) réduite à une vitrine : l'app a un seul design, celui d'un Seeker.
+const HERO_IMG = require("../assets/images/looks/b.jpg");
 
 export default function LooksScreen() {
   const t = useT();
   const c = useColors();
   const s = useMemo(() => makeStyles(c), [c]);
   const router = useRouter();
-  const look = usePunch((st) => st.look);
-  const setLook = usePunch((st) => st.setLook);
   const locale = usePunch((st) => st.locale);
-  const { width } = useWindowDimensions();
-  const [applied, setApplied] = useState<Look | null>(null);
+  const [feted, setFeted] = useState(false);
 
-  // Le bandeau de confirmation s'efface après 2,5 s.
   useEffect(() => {
-    if (!applied) return;
-    const id = setTimeout(() => setApplied(null), 2500);
+    if (!feted) return;
+    const id = setTimeout(() => setFeted(false), 2500);
     return () => clearTimeout(id);
-  }, [applied]);
-
-  // Cartes en 2 colonnes sur les grands écrans, 1 colonne sur téléphone serré.
-  const cardW = width >= 760 ? (width - 24 * 3) / 2 : width - 48;
-
-  function apply(l: Look) {
-    setLook(l);
-    setApplied(l);
-    // Confirmation physique : l'utilisateur SENT que le changement est pris.
-    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(() => {});
-  }
+  }, [feted]);
 
   return (
     <View style={s.wrap}>
@@ -69,53 +39,52 @@ export default function LooksScreen() {
           <Text style={s.backTxt}>{t.back}</Text>
         </TouchableOpacity>
 
-        <Text style={s.title}>{t.looks}</Text>
-        <Text style={s.tag}>{t.looksTag}</Text>
+        <Text style={s.title}>{t.look}</Text>
+        <Text style={s.tag}>{t.lookTag}</Text>
 
-        {LOOK_ORDER.map((l) => {
-          const active = look === l;
-          return (
-            <View key={l} style={[s.card, { width: cardW, borderColor: active ? c.accent : c.borderLight }]}>
-              <Image source={LOOK_IMAGES[l]} style={s.img} resizeMode="cover" />
-              <View style={s.cardBody}>
-                <Text style={s.cardSub}>{lookGallery[l].sub}</Text>
-                <View style={s.cardHead}>
-                  <Text style={s.cardName}>{LOOK_NAME[l][locale]}</Text>
-                  {active && (
-                    <View style={[s.chip, { backgroundColor: c.accent }]}>
-                      <Text style={[s.chipTxt, { color: c.accentFg }]}>{t.looksUsed}</Text>
-                    </View>
-                  )}
-                </View>
-                <Text style={s.cardDesc}>{lookGallery[l].desc[locale]}</Text>
-                <TouchableOpacity
-                  style={[
-                    s.useBtn,
-                    { backgroundColor: active ? c.input : c.accent },
-                    applied === l && !active ? { borderWidth: 2, borderColor: c.accent } : null,
-                  ]}
-                  onPress={() => apply(l)}
-                  activeOpacity={0.85}
-                >
-                  <Text style={[s.useBtnTxt, { color: active ? c.fg : c.accentFg }]}>
-                    {active ? `✓ ${t.looksUsed}` : `${t.looksUse} ${l.toUpperCase()} →`}
-                  </Text>
-                </TouchableOpacity>
-                {applied === l ? (
-                  <Text style={[s.appliedNote, { color: c.accent }]}>✓ {t.looksApplied}</Text>
-                ) : null}
+        <View style={[s.card, { borderColor: c.accent }]}>
+          <Image source={HERO_IMG} style={s.img} resizeMode="cover" />
+          <View style={s.cardBody}>
+            <Text style={s.cardSub}>{lookGallery.b.sub}</Text>
+            <View style={s.cardHead}>
+              <Text style={s.cardName}>{lookGallery.b.name}</Text>
+              <View style={[s.chip, { backgroundColor: c.accent }]}>
+                <Text style={[s.chipTxt, { color: c.accentFg }]}>{t.lookWorn}</Text>
               </View>
             </View>
-          );
-        })}
+            <Text style={s.cardDesc}>{lookGallery.b.desc[locale]}</Text>
 
-        {applied ? (
-          <View style={[s.banner, { backgroundColor: c.accent }]}>
-            <Text style={[s.bannerTxt, { color: c.accentFg }]}>✓ {t.looksApplied}</Text>
+            {/* La palette de l'identité, échantillonnée — transparence totale. */}
+            <View style={s.swatches}>
+              {[
+                { hex: "#0b0a07", label: locale === "fr" ? "Monolithe" : "Monolith" },
+                { hex: "#d4af37", label: "Or · #d4af37" },
+                { hex: "#f3dc8e", label: locale === "fr" ? "Reflet" : "Highlight" },
+                { hex: "#8a6d1f", label: locale === "fr" ? "Ombre" : "Shadow" },
+                { hex: "#f2e6c8", label: locale === "fr" ? "Ticket" : "Ticket" },
+              ].map((sw) => (
+                <View key={sw.hex} style={s.swatchWrap}>
+                  <View style={[s.swatch, { backgroundColor: sw.hex, borderColor: c.borderLight }]} />
+                  <Text style={s.swatchLabel}>{sw.label}</Text>
+                </View>
+              ))}
+            </View>
+
+            <TouchableOpacity
+              style={[s.useBtn, { backgroundColor: c.input, borderWidth: 2, borderColor: c.accent }]}
+              onPress={() => {
+                setFeted(true);
+                Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(() => {});
+              }}
+              activeOpacity={0.85}
+            >
+              <Text style={[s.useBtnTxt, { color: c.accent }]}>✦ {lookGallery.b.name}</Text>
+            </TouchableOpacity>
+            {feted ? <Text style={[s.appliedNote, { color: c.accent }]}>✦ {t.lookApplied}</Text> : null}
           </View>
-        ) : (
-          <Text style={s.note}>{t.demoVault}</Text>
-        )}
+        </View>
+
+        <Text style={s.note}>{t.demoVault}</Text>
       </ScrollView>
     </View>
   );
@@ -131,31 +100,27 @@ function makeStyles(c: ReturnType<typeof useColors>) {
     tag: { fontFamily: fonts.body, fontSize: 13, color: c.dim2, lineHeight: 19, alignSelf: "flex-start", marginTop: 4, marginBottom: 20 },
     card: {
       backgroundColor: c.card,
-      borderRadius: 18,
+      borderRadius: 2,
       borderWidth: 1,
       marginBottom: 16,
       overflow: "hidden",
+      width: "100%",
     },
     img: { width: "100%", height: 260 },
     cardBody: { padding: 14 },
     cardSub: { fontFamily: fonts.mono, fontSize: 11, color: c.dim, textTransform: "uppercase", letterSpacing: 2, marginBottom: 4 },
     cardHead: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginBottom: 6 },
-    cardDesc: { fontFamily: fonts.body, fontSize: 13, color: c.dim2, lineHeight: 18, marginBottom: 10 },
+    cardDesc: { fontFamily: fonts.body, fontSize: 13, color: c.dim2, lineHeight: 18, marginBottom: 12 },
     cardName: { fontFamily: fonts.display, fontSize: 18, color: c.fg },
-    chip: { borderRadius: 999, paddingHorizontal: 10, paddingVertical: 4 },
+    chip: { borderRadius: 2, paddingHorizontal: 10, paddingVertical: 4 },
     chipTxt: { fontFamily: fonts.bodySemi, fontSize: 11 },
-    useBtn: { borderRadius: 12, paddingVertical: 12, alignItems: "center" },
+    swatches: { flexDirection: "row", flexWrap: "wrap", gap: 10, marginBottom: 14 },
+    swatchWrap: { alignItems: "center", gap: 4 },
+    swatch: { width: 44, height: 44, borderRadius: 2, borderWidth: 1 },
+    swatchLabel: { fontFamily: fonts.mono, fontSize: 9, color: c.dim, letterSpacing: 0.5 },
+    useBtn: { borderRadius: 2, paddingVertical: 12, alignItems: "center" },
     useBtnTxt: { fontFamily: fonts.bodySemi, fontSize: 14 },
     appliedNote: { fontFamily: fonts.bodySemi, fontSize: 12, textAlign: "center", marginTop: 8 },
-    banner: {
-      borderRadius: 12,
-      paddingVertical: 12,
-      paddingHorizontal: 16,
-      alignItems: "center",
-      marginTop: 8,
-      alignSelf: "stretch",
-    },
-    bannerTxt: { fontFamily: fonts.bodySemi, fontSize: 14 },
     note: { fontFamily: fonts.body, fontSize: 12, color: c.dim, textAlign: "center", marginTop: 8, lineHeight: 17 },
   });
 }

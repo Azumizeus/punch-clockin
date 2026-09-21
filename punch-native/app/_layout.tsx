@@ -9,10 +9,10 @@ import { useFonts, Fraunces_500Medium, Fraunces_600SemiBold } from "@expo-google
 import { Figtree_400Regular, Figtree_500Medium, Figtree_600SemiBold } from "@expo-google-fonts/figtree";
 import { IBMPlexMono_400Regular } from "@expo-google-fonts/ibm-plex-mono";
 import { usePunch, rehydratePunch } from "../lib/punch/store";
-import { Screensaver } from "../components/Screensaver";
 
-if (typeof globalThis.Buffer === "undefined") {
-  (globalThis as any).Buffer = Buffer;
+const g = globalThis as any;
+if (typeof g.Buffer === "undefined") {
+  g.Buffer = Buffer;
 }
 
 export default function RootLayout() {
@@ -53,30 +53,28 @@ export default function RootLayout() {
     }
   }, [connected, localeChosen, segments]);
 
-  // Sombre, Or noir et (par sécurité) tout thème inconnu → statusbar claire.
-  const isDark = theme !== "light" && theme !== "goldLight";
+  // Identité unique gold : toujours statusbar claire sur noir chaud.
+  const isDark = true;
 
   if (!fontsLoaded) {
-    const bg = usePunch.getState();
-    return <View style={{ flex: 1, backgroundColor: bg.theme === "light" ? "#efece6" : bg.theme === "goldLight" ? "#f6ecd2" : "#0c0c0d" }} />;
+    return <View style={{ flex: 1, backgroundColor: "#0b0a07" }} />;
   }
 
   return (
     <>
       <StatusBar style={isDark ? "light" : "dark"} />
-      {/* Veille : après N s d'inactivité, diaporama des 3 habillages ; un tap réveille. */}
-      <Screensaver>
-        <Stack
-          screenOptions={{
-            headerShown: false,
-            contentStyle: {
-              backgroundColor:
-                theme === "light" ? "#efece6" : theme === "goldLight" ? "#f6ecd2" : "#0c0c0d",
-            },
-            animation: "slide_from_bottom",
-          }}
-        />
-      </Screensaver>
+      {/* Veille retirée (v1.6.1) : elle s'armait en plein milieu des
+          transactions lentes et avalait les taps — le téléphone garde son
+          réglage système, l'app ne la remplace plus. */}
+      <Stack
+        screenOptions={{
+          headerShown: false,
+          contentStyle: {
+            backgroundColor: "#0b0a07", // noir chaud de l'identité gold
+          },
+          animation: "slide_from_bottom",
+        }}
+      />
     </>
   );
 }

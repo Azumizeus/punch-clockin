@@ -3,7 +3,12 @@ import { persist, createJSONStorage } from "zustand/middleware";
 import * as Haptics from "expo-haptics";
 import { Connection, PublicKey } from "@solana/web3.js";
 import { copy } from "./copy";
-import { sendTreasurySol, sendTreasuryToUserTransfer, sendUserToTreasuryTransfer } from "../solana/wallet";
+import {
+  readableTxError,
+  sendTreasurySol,
+  sendTreasuryToUserTransfer,
+  sendUserToTreasuryTransfer,
+} from "../solana/wallet";
 import { getTokenBalance, mintFor, toBaseUnits } from "../solana/tokens";
 import {
   DEMO_ADDRESS,
@@ -25,10 +30,12 @@ import {
   usdValue,
 } from "./format";
 import { zustandMMKVStorage } from "./storage";
-import { palettes, lookPalettes } from "./theme";
+import { premiumPalettes } from "./theme";
 import { applyLookFonts } from "./fonts";
+import { HELLO_REWARD_SKR } from "./hellos";
 import type {
   FeedItem,
+  HelloEvent,
   Locale,
   Look,
   Pli,
@@ -73,9 +80,8 @@ function seed(): PunchState {
   return {
     locale: "fr",
     localeChosen: false,
-    theme: "dark",
-    look: "c" as Look,
-    screensaverSecs: 0,
+    theme: "gold", // UNE identité : Gold Seeker Premium (les sélecteurs ○/●/✦ ont été retirés)
+    look: "b" as Look,
     seenHow: false,
     product: "punch",
     tab: "punch",
@@ -96,6 +102,7 @@ function seed(): PunchState {
     plis: seedPlis(),
     receipts: SEED_RECEIPTS,
     feed: SEED_FEED,
+    helloEvents: [],
     completedIds: ["cafe-lumen"],
     greetedIds: [],
     openedIds: [],
@@ -123,6 +130,9 @@ function bal(wallet: PunchState["wallet"], token: Token) {
   return wallet.skr;
 }
 
+// Nombre maximal de tickets gardés dans l'historique persisté.
+const RECEIPTS_HISTORY_MAX = 100;
+
 export const usePunch = create<
   PunchState & {
     t: () => (typeof copy)[Locale];
@@ -133,7 +143,6 @@ export const usePunch = create<
     chooseLocale: (locale: Locale) => void;
     setTheme: (theme: Theme) => void;
     setLook: (look: Look) => void;
-    setScreensaver: (secs: number) => void;
     dismissHow: () => void;
     setProduct: (product: Product) => void;
     setTab: (tab: Tab) => void;
@@ -158,6 +167,8 @@ export const usePunch = create<
     fillPosted: (id: string) => Receipt | null;
     buyPli: (id: string) => string | null;
     openLetter: (id: string) => void;
+    /** Rouvre un ticket existant depuis l'historique. */
+    openReceipt: (id: string) => void;
     writePli: (input: {
       body: string;
       price: number;
@@ -190,7 +201,6 @@ export const usePunch = create<
       chooseLocale: (locale) => set({ locale, localeChosen: true }),
       setTheme: (theme) => set({ theme }),
       setLook: (look) => set({ look }),
-      setScreensaver: (secs) => set({ screensaverSecs: secs }),
       dismissHow: () => set({ seenHow: true, view: "app", tab: "punch" }),
       setProduct: (product) => {
         set({
@@ -301,7 +311,10 @@ export const usePunch = create<
           stakers: 0.01,
           protocol: 0.1,
           signature: txSig || fakeSig(),
+          // Bonus SKR du bonjour : tracé sur le reçu, cumulé sur l'onglet Bonjours.
+          bonusSkr: HELLO_REWARD_SKR,
         };
+        const hello: HelloEvent = { id: rec.id, at: rec.at, name, skr: HELLO_REWARD_SKR };
         set((prev) => {
           const wallet = { ...prev.wallet };
           credit(wallet, "USDC", 0.1);
@@ -309,6 +322,7 @@ export const usePunch = create<
             wallet,
             greetedIds: [...prev.greetedIds, id],
             receipts: [rec, ...prev.receipts],
+            helloEvents: [hello, ...prev.helloEvents],
             lastReceiptId: rec.id,
             todayEarnedUsd: round2(prev.todayEarnedUsd + 0.1),
             protocolUsdc: round2(Math.max(0, prev.protocolUsdc - 0.11)),
@@ -414,6 +428,9 @@ export const usePunch = create<
         if (from === to || amount <= 0) return null;
         const s = get();
         if (bal(s.wallet, from) < amount) return null;
+        // Chaque tentative part d'une ardoise propre : l'erreur affichée est
+        // celle de CETTE tentative, jamais un reste d'échec précédent.
+        if (s.wallet.real) set({ lastTxError: null });
         const mid =
           from === "SKR"
             ? amount * SKR_USD
@@ -430,11 +447,14 @@ export const usePunch = create<
         // On garde dans le reçu la signature du transfert signé par l'utilisateur
         // (celle qu'il peut vérifier dans son historique Seed Vault).
         let txSig = "";
-        // Session perdue (authToken purgé au démarrage) : refus propre,
-        // JAMAIS de simulation locale en secours.
+        // Session perdue (authToken purgé au démarrage) : refus propre avec la
+        // VRAIE raison affichée — pas un « pas assez d'argent » mensonger.
         const token = s.wallet.authToken;
         if (s.wallet.real) {
-          if (!token) return null; // session perdue : refus propre, jamais simulé
+          if (!token) {
+            set({ lastTxError: copy[s.locale].needReconnect });
+            return null;
+          }
           try {
             const pubkey = new PublicKey(s.wallet.address);
             txSig = await sendUserToTreasuryTransfer(
@@ -447,9 +467,16 @@ export const usePunch = create<
             await sendTreasuryToUserTransfer(devnetConn, pubkey, mintFor(to), toBaseUnits(out, to));
           } catch (e) {
             console.log("[PUNCH-TX] swap:", e);
+            set({ lastTxError: readableTxError(e) });
             return null;
           }
         }
+        // Part gardien : si ce wallet stake du SKR, il EST un détenteur — les
+        // 3 % de gardiens ne restent plus dans un pool fantôme, une part réelle
+        // est créditée en SKR au wallet. Pas de stake = pas de part (c'est la
+        // règle : garder du SKR doit servir).
+        const stakerCutSkr = roundSkr(round2(spreadUsd * 0.03) / SKR_USD);
+        const stakerPays = s.wallet.stakedSkr > 0 && stakerCutSkr > 0;
         const rec: Receipt = {
           id: `r-${Date.now()}`,
           at: Date.now(),
@@ -461,11 +488,18 @@ export const usePunch = create<
           stakers: half,
           protocol: half,
           signature: txSig || fakeSig(),
+          // Vrais montants de l'échange : payé / reçu. Sans eux, un petit swap
+          // imprimait des 0,00 partout (les frais sont plus petits que le centime).
+          swapIn: { amount, token: from },
+          swapOut: { amount: out, token: to },
+          stakerSkrPaid: stakerPays ? stakerCutSkr : undefined,
         };
         set((prev) => {
           const wallet = { ...prev.wallet };
           debit(wallet, from, amount);
           credit(wallet, to, out);
+          // La part gardien atterrit réellement dans le portefeuille (SKR).
+          if (stakerPays) credit(wallet, "SKR", stakerCutSkr);
           return {
             wallet,
             receipts: [rec, ...prev.receipts],
@@ -484,17 +518,22 @@ export const usePunch = create<
         const s = get();
         if (amount <= 0 || s.wallet.skr < amount) return false;
         // En mode réel : vrai transfert SPL signé par Seed Vault, user -> trésor.
-        // Session perdue (authToken purgé au démarrage) : refus propre, jamais simulé.
+        // Session perdue : la VRAIE raison est affichée, jamais simulé.
         const token = s.wallet.authToken;
         let txSig = "";
         if (s.wallet.real) {
-          if (!token) return false; // session perdue : refus propre, jamais simulé
+          set({ lastTxError: null });
+          if (!token) {
+            set({ lastTxError: copy[s.locale].needReconnect });
+            return false;
+          }
           try {
             const pubkey = new PublicKey(s.wallet.address);
             const units = toBaseUnits(amount, "SKR");
             txSig = await sendUserToTreasuryTransfer(devnetConn, token, pubkey, mintFor("SKR"), units);
           } catch (e) {
             console.log("[PUNCH-TX] stake:", e);
+            set({ lastTxError: readableTxError(e) });
             return false;
           }
         }
@@ -527,6 +566,7 @@ export const usePunch = create<
       unstake: async (amount) => {
         const s = get();
         if (amount <= 0 || s.wallet.stakedSkr < amount) return false;
+        if (s.wallet.real) set({ lastTxError: null });
         // Frais de retrait : une petite part du SKR retiré finance le
         // protocole et les stakers au lieu de revenir intégralement au wallet.
         const fee = roundSkr(amount * WITHDRAW_FEE_PCT);
@@ -541,6 +581,7 @@ export const usePunch = create<
             txSig = await sendTreasuryToUserTransfer(devnetConn, pubkey, mintFor("SKR"), units);
           } catch (e) {
             console.log("[PUNCH-TX] unstake:", e);
+            set({ lastTxError: readableTxError(e) });
             return false;
           }
         }
@@ -755,6 +796,7 @@ export const usePunch = create<
         return null;
       },
       openLetter: (id) => set({ view: "letter", activePliId: id }),
+      openReceipt: (id) => set({ lastReceiptId: id, view: "receipt" }),
       writePli: (input) => {
         const body = input.body.trim();
         if (body.length < 24) return "short";
@@ -943,7 +985,6 @@ export const usePunch = create<
         localeChosen: s.localeChosen,
         theme: s.theme,
         look: s.look,
-        screensaverSecs: s.screensaverSecs,
         seenHow: s.seenHow,
         country: s.country,
         streak: s.streak,
@@ -953,6 +994,8 @@ export const usePunch = create<
         skrBought: s.skrBought,
         lastPunchAt: s.lastPunchAt,
         completedIds: s.completedIds,
+        helloEvents: s.helloEvents,
+        receipts: s.receipts.slice(0, RECEIPTS_HISTORY_MAX),
         wallet: {
           ...s.wallet,
           connected: false,
@@ -967,13 +1010,11 @@ export const usePunch = create<
           ...p,
           locale: p.locale === "en" ? "en" : "fr",
           localeChosen: Boolean(p.localeChosen),
-          theme:
-            p.theme === "light" || p.theme === "gold" || p.theme === "goldLight" ? p.theme : "dark",
-          look: p.look === "a" || p.look === "b" || p.look === "c" ? p.look : "c",
-          screensaverSecs:
-            p.screensaverSecs === 10 || p.screensaverSecs === 30 || p.screensaverSecs === 60
-              ? p.screensaverSecs
-              : 0,
+          // Identité v1.6.0 : Seeker Premium (gold, défaut) ou Seeker Nuit.
+          // Tous les anciens thèmes migrent vers gold, tous les anciens
+          // habillages (a et c) migrent vers b — un seul design de composition.
+          theme: p.theme === "nuit" ? "nuit" : "gold",
+          look: "b",
           seenHow: Boolean(p.seenHow),
           greetedIds: Array.isArray(p.greetedIds) ? p.greetedIds : [],
           view: "app",
@@ -981,6 +1022,18 @@ export const usePunch = create<
           product: "punch",
           lastPunchAt: typeof p.lastPunchAt === "number" ? p.lastPunchAt : null,
           completedIds: Array.isArray(p.completedIds) ? p.completedIds : current.completedIds,
+          helloEvents: Array.isArray(p.helloEvents)
+            ? p.helloEvents.filter(
+                (e): e is HelloEvent =>
+                  e != null && typeof e.at === "number" && typeof e.skr === "number" && typeof e.name === "string",
+              )
+            : [],
+          receipts: Array.isArray(p.receipts)
+            ? p.receipts.filter(
+                (r): r is Receipt =>
+                  r != null && typeof r.id === "string" && typeof r.at === "number" && typeof r.signature === "string",
+              )
+            : current.receipts,
           plis: current.plis,
           openedIds: [],
           globeToday: current.globeToday,
@@ -1011,7 +1064,9 @@ export function useColors() {
   // Chaque habillage définit ses 13 tokens pour CHACUN des 4 thèmes (portage
   // exact de lookPalettes du web validé). Identité fraîche à chaque appel pour
   // que tous les styles se recalculent au changement d'habillage ou de thème.
-  return lookPalettes[look][theme] ?? palettes[theme] ?? palettes.dark;
+  // Deux identités de couleur partagent la même composition : l'or (défaut)
+  // et la Nuit (option). L'habillage n'a plus d'effet sur la palette.
+  return premiumPalettes[theme] ?? premiumPalettes.gold;
 }
 
 export function rehydratePunch() {
@@ -1019,14 +1074,11 @@ export function rehydratePunch() {
 }
 
 /**
- * Formes globales par habillage (portage du --radius du web validé appliqué à
- * toute la page) : A = pilules partout, B = angles vifs 2px, C = doux 16px.
- * Les cartes, rangées et boutons de TOUS les écrans s'en servent — c'est ce
- * qui rend le changement d'habillage visible au-delà de la police.
+ * Formes globales de l'identité Seeker Premium (angles bruts 2 px du ticket,
+ * appliqués à toute la page). La composition est unique : cartes, rangées et
+ * boutons de TOUS les écrans partagent ces rayons, quel que soit le thème de
+ * couleur (gold ou nuit).
  */
 export function useShape() {
-  const look = usePunch((s) => s.look);
-  if (look === "a") return { radius: 999, card: 999, btn: 999, chip: 999, input: 999 };
-  if (look === "b") return { radius: 2, card: 2, btn: 2, chip: 2, input: 2 };
-  return { radius: 16, card: 16, btn: 16, chip: 10, input: 16 };
+  return { radius: 2, card: 2, btn: 2, chip: 2, input: 2 };
 }

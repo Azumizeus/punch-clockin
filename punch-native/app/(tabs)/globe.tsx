@@ -270,7 +270,7 @@ export default function GlobeScreen() {
 function makeStyles(c: ReturnType<typeof useColors>, shape: ReturnType<typeof useShape>) {
   return StyleSheet.create({
     wrap: { flex: 1, backgroundColor: c.bg },
-    content: { paddingTop: 16, paddingHorizontal: 24, paddingBottom: 40 },
+    content: { paddingTop: 16, paddingHorizontal: 24, paddingBottom: 140 },
     title: { fontFamily: fonts.display, fontSize: 26, color: c.fg, marginBottom: 4 },
     privacy: { fontFamily: fonts.body, fontSize: 13, color: c.dim, lineHeight: 19 },
     heroRow: { flexDirection: "row", gap: 12, marginBottom: 16 },

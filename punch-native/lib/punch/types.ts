@@ -1,10 +1,14 @@
 export type Locale = "en" | "fr";
-export type Theme = "dark" | "light" | "gold" | "goldLight";
-/** Habillage de l'interface : a = pointeuse industrielle, b = ticket papier, c = éditorial (défaut). */
-export type Look = "a" | "b" | "c";
+/** Identité de couleur de l'app. gold = Seeker Premium (défaut), nuit =
+ * Seeker Nuit (optionnel, noir bleuté / argent). Le champ reste pour la
+ * compat des anciens stockages. */
+export type Theme = "gold" | "nuit";
+/** Habillage : champ conservé pour compat (tout migre vers "b" = fusion
+ * Seeker Premium). Un seul design à partir de v1.5.0. */
+export type Look = "b";
 export type Token = "USDC" | "USDT" | "SKR";
 export type Product = "punch" | "pli";
-export type Tab = "punch" | "board" | "wallet" | "split" | "box" | "write" | "globe";
+export type Tab = "punch" | "board" | "wallet" | "split" | "box" | "write" | "globe" | "hellos";
 export type Rank = "open" | "silver" | "gold" | "guardian";
 export type ShiftKind = "dwell" | "review" | "scan" | "swap" | "watch";
 export type View = "app" | "shift" | "post" | "receipt" | "how" | "letter";
@@ -53,6 +57,22 @@ export interface Receipt {
   protocol: number;
   signature: string;
   city?: string;
+  /** Bonus SKR versé en plus de la part worker (bonjour uniquement, pour l'instant). */
+  bonusSkr?: number;
+  /** Détail d'un échange (kind === "swap") : ce que tu as payé et ce que tu as reçu. */
+  swapIn?: { amount: number; token: Token };
+  swapOut?: { amount: number; token: Token };
+  /** Part gardien SKR versée à CE wallet sur un échange (3 % des frais, si SKR staké). */
+  stakerSkrPaid?: number;
+}
+
+/** Un bonjour effectué : horodaté, nommé, bonus SKR tracé — alimente les cumuls. */
+export interface HelloEvent {
+  id: string;
+  at: number;
+  name: string;
+  /** SKR gagné sur ce bonjour (lot de démarrage, pas encore de paiements on-chain). */
+  skr: number;
 }
 
 export interface FeedItem {
@@ -89,8 +109,6 @@ export interface PunchState {
   localeChosen: boolean;
   theme: Theme;
   look: Look;
-  /** Écran de veille : 0 = off, sinon secondes d'inactivité (10/30/60). */
-  screensaverSecs: number;
   seenHow: boolean;
   product: Product;
   tab: Tab;
@@ -111,6 +129,8 @@ export interface PunchState {
   plis: Pli[];
   receipts: Receipt[];
   feed: FeedItem[];
+  /** Historique complet des bonjours effectués (cumuls semaine / mois / année). */
+  helloEvents: HelloEvent[];
   completedIds: string[];
   greetedIds: string[];
   openedIds: string[];

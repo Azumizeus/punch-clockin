@@ -41,6 +41,20 @@ export async function connectSeedVault() {
 }
 
 /**
+ * Vérifie que la session de signature est encore valide AVANT de construire
+ * une transaction. Quand l'autorisation Seed Vault a expiré, l'appel reauthorize
+ * échoue parfois en silence côté vault (feuille refermée, aucun message) —
+ * l'utilisateur croit que le bouton est mort. En testant la session d'abord,
+ * on obtient soit un silence confirmé (session OK), soit une erreur propre
+ * que l'app affiche (session expirée).
+ */
+export async function assertSigningSession(authToken: string): Promise<void> {
+  await transact(async (wallet) => {
+    await wallet.reauthorize({ auth_token: authToken, identity: IDENTITY });
+  });
+}
+
+/**
  * Le Seed Vault SIGNE, puis NOTRE connexion soumet la transaction (sendRawTransaction
  * avec retries) et la confirme. Pourquoi : signAndSendTransactions laisse le vault
  * soumettre via son propre endpoint RPC, qui échoue en silence (rate-limit devnet)
@@ -52,11 +66,20 @@ async function signByUserAndSubmit(
   tx: Transaction,
   bh: { blockhash: string; lastValidBlockHeight: number }
 ): Promise<string> {
-  const signed = await transact(async (wallet) => {
-    await wallet.reauthorize({ auth_token: authToken, identity: IDENTITY });
-    const result = await wallet.signTransactions({ transactions: [tx] });
-    return result[0];
-  });
+  // Garde-fou : si le Seed Vault ne répond pas (processus tué, feuille morte,
+  // RPC du vault coincé), la promesse ne doit pas rester suspendue pour
+  // toujours — le bouton semblerait "mort" sans aucun message. 75 s = le
+  // temps raisonnable de décider sur la feuille, large marge réseau incluse.
+  const signed = await Promise.race([
+    transact(async (wallet) => {
+      await wallet.reauthorize({ auth_token: authToken, identity: IDENTITY });
+      const result = await wallet.signTransactions({ transactions: [tx] });
+      return result[0];
+    }),
+    new Promise<never>((_, reject) =>
+      setTimeout(() => reject(new Error("Seed Vault ne répond pas (session morte) — réessaie.")), 75_000),
+    ),
+  ]);
   const raw: Uint8Array =
     signed instanceof Uint8Array ? signed : (signed as Transaction).serialize();
   const sig = await connection.sendRawTransaction(raw, { maxRetries: 5 });
@@ -112,6 +135,8 @@ async function ensureAtaIx(
  */
 export function readableTxError(e: unknown): string {
   const raw = e instanceof Error ? e.message : String(e ?? "");
+  if (/dismiss|cancel|closed|abort.*session|session.*(closed|rejected)/i.test(raw))
+    return "Signature refusée ou feuille fermée — ton argent n'a pas bougé, réessaie.";
   if (/429|Too Many Requests|rate.?limit|-32005/i.test(raw))
     return "RPC devnet saturé (limite de débit) — réessaie dans quelques secondes.";
   if (/fetch failed|Network request failed|network request|timeout|aborted/i.test(raw))

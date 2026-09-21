@@ -12,6 +12,7 @@ export const zustandMMKVStorage: StateStorage = {
     storage.set(name, value);
   },
   removeItem: (name: string) => {
-    storage.delete(name);
+    // MMKV v4 : l'API de suppression s'appelle remove() (delete n'existe plus).
+    storage.remove(name);
   },
 };

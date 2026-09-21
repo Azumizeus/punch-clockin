@@ -51,7 +51,8 @@ export default function ShiftScreen() {
     setSigning(true);
     usePunch.setState({ lastTxError: null });
     try {
-      const rec = await cashShift(shift.id, title);
+      // Garde `!shift` ci-dessus : la fermeture ne voit pas le narrowing TS.
+      const rec = await cashShift(shift!.id, title);
       if (!rec) {
         Alert.alert(t.txFailed, usePunch.getState().lastTxError ?? undefined);
         return;
@@ -63,7 +64,7 @@ export default function ShiftScreen() {
   }
 
   function handleFillPosted() {
-    fillPosted(shift.id);
+    fillPosted(shift!.id);
     router.back();
   }
 

@@ -8,11 +8,13 @@ import {
   ActivityIndicator,
   Linking,
 } from "react-native";
+import { useRouter } from "expo-router";
 import { usePunch, useT, useColors } from "../../lib/punch/store";
 import { fonts } from "../../lib/punch/fonts";
 import { lookTokens } from "../../lib/punch/looks";
 import { tokenColors } from "../../lib/punch/theme";
-import { formatAmt, formatUsd, shortAddr, isRealSig, txUrl } from "../../lib/punch/format";
+import { formatAmt, formatUsd, shortAddr, isRealSig, txUrl, roundSkr } from "../../lib/punch/format";
+import type { Receipt, Token } from "../../lib/punch/types";
 import { useLeaveNetwork } from "../../lib/punch/useLeaveNetwork";
 
 export default function SplitScreen() {
@@ -27,6 +29,8 @@ export default function SplitScreen() {
   const stakerUsdc = usePunch((s) => s.stakerUsdc);
   const skrBought = usePunch((s) => s.skrBought);
   const todayEarnedUsd = usePunch((s) => s.todayEarnedUsd);
+  const openReceipt = usePunch((st) => st.openReceipt);
+  const router = useRouter();
   const { leaving, confirmLeave } = useLeaveNetwork();
 
   return (
@@ -66,24 +70,70 @@ export default function SplitScreen() {
         </View>
         <View style={s.totalRow}>
           <Text style={s.totalLabel}>{t.skrBought}</Text>
-          <Text style={s.totalVal}>{skrBought.toLocaleString()} SKR</Text>
+          {/* toLocaleString("en-US") : le séparateur FR (espace insécable fine)
+              s'affichait en caractères bizarres sur le Seeker (« ùùùéé »). */}
+          <Text style={s.totalVal}>{Math.round(skrBought).toLocaleString("en-US")} SKR</Text>
         </View>
       </View>
 
       <Text style={s.receiptTitle}>{t.feeTable}</Text>
+      {/* Carte adaptée au type : un échange n'a PAS de découpe 92/3/5 —
+          imprimer ces lignes à 0 donnait des tickets « 0,00 partout ».
+          Même logique que le reçu complet (receipt.tsx). Rouvrable. */}
       {receipts.slice(0, 6).map((r) => (
-        <View key={r.id} style={s.receiptCard}>
+        <TouchableOpacity
+          key={r.id}
+          style={s.receiptCard}
+          activeOpacity={0.8}
+          onPress={() => {
+            openReceipt(r.id);
+            router.push("/receipt");
+          }}
+        >
           <View style={s.recHead}>
             <Text style={s.recTitle} numberOfLines={1}>{r.title}</Text>
-            <View style={[s.tokenChip, { backgroundColor: tokenColors[r.token] + "26" }]}>
-              <Text style={[s.tokenChipTxt, { color: tokenColors[r.token] }]}>{r.token}</Text>
+            <View style={[s.tokenChip, { backgroundColor: tokenColors[chipToken(r)] + "26" }]}>
+              <Text style={[s.tokenChipTxt, { color: tokenColors[chipToken(r)] }]}>{chipToken(r)}</Text>
             </View>
           </View>
           <View style={s.recRows}>
-            <Text style={s.recRow}>{t.gross}: {formatAmt(r.gross, r.token)} {r.token}</Text>
-            <Text style={s.recRow}>{t.worker}: {formatAmt(r.worker, r.token)}  92%</Text>
-            <Text style={s.recRow}>{t.stakers}: {formatAmt(r.stakers, r.token)}  3%</Text>
-            <Text style={s.recRow}>{t.protocol}: {formatAmt(r.protocol, r.token)}  5%</Text>
+            {r.kind === "swap" && r.swapIn && r.swapOut ? (
+              <>
+                <Text style={s.recRow}>{t.youPay}: {formatAmt(r.swapIn.amount, r.swapIn.token)} {r.swapIn.token}</Text>
+                <Text style={[s.recRow, s.recRowStrong]}>{t.youGet}: {formatAmt(r.swapOut.amount, r.swapOut.token)} {r.swapOut.token}</Text>
+                {r.gross >= 0.01 ? (
+                  <Text style={s.recRow}>{t.swapFee}: {formatAmt(r.gross, "USDC")} $US</Text>
+                ) : null}
+                {r.stakerSkrPaid ? (
+                  <Text style={[s.recRow, s.recRowStrong]}>{t.stakerPaid}: +{roundSkr(r.stakerSkrPaid)} SKR</Text>
+                ) : null}
+              </>
+            ) : r.kind === "stake" ? (
+              <>
+                {r.worker === 0 ? (
+                  <Text style={[s.recRow, s.recRowStrong]}>{t.stakeLocked}: {formatAmt(r.gross, r.token)} {r.token}</Text>
+                ) : (
+                  <>
+                    <Text style={s.recRow}>{t.gross}: {formatAmt(r.gross, r.token)} {r.token}</Text>
+                    <Text style={s.recRow}>{t.stakeFee}: {formatAmt(r.stakers, r.token)} {r.token}</Text>
+                    <Text style={[s.recRow, s.recRowStrong]}>{t.stakeNet}: {formatAmt(r.worker, r.token)} {r.token}</Text>
+                  </>
+                )}
+              </>
+            ) : (
+              <>
+                <Text style={s.recRow}>{t.gross}: {formatAmt(r.gross, r.token)} {r.token}</Text>
+                <Text style={[s.recRow, s.recRowStrong]}>{t.worker}: {formatAmt(r.worker, r.token)}  92%</Text>
+                {r.kind === "hello" && r.bonusSkr ? (
+                  <Text style={[s.recRow, s.recRowStrong]}>{t.hellos}: +{roundSkr(r.bonusSkr)} SKR</Text>
+                ) : (
+                  <>
+                    <Text style={s.recRow}>{t.stakers}: {formatAmt(r.stakers, r.token)}  3%</Text>
+                    <Text style={s.recRow}>{t.protocol}: {formatAmt(r.protocol, r.token)}  5%</Text>
+                  </>
+                )}
+              </>
+            )}
           </View>
           {/* Preuve on-chain : les vraies signatures ouvrent la page tx (devnet).
               Les signatures fictives du mode démo restent en texte simple. */}
@@ -94,7 +144,7 @@ export default function SplitScreen() {
           ) : (
             <Text style={s.recTx} numberOfLines={1}>{t.tx} {shortAddr(r.signature)}</Text>
           )}
-        </View>
+        </TouchableOpacity>
       ))}
 
       <View style={s.footer}>
@@ -114,10 +164,19 @@ export default function SplitScreen() {
   );
 }
 
+/** Token affiché sur la puce : pour un échange, ce qu'on a REÇU (pas USDC en dur). */
+function chipToken(r: { kind: Receipt["kind"]; token: Token; swapOut?: { token: Token } }): Token {
+  if (r.kind === "swap" && r.swapOut) return r.swapOut.token;
+  return r.token;
+}
+
 function makeStyles(c: ReturnType<typeof useColors>, lk: ReturnType<typeof lookTokens>) {
   return StyleSheet.create({
     wrap: { flex: 1, backgroundColor: c.bg },
-    content: { paddingTop: 16, paddingHorizontal: 24, paddingBottom: 40 },
+    // paddingBottom large : « Quitter le réseau » était mangé par la barre
+    // d'onglets — la barre déborde du layout sur le Seeker, le contenu bas
+    // doit garder une vraie réserve d'air sur TOUS les écrans à onglets.
+    content: { paddingTop: 16, paddingHorizontal: 24, paddingBottom: 140 },
     hero: { fontFamily: fonts.display, fontSize: 26, color: c.fg, lineHeight: 32, marginBottom: 10 },
     body: { fontFamily: fonts.body, fontSize: 15, color: c.dim2, lineHeight: 21, marginBottom: 8 },
     body2: { fontFamily: fonts.body, fontSize: 13, color: c.dim2, lineHeight: 19 },
@@ -141,6 +200,7 @@ function makeStyles(c: ReturnType<typeof useColors>, lk: ReturnType<typeof lookT
     tokenChipTxt: { fontFamily: lk.ticketMono ? fonts.mono : fonts.bodySemi, fontSize: 10, color: c.paperMuted },
     recRows: { gap: 2 },
     recRow: { fontFamily: lk.ticketMono ? fonts.mono : fonts.body, fontSize: 12, color: "rgba(26,25,22,0.75)" },
+    recRowStrong: { color: "rgba(26,25,22,1)", fontWeight: "600" },
     recTx: { fontFamily: lk.ticketMono ? fonts.mono : fonts.body, fontSize: 10, color: c.paperMuted, marginTop: 8 },
     recTxLink: { textDecorationLine: "underline" },
     footer: { marginTop: 12, gap: 10, alignItems: "stretch" },

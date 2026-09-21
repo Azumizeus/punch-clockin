@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import { Connection, PublicKey } from "@solana/web3.js";
 import { useRouter } from "expo-router";
+import { GoldBadge } from "../../components/GoldBadge";
 import { usePunch, useT, useColors, useShape } from "../../lib/punch/store";
 import { fonts } from "../../lib/punch/fonts";
 import { tokenColors } from "../../lib/punch/theme";
@@ -29,6 +30,7 @@ export default function WalletScreen() {
   const stake = usePunch((s) => s.stake);
   const unstake = usePunch((s) => s.unstake);
   const swap = usePunch((s) => s.swap);
+  const lastTxError = usePunch((s) => s.lastTxError);
   const router = useRouter();
 
   const [swapFrom, setSwapFrom] = useState<Token>("SKR");
@@ -62,8 +64,14 @@ export default function WalletScreen() {
     }
     try {
       const conn = new Connection("https://api.devnet.solana.com");
-      const lamports = await conn.getBalance(new PublicKey(wallet.address));
-      if (lamports < 10_000) {
+      // Plafonné à 4 s : sous rate-limit devnet, ce pré-check ne doit JAMAIS
+      // laisser le bouton mort en silence — passé ce délai on tente quand
+      // même, le vault affichera son erreur s'il y en a une.
+      const lamports = await Promise.race([
+        conn.getBalance(new PublicKey(wallet.address)),
+        new Promise<number>((_, rej) => setTimeout(() => rej(new Error("precheck-timeout")), 4000)),
+      ]).catch(() => -1);
+      if (lamports >= 0 && lamports < 10_000) {
         Alert.alert(t.needSol);
         return false;
       }
@@ -76,12 +84,18 @@ export default function WalletScreen() {
   async function handleSwap() {
     const amt = parseFloat(swapAmt);
     if (!Number.isFinite(amt) || amt <= 0) return;
-    if (!(await canSign())) return;
+    // Spinner IMMÉDIAT : canSign() fait un appel réseau — sans ça, le bouton
+    // paraissait mort pendant des secondes de silence (rate-limit devnet).
     setSwapping(true);
     try {
+      if (!(await canSign())) return;
       const rec = await swap(swapFrom, swapTo, amt);
-      if (!rec) Alert.alert(t.notEnough);
-      else router.push("/receipt");
+      if (!rec) {
+        // La VRAIE raison (session expirée, RPC saturé, refus...) quand le
+        // store en a écrit une ; sinon c'est vraiment le solde.
+        const reason = usePunch.getState().lastTxError;
+        Alert.alert(reason ?? t.notEnough);
+      } else router.push("/receipt");
     } finally {
       setSwapping(false);
     }
@@ -90,13 +104,14 @@ export default function WalletScreen() {
   async function handleStake() {
     const amt = parseFloat(stakeAmt);
     if (!Number.isFinite(amt) || amt <= 0) return;
-    if (!(await canSign())) return;
     if (wallet.skr < amt) {
       Alert.alert(t.notEnough);
       return;
     }
+    // Spinner immédiat (même raison que handleSwap).
     setStaking(true);
     try {
+      if (!(await canSign())) return;
       const ok = await stake(amt);
       if (!ok) Alert.alert(t.txFailed, usePunch.getState().lastTxError ?? undefined);
       else router.push("/receipt");
@@ -108,13 +123,14 @@ export default function WalletScreen() {
   async function handleUnstake() {
     const amt = parseFloat(stakeAmt);
     if (!Number.isFinite(amt) || amt <= 0) return;
-    if (!(await canSign())) return;
     if (wallet.stakedSkr < amt) {
       Alert.alert(t.notEnough);
       return;
     }
+    // Spinner immédiat (même raison que handleSwap).
     setUnstaking(true);
     try {
+      if (!(await canSign())) return;
       const ok = await unstake(amt);
       if (!ok) Alert.alert(t.txFailed, usePunch.getState().lastTxError ?? undefined);
       else router.push("/receipt");
@@ -130,6 +146,13 @@ export default function WalletScreen() {
       <Text style={s.hint}>{t.moneyUsdc}</Text>
       <Text style={s.hint}>{t.moneySkr}</Text>
       <Text style={s.rankLine}>{t.openRanks[rank()]}</Text>
+      <TouchableOpacity onPress={() => router.push("/history" as never)} activeOpacity={0.8}>
+        <Text style={s.historyLink}>{t.history} →</Text>
+      </TouchableOpacity>
+
+      {/* Badge SEEKER PREMIUM : ne se porte que sur le thème gold — dégradé
+          or métal (reflet → métal → ombre) autour d'un fond noir chaud. */}
+      <GoldBadge />
 
       <View style={s.balances}>
         {TOKENS.map((tok) => (
@@ -193,6 +216,7 @@ export default function WalletScreen() {
           {swapping ? <ActivityIndicator color={c.accentFg} /> : <Text style={s.ctaTxt}>{t.confirmSwap}</Text>}
         </TouchableOpacity>
         {wallet.real && <Text style={s.hint}>{t.realTxHint}</Text>}
+        {lastTxError ? <Text style={s.errTxt}>{lastTxError}</Text> : null}
       </View>
 
       {/* Stake */}
@@ -235,11 +259,15 @@ export default function WalletScreen() {
 function makeStyles(c: ReturnType<typeof useColors>, sh: ReturnType<typeof useShape>) {
   return StyleSheet.create({
     wrap: { flex: 1, backgroundColor: c.bg },
-    content: { paddingTop: 16, paddingHorizontal: 24, paddingBottom: 40 },
+    // paddingBottom large : les boutons stake finissaient SOUS la barre
+    // d'onglets (il fallait scroller pour les atteindre — « le bouton ne
+    // fonctionne pas »). 140 garde tout accessible d'un seul coup d'œil.
+    content: { paddingTop: 16, paddingHorizontal: 24, paddingBottom: 140 },
     title: { fontFamily: fonts.display, fontSize: 26, color: c.fg },
     totalUsd: { fontFamily: fonts.display, fontSize: 34, color: c.fg, marginTop: 10 },
     hint: { fontFamily: fonts.body, fontSize: 13, color: c.dim2, lineHeight: 18, marginTop: 6 },
     rankLine: { fontFamily: fonts.bodySemi, fontSize: 13, color: c.fg, marginTop: 8 },
+    historyLink: { fontFamily: fonts.bodySemi, fontSize: 14, color: c.accent, marginTop: 6 },
     balances: { marginTop: 20, gap: 8, marginBottom: 24 },
     balRow: {
       flexDirection: "row", alignItems: "center", justifyContent: "space-between",
@@ -264,6 +292,7 @@ function makeStyles(c: ReturnType<typeof useColors>, sh: ReturnType<typeof useSh
       fontFamily: fonts.mono, fontSize: 16, color: c.fg, marginTop: 12,
     },
     spreadHint: { fontFamily: fonts.mono, fontSize: 11, color: c.dim, marginTop: 8 },
+    errTxt: { fontFamily: fonts.body, fontSize: 12, color: "#e06060", lineHeight: 17, marginTop: 10 },
     ctaBtn: { flex: 1, backgroundColor: c.accent, borderRadius: sh.btn, paddingVertical: 14, alignItems: "center", marginTop: 12 },
     ctaTxt: { fontFamily: fonts.bodySemi, fontSize: 14, color: c.accentFg },
     stakeRow: { flexDirection: "row", gap: 8 },

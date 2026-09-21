@@ -50,11 +50,9 @@ export default function ConnectScreen() {
     }
   }
 
-  // Portage des 3 compositions connect.tsx de la source :
-  //   a = titre énorme « — CLOCK IN — », CTA en anneau bordé, footer mécanique
+  // Portage des compositions connect.tsx de la source :
   //   b = icône dans un ticket carré, CTA rectangle encre, footer pointillés
   //   c = épuré, icône nue, CTA standard (design de base)
-  const isA = look === "a";
   const isB = look === "b";
 
   const btn = (
@@ -68,18 +66,16 @@ export default function ConnectScreen() {
         <Animated.View
           style={[
             s.btn,
-            isA && { backgroundColor: "transparent", borderWidth: 2, borderColor: c.fg, borderRadius: 999, paddingVertical: 16 },
             isB && { borderRadius: 2, transform: [{ scale: pressed ? 0.985 : pressAnim }] },
             loading && s.btnBusy,
           ]}
         >
           {loading ? (
-            <ActivityIndicator color={isA ? c.fg : c.accentFg} />
+            <ActivityIndicator color={c.accentFg} />
           ) : (
             <Text
               style={[
                 s.btnText,
-                isA && { color: c.fg, fontFamily: fonts.mono, letterSpacing: 4, fontSize: 14 },
                 isB && { fontFamily: fonts.displaySemi, letterSpacing: 0.5 },
               ]}
             >
@@ -100,17 +96,17 @@ export default function ConnectScreen() {
             <Image source={appIcon} style={s.boltTicketIcon} />
           </View>
         ) : (
-          <Image source={appIcon} style={isA ? { ...s.bolt, borderRadius: 999 } : s.bolt} />
+          <Image source={appIcon} style={s.bolt} />
         )}
-        <Text style={[s.title, isA && { fontFamily: fonts.mono, fontSize: 30, letterSpacing: 6 }, isB && { fontSize: 34 }]}>
-          {isA ? `— ${t.clockIn.toUpperCase()} —` : t.clockIn}
+        <Text style={[s.title, isB && { fontSize: 34 }]}>
+          {t.clockIn}
         </Text>
-        <Text style={[s.body, isA && { fontFamily: fonts.mono, fontSize: 11, letterSpacing: 2, textTransform: "uppercase" as const }, isB && { fontStyle: "italic" as const }]}>
+        <Text style={[s.body, isB && { fontStyle: "italic" as const }]}>
           {t.nexusLine}
         </Text>
 
         {btn}
-        <Text style={[s.foot, isA && { fontFamily: fonts.mono, fontSize: 10, letterSpacing: 1.5, textTransform: "uppercase" as const }, isB && { fontStyle: "italic" as const, borderTopWidth: 1, borderTopColor: c.borderLight, borderStyle: "dashed", paddingTop: 14, width: "100%", textAlign: "center" }]}>
+        <Text style={[s.foot, isB && { fontStyle: "italic" as const, borderTopWidth: 1, borderTopColor: c.borderLight, borderStyle: "dashed", paddingTop: 14, width: "100%", textAlign: "center" }]}>
           {t.demoVault}
         </Text>
       </View>

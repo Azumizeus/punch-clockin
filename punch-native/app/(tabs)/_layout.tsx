@@ -9,48 +9,30 @@ import { TopBar } from "../../components/TopBar";
 export default function TabsLayout() {
   const t = useT();
   const c = useColors();
-  // L'habillage relooke la barre d'onglets — présente sur TOUTES les pages :
-  //  a = barre flottante en pilule + labels mono espacés (PUNCH-ABC skin-a)
-  //  b = barre carrée posée + labels serif (skin-b)
-  //  c = barre standard du design de base
-  const look = usePunch((s) => s.look);
-  const isA = look === "a";
-  const isB = look === "b";
+  // Identité unique Seeker Premium : la barre d'onglets est le bord déchiré
+  // du ticket — papier ivoire, bordure or pointillée 2 px, labels serif.
 
   return (
     <Tabs
       screenOptions={{
         header: () => <TopBar />,
         tabBarStyle: {
-          // B = "ticket papier" : la barre devient papier (clair) même en thème
-          // sombre — fidèle au CSS skin-b (.bg-surface → paper).
-          backgroundColor: isB ? c.paper : c.bg,
-          borderTopColor: isB ? c.border : c.borderLight,
-          borderTopWidth: isB ? 2 : StyleSheet.hairlineWidth,
+          // La barre est PAPIER (ivoire) même sur fond monolithe noir —
+          // l'argent vit sur le ticket, fidèle au CSS skin-b.
+          backgroundColor: c.paper,
+          borderTopColor: c.border,
+          borderTopWidth: 2,
+          // La déchirure de ticket traverse TOUTE la barre (nav.punch-nav du CSS).
+          borderStyle: "dashed",
           height: 64,
           paddingBottom: 8,
           paddingTop: 8,
-          ...(isA
-            ? {
-                position: "absolute" as const,
-                borderRadius: 999,
-                marginHorizontal: 12,
-                marginBottom: 10,
-                borderTopWidth: 1,
-                shadowColor: "#000",
-                shadowOpacity: 0.35,
-                shadowRadius: 12,
-                shadowOffset: { width: 0, height: 4 },
-                elevation: 10,
-              }
-            : {}),
         },
-        tabBarActiveTintColor: isB ? c.paperFg : c.fg,
-        tabBarInactiveTintColor: isB ? c.paperMuted : c.dim,
+        tabBarActiveTintColor: c.paperFg,
+        tabBarInactiveTintColor: c.paperMuted,
         tabBarLabelStyle: {
-          fontFamily: isA ? fonts.mono : isB ? fonts.display : fonts.bodySemi,
+          fontFamily: fonts.display,
           fontSize: 10,
-          ...(isA ? { letterSpacing: 1 } : {}),
         },
       }}
     >
@@ -78,6 +60,15 @@ export default function TabsLayout() {
           tabBarLabel: t.globe,
           tabBarIcon: ({ color, focused }) => (
             <Ionicons name={focused ? "globe" : "globe-outline"} size={20} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="hellos"
+        options={{
+          tabBarLabel: t.hellos,
+          tabBarIcon: ({ color, focused }) => (
+            <Ionicons name={focused ? "happy" : "happy-outline"} size={20} color={color} />
           ),
         }}
       />
