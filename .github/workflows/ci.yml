@@ -16,6 +16,14 @@ jobs:
         with:
           node-version: 22
 
+      # Le secret du tresor n'est pas versionne : la CI compile avec la vraie
+      # cle (secret GitHub) ou le gabarit zero sinon.
+      - name: Inject treasury key (secret or stub)
+        working-directory: punch-native
+        env:
+          TREASURY_SECRET_DEVNET: ${{ secrets.TREASURY_SECRET_DEVNET }}
+        run: node scripts/inject-treasury.mjs
+
       # 1) Harnais economiques — 54 verifications offline (split 92/3/5, frais,
       #    soldes, compteurs). Aucune dependance, aucun reseau.
       - name: Harnais economiques
