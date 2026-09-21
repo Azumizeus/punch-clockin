@@ -66,7 +66,8 @@ export default function HomeScreen() {
     setGreetingId(id);
     try {
       const rec = await greetNearby(id, name);
-      if (!rec) Alert.alert(t.txFailed);
+      // La vraie raison (RPC saturé, réseau perdu...) accompagne le titre d'échec.
+      if (!rec) Alert.alert(t.txFailed, usePunch.getState().lastTxError ?? undefined);
     } finally {
       setGreetingId(null);
     }

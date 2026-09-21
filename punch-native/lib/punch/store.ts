@@ -251,9 +251,11 @@ export const usePunch = create<
             await sendTreasuryToUserTransfer(devnetConn, pubkey, mintFor("SKR"), toBaseUnits(5000, "SKR"));
             await get().refreshWalletBalances();
           }
-        } catch {
+        } catch (e) {
           // Le lot de bienvenue est un bonus, pas un blocage — l'app reste
-          // utilisable même si le RPC devnet est capricieux.
+          // utilisable même si le RPC devnet est capricieux, mais la raison
+          // reste lisible (cohérence avec les autres flux).
+          set({ lastTxError: readableTxError(e) });
         }
       },
       punchIn: (signature) => {
@@ -292,11 +294,17 @@ export const usePunch = create<
         // Le trésor signe seul : recevoir un "bonjour" ne nécessite pas de
         // session wallet (un authToken périmé ne doit pas bloquer un paiement).
         if (s.wallet.real) {
+          // Chaque tentative part d'une ardoise propre (même règle que swap) :
+          // l'erreur affichée est celle de CETTE tentative, jamais un reste.
+          set({ lastTxError: null });
           try {
             const pubkey = new PublicKey(s.wallet.address);
             txSig = await sendTreasuryToUserTransfer(devnetConn, pubkey, mintFor("USDC"), toBaseUnits(0.1, "USDC"));
           } catch (e) {
             console.log("[PUNCH-TX] greetNearby:", e);
+            // Cohérence swap/stake/unstake : la VRAIE raison (RPC saturé,
+            // réseau perdu...) est stockée pour l'écran, jamais avalée.
+            set({ lastTxError: readableTxError(e) });
             return null;
           }
         }
@@ -380,7 +388,8 @@ export const usePunch = create<
             );
           } catch (e) {
             console.log("[PUNCH-TX] cashShift:", e);
-            set({ lastTxError: e instanceof Error ? e.message : String(e) });
+            // Lisible comme partout : "RPC devnet saturé", "réseau perdu"...
+            set({ lastTxError: readableTxError(e) });
             return null;
           }
         }
@@ -635,7 +644,7 @@ export const usePunch = create<
             );
           } catch (e) {
             console.log("[PUNCH-TX] postShift:", e);
-            set({ lastTxError: e instanceof Error ? e.message : String(e) });
+            set({ lastTxError: readableTxError(e) });
             return "tx";
           }
         }
