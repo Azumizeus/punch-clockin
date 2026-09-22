@@ -63,7 +63,11 @@ jobs:
       - name: Prepare release body
         run: |
           VER="${GITHUB_REF_NAME#v}"
-          if [ -f "docs/RELEASE-NOTES-${VER}.md" ]; then
+          # Le fichier peut s'appeler RELEASE-NOTES-v1.6.6.md (avec le v)
+          # ou RELEASE-NOTES-1.6.6.md (sans) — on accepte les deux.
+          if [ -f "docs/RELEASE-NOTES-${GITHUB_REF_NAME}.md" ]; then
+            cp "docs/RELEASE-NOTES-${GITHUB_REF_NAME}.md" RELEASE_BODY.md
+          elif [ -f "docs/RELEASE-NOTES-${VER}.md" ]; then
             cp "docs/RELEASE-NOTES-${VER}.md" RELEASE_BODY.md
           else
             printf '# PUNCH %s\n\nAPK signe (arm64) — voir docs/RELEASE-NOTES des versions precedentes.\n' \
