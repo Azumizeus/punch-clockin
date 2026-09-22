@@ -1,0 +1,126 @@
+1
+00:00:06,000 --> 00:00:10,282
+Punch in once a day from a real Seeker phone.
+A real Solana transaction proves you showed up
+
+2
+00:00:10,362 --> 00:00:14,644
+— and you get paid. The whole economy follows
+one rule, printed everywhere: ninety-two
+
+3
+00:00:14,724 --> 00:00:19,006
+percent to the person who showed up. Three
+percent to SKR holders. Five percent to the
+
+4
+00:00:19,086 --> 00:00:23,368
+app.
+
+5
+00:00:26,500 --> 00:00:30,276
+Every punch is real. The app opens Seed Vault,
+you sign a memo transaction with your own
+
+6
+00:00:30,356 --> 00:00:34,132
+fingerprint, and it lands on devnet in
+seconds. No simulation. The explorer proves
+
+7
+00:00:34,212 --> 00:00:37,988
+it.
+
+8
+00:00:41,500 --> 00:00:45,164
+One tap. No forms, no manager, nothing to
+trust — the app asks the chain to record that
+
+9
+00:00:45,244 --> 00:00:48,908
+you showed up.
+
+10
+00:00:52,500 --> 00:00:57,916
+Approve once — and the memo lands on devnet.
+Your time is now a fact on chain.
+
+11
+00:01:02,500 --> 00:01:08,876
+And there it is: the split, printed on every
+receipt. Ninety-two, three, five.
+
+12
+00:01:12,500 --> 00:01:17,268
+Being here unlocks work. The Board lists small
+paid gigs nearby: confirm a place is open,
+
+13
+00:01:17,348 --> 00:01:22,116
+leave an honest review, scan a code. Take a
+job, and the treasury pays you in USDC — a
+
+14
+00:01:22,196 --> 00:01:26,964
+real transfer, every time.
+
+15
+00:01:28,300 --> 00:01:33,300
+The wallet holds real balances: USDC, USDT,
+and SKR. Stake SKR to climb the ranks —
+
+16
+00:01:33,380 --> 00:01:38,380
+Silver, Gold, Guardian — and reach the
+better-paid jobs first. Real utility, zero new
+
+17
+00:01:38,460 --> 00:01:43,460
+supply.
+
+18
+00:01:45,300 --> 00:01:50,364
+And this is a clock, for the whole world. A
+real drag-physics globe: every punch on the
+
+19
+00:01:50,444 --> 00:01:55,508
+planet drops a live dot. Say hi to a Seeker
+nearby — it pays you both ten cents. A social
+
+20
+00:01:55,588 --> 00:02:00,652
+gesture, turned into a real micro-transaction.
+
+21
+00:02:04,800 --> 00:02:10,180
+The network screen is honest too - point a
+custom RPC anywhere, watch the live ping, and
+
+22
+00:02:10,260 --> 00:02:15,640
+read the balances pulled straight from the
+chain. No mockups anywhere.
+
+23
+00:02:17,300 --> 00:02:23,532
+And the receipts stay. Every job, every payout
+— each with its clickable on-chain signature.
+
+24
+00:02:24,800 --> 00:02:29,424
+Everything you just saw is real: signed devnet
+transactions through Seed Vault. The treasury
+
+25
+00:02:29,504 --> 00:02:34,128
+is public — watch it move on the explorer.
+
+26
+00:02:35,300 --> 00:02:38,616
+Built for the Clock In hackathon. One hundred
+percent native, signed APK, judge guide in the
+
+27
+00:02:38,696 --> 00:02:42,012
+repo.

@@ -87,4 +87,5 @@ jobs:
             punch-clockin-seeker-${{ github.ref_name }}.apk
             punch-clockin-seeker-${{ github.ref_name }}.apk.sha256
             punch-native/releases/punch-clockin-demo.mp4
+            punch-native/releases/punch-clockin-demo.srt
           fail_on_unmatched_files: true

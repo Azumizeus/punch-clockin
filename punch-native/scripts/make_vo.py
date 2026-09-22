@@ -23,7 +23,7 @@ os.makedirs(OUT, exist_ok=True)
 VOICE = "en-US-AndrewNeural"
 RATE = "-4%"
 
-SEGMENTS = [  # seg02b : moment ticket (insert v3)
+SEGMENTS = [  # seg02b/seg02d/seg06 reecrits (montage v6) ; seg02d = nouveau (ticket papier)
     ("seg01", "Punch in once a day from a real Seeker phone. A real Solana "
               "transaction proves you showed up — and you get paid. The whole "
               "economy follows one rule, printed everywhere: ninety-two percent "
@@ -32,9 +32,12 @@ SEGMENTS = [  # seg02b : moment ticket (insert v3)
     ("seg02", "Every punch is real. The app opens Seed Vault, you sign a memo "
               "transaction with your own fingerprint, and it lands on devnet in "
               "seconds. No simulation. The explorer proves it."),
-    ("seg02b", "One tap. Your fingerprint signs the memo inside Seed Vault, and "
-               "seconds later the ticket is on chain — your time, your country, "
-               "and the rule printed right on it."),
+    ("seg02b", "One tap. No forms, no manager, nothing to trust — the app asks "
+               "the chain to record that you showed up."),
+    ("seg02c", "Approve once — and the memo lands on devnet. Your time is now "
+               "a fact on chain."),
+    ("seg02d", "And there it is: the split, printed on every receipt. "
+               "Ninety-two, three, five."),
     ("seg03", "Being here unlocks work. The Board lists small paid gigs nearby: "
               "confirm a place is open, leave an honest review, scan a code. "
               "Take a job, and the treasury pays you in USDC — a real transfer, "
@@ -46,17 +49,18 @@ SEGMENTS = [  # seg02b : moment ticket (insert v3)
               "globe: every punch on the planet drops a live dot. Say hi to a "
               "Seeker nearby — it pays you both ten cents. A social gesture, "
               "turned into a real micro-transaction."),
-    ("seg06", "And when you're done, you leave honestly. Leaving the network is "
-              "a real transaction too: counters decrement, nothing is hidden, "
-              "and the receipts stay — one hundred of them, each with its "
+    ("seg05b", "The network screen is honest too - point a custom RPC anywhere, "
+               "watch the live ping, and read the balances pulled straight from "
+               "the chain. No mockups anywhere."),
+    ("seg06", "And the receipts stay. Every job, every payout — each with its "
               "clickable on-chain signature."),
-    ("seg07", "Everything you just saw is a real signed devnet transaction "
-              "through Mobile Wallet Adapter and Seed Vault. The treasury is "
-              "public: watch the balances move on the explorer while you use "
-              "the app."),
+    ("seg07", "Everything you just saw is real: signed devnet transactions "
+              "through Seed Vault. The treasury is public — watch it move on "
+              "the explorer."),
+    ("seg06b", "Approve - and the network simply lets you go. No lock-in, no "
+               "penalty. Your time stays yours. That is the whole point."),
     ("seg08", "Built for the Clock In hackathon. One hundred percent native, "
-              "signed APK, judge guide in the repo. Show up. Get paid. "
-              "Ninety-two, three, five."),
+              "signed APK, judge guide in the repo."),
 ]
 
 

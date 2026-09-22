@@ -27,9 +27,11 @@ wallet_full.xml
 ui_now.png
 scan_target.py
 
-# artefacts de build lourds : captures QA et APKs signes (releases/)
+# artefacts de build lourds : captures QA et APKs signes (releases/*)
+# (/* et pas / : sinon les ! ne peuvent pas re-inclure la video)
 punch-native/_shots/
-punch-native/releases/
+punch-native/releases/*
 
-# la video demo est trackee (attachee aux GitHub Releases)
+# la video demo est trackee (attachee aux GitHub Releases), + ses sous-titres
 !punch-native/releases/punch-clockin-demo.mp4
+!punch-native/releases/punch-clockin-demo.srt

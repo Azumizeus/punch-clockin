@@ -38,38 +38,43 @@ for fname in (GEORGIA, CONSOLA):
     if not os.path.exists(dst):
         shutil.copy(os.path.join("C:/Windows/Fonts", fname), dst)
 
-# (rush, ss, dur, gel) — coupes calibrees ~3:10. Gel = prolongation par clone
-# de la derniere frame (le rush ticket est court : ~7 s reel pour 11 s voulus).
+# (rush, ss, dur, gel) — montage v6 : l'arc punch complet (feuille -> Approuve
+# -> CLOCK IN -> ticket gelee) + le recu 92% en plan dedie. Pas de plan « quitter » :
+# le rush ne contient pas l'approbation finale (dialogue fige), la sortie est racontee
+# en voix off. Gel = prolongation par clone de la derniere frame.
 CUTS = [
-    ("seg01-connect.mp4", 0.0, 19.6, 0.0),  # CLOCK IN -> feuille vault -> registre
-    ("seg02-cadran.mp4", 3.0, 12.0, 0.0),   # cadran + horloge + registre
-    ("seg03-punch.mp4", 0.0, 25.0, 0.0),    # cadran -> feuille Transaction -> signature
-    ("seg03b-ticket.mp4", 0.0, 7.0, 4.0),   # le ticket papier (prolonge par gel)
-    ("seg04-board.mp4", 0.0, 15.0, 0.0),    # missions payees
-    ("seg05-wallet.mp4", 0.0, 17.0, 0.0),   # soldes reels + rangs
-    ("seg06-globe.mp4", 0.0, 19.0, 0.0),    # globe physique
-    ("seg07-reseau.mp4", 0.0, 22.0, 0.0),   # ping RPC + historique
-    ("seg08-leave.mp4", 0.0, 28.0, 0.0),    # quitter le reseau (signe) -> CLOCK IN final
-    ("seg09-explorer.mp4", 0.0, 11.0, 0.0), # tresor sur l'explorer
+    ("seg01-connect.mp4", 0.0, 19.6, 0.0),   # CLOCK IN -> feuille vault -> registre
+    ("seg02-cadran.mp4", 3.0, 12.0, 0.0),    # cadran + horloge + registre
+    ("seg03-punch.mp4", 0.0, 21.9, 0.0),     # tap -> feuille Transaction -> empreinte (coupe avant le glitch noir ~22)
+    ("seg03-punch.mp4", 22.4, 4.0, 3.5),     # Approuve -> CLOCK IN -> ticket (gele)
+    ("seg03b-ticket.mp4", 0.3, 6.5, 0.0),    # carte recu « Tu gardes 92% » (le payoff)
+    ("seg04-board.mp4", 0.0, 15.0, 0.0),     # missions payees
+    ("seg05-wallet.mp4", 0.0, 17.0, 0.0),    # soldes reels + rangs
+    ("seg06-globe.mp4", 0.0, 19.0, 0.0),     # globe physique
+    ("seg07-reseau.mp4", 0.0, 22.0, 0.0),    # ping RPC + historique
+    ("seg09-explorer.mp4", 0.0, 11.0, 1.5),  # tresor sur l'explorer
 ]
 CARD_TITLE = 4.5
-CARD_CLOSE = 6.0
-TOTAL = CARD_TITLE + sum(c[2] for c in CUTS) + CARD_CLOSE
+CARD_CLOSE = 9.0
+# NB : TOTAL reel calcule apres encodage (les gels prolongent certaines pieces)
 
 # Voix off : (fichier, offset s) — ordre narratif, pas l'ordre des fichiers.
-# Timeline : carte 0-4.5 | connect 4.5-24.1 | cadran -36.1 | punch -61.1 |
-# ticket -72.1 | board -87.1 | wallet -104.1 | globe -123.1 | reseau -145.1 |
-# leave -173.1 | explorer -184.1 | cloture -190.1
+# Timeline v6 (~166 s) : carte 0-4.5 | connect -24.1 | cadran -36.1 | punch 36.1-66
+# (vault ~44.4, Approuve ~57.9, CLOCK IN ~61.5, ticket ~62.3) | recu 92% -72.3 |
+# board -87.8 | wallet -104.8 | globe -123.8 | reseau -145.6 | explorer -157.8 | cloture -166.3
 VO = [
     ("seg01.mp3", 6.0),     # hook 92/3/5 pendant la connexion
-    ("seg02.mp3", 27.0),    # « every punch is real » (fin connect + debut punch)
-    ("seg02b.mp3", 47.0),   # le moment vault/ticket
-    ("seg03.mp3", 73.0),    # board / missions
-    ("seg04.mp3", 88.0),    # wallet / staking
-    ("seg05.mp3", 105.0),   # globe / bonjour
-    ("seg06.mp3", 143.0),   # quitter honnetement + historique
-    ("seg08.mp3", 160.0),   # « built for CLOCK IN » sur l'ecran final
-    ("seg07.mp3", 172.0),   # tout est reel / tresor (sur l'explorer)
+    ("seg02.mp3", 26.5),    # « every punch is real » (fin connect + cadran)
+    ("seg02b.mp3", 41.5),   # « one tap » pendant le tap + feuille vault
+    ("seg02c.mp3", 52.5),   # Approuve -> memo on chain -> CLOCK IN
+    ("seg02d.mp3", 62.5),   # le ticket papier + le recu 92% : le payoff
+    ("seg03.mp3", 72.5),    # board / missions
+    ("seg04.mp3", 88.3),    # wallet / staking
+    ("seg05.mp3", 105.3),   # globe / bonjour
+    ("seg05b.mp3", 124.8),  # ecran reseau : RPC custom + ping + soldes
+    ("seg06.mp3", 137.3),   # les reçus restent lisibles (bridge vers l'explorer)
+    ("seg07.mp3", 144.8),   # tout est reel / tresor (sur l'explorer)
+    ("seg08.mp3", 155.3),   # « built for CLOCK IN » sur la carte de cloture
 ]
 
 
@@ -109,9 +114,9 @@ for i, (name, ss, dur, freeze) in enumerate(CUTS):
     if freeze:
         vf += ",tpad=stop_mode=clone:stop_duration=%.1f" % freeze
     vf += "," + fades(dur)
-    if i == 0:  # overlay 92/3/5 pendant le hook
+    if i == 0:  # overlay 92/3/5 pendant le hook — 8 s seulement (plan de montage)
         vf += (",drawtext=fontfile=%s:text='92 / 3 / 5':fontsize=84:fontcolor=%s"
-               ":x=(w-text_w)/2:y=h-330:box=1:boxcolor=black@0.55:boxborderw=20" % (GEORGIA, GOLD))
+               ":x=(w-text_w)/2:y=h-330:box=1:boxcolor=black@0.55:boxborderw=20:enable='lt(t,8)'" % (GEORGIA, GOLD))
     if i == len(CUTS) - 1:  # legende sur l'explorer
         vf += (",drawtext=fontfile=%s:text='Treasury — explorer.solana.com (devnet)'"
                ":fontsize=30:fontcolor=%s:x=(w-text_w)/2:y=90:box=1:boxcolor=black@0.5:boxborderw=14"
@@ -147,6 +152,8 @@ card("90-close.mp4", CARD_CLOSE, [
     ("github.com/Azumizeus/punch-clockin", 36, CREAM, CONSOLA, 640),
     ("Signed APK v1.6.6 - see repo releases", 30, DIM, CONSOLA, 710),
 ])
+
+TOTAL = sum(probe_dur(p) for p in pieces)  # duree reelle (gels inclus)
 
 print("== Concat video ==")
 
