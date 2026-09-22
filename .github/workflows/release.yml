@@ -28,13 +28,20 @@ jobs:
         working-directory: punch-native
         run: npm ci
 
-      # Le secret du tresor n'est pas versionne : vrai secret CI s'il existe,
-      # sinon gabarit zero (l'APK sera marque « demo tresor »).
-      - name: Inject treasury key (secret or stub)
+      # Le secret du tresor est OBLIGATOIRE pour une release : sans lui l'APK
+      # partirait avec le gabarit zero (aucun lot ni paiement possible depuis
+      # le tresor). On echoue tot avec un message d'action clair.
+      - name: Inject treasury key (secret required)
         working-directory: punch-native
         env:
           TREASURY_SECRET_DEVNET: ${{ secrets.TREASURY_SECRET_DEVNET }}
-        run: node scripts/inject-treasury.mjs
+        run: |
+          if [ -z "$TREASURY_SECRET_DEVNET" ]; then
+            echo "::error::Secret TREASURY_SECRET_DEVNET absent : refuse de construire un APK au gabarit zero."
+            echo "Ajouter le secret (JSON : tableau de 64 octets) dans Settings > Secrets and variables > Actions > Repository secrets, puis retag."
+            exit 1
+          fi
+          node scripts/inject-treasury.mjs
 
       # Le dossier android/ n'est pas tracke : prebuild le regenere
       # (le template embarque le keystore debug utilise pour signer).
@@ -78,6 +85,15 @@ jobs:
           if [ "$TREASURY_FALLBACK" = "1" ]; then
             printf '\n> ⚠️ APK construit sans le secret tresor (gabarit demo) : configurez le secret TREASURY_SECRET_DEVNET, ou installez un APK construit avec la vraie cle.\n' >> RELEASE_BODY.md
           fi
+
+      # Rebuild sur un tag deplace : purge les assets de l'ancienne release
+      # (sinon l'APK gabarit resterait cote a cote du bon).
+      - name: Remove previous release assets (re-tag rebuild)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release view "$GITHUB_REF_NAME" --json assets -q '.assets[].name' 2>/dev/null \
+            | while read -r a; do gh release delete-asset "$GITHUB_REF_NAME" "$a" -y || true; done
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
