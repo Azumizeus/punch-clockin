@@ -4,7 +4,7 @@
 
 **EN:** PUNCH is our entry for the **CLOCK IN** hackathon (Solana Mobile): punch in once a day from a real Seeker phone, a real Solana transaction (devnet) proves your presence, and the resulting economy follows one rule, printed everywhere: **92% to the person who showed up, 3% to SKR holders, 5% to the app**. Part of the **Nexus Seeker** ecosystem.
 
-**EN — judges, start here:** open [`docs/GUIDE-JURY.md`](docs/GUIDE-JURY.md) (English first) for a step-by-step test of the app, and [`docs/PITCH-JURY.md`](docs/PITCH-JURY.md) for the pitch. Every money-related action in the app is a **real signed devnet transaction** — nothing is simulated. Signed APK: [GitHub Release v1.6.7](https://github.com/Azumizeus/punch-clockin/releases/latest) — `punch-clockin-seeker-v1.6.7.apk` (arm64, identité Seeker Premium, RPC personnalisé + test de connexion, **trésor réel injecté en CI**).
+**EN — judges, start here:** open [`docs/GUIDE-JURY.md`](docs/GUIDE-JURY.md) (English first) for a step-by-step test of the app, and [`docs/PITCH-JURY.md`](docs/PITCH-JURY.md) for the pitch. Every money-related action in the app is a **real signed devnet transaction** — nothing is simulated. Signed APK: [GitHub Release v1.6.8](https://github.com/Azumizeus/punch-clockin/releases/latest) — `punch-clockin-seeker-v1.6.8.apk` (arm64, identité Seeker Premium, RPC personnalisé + test de connexion, **trésor réel injecté en CI**).
 
 ## Démarrage rapide / Quick start
 

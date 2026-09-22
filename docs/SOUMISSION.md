@@ -21,7 +21,7 @@ mise à jour: 23 septembre 2026
 
 | Livrable | État | Lien / action |
 |---|---|---|
-| **APK Android fonctionnel** | ✅ prêt (v1.6.7, arm64, signé, **construit en CI avec le vrai trésor**) | https://github.com/Azumizeus/punch-clockin/releases/tag/v1.6.7 |
+| **APK Android fonctionnel** | ✅ prêt (v1.6.8, arm64, signé, **construit en CI avec le vrai trésor**) | https://github.com/Azumizeus/punch-clockin/releases/tag/v1.6.8 |
 | **Repo GitHub source** | ✅ prêt, **public**, CI verte | https://github.com/Azumizeus/punch-clockin |
 | **Vidéo démo** | ✅ refaite le 22/09 (2 min 43, voix off EN + **sous-titres incrustés**, tournée sur Seeker v1.6.6 : connexion, pointage complet → ticket, reçu 92/3/5, ping RPC, explorer) | `punch-clockin-demo.mp4` dans la release v1.6.7 (+ `.srt`) — **à uploader sur YouTube (public ou répertorié)** et lier |
 | **Pitch deck** | ✅ prêt | [`docs/punch-clockin-deck.pdf`](https://github.com/Azumizeus/punch-clockin/blob/master/docs/punch-clockin-deck.pdf) (10 slides EN) |
@@ -39,7 +39,7 @@ Le prix SKR ($10k) vise exactement notre intégration : staking SKR → accès p
 
 Le secret GitHub `TREASURY_SECRET_DEVNET` a été **posé via l'API** (valeur = le tableau JSON des 64 octets, chiffrée libsodium avec la clé publique Actions) et **prouvé par dérivation** : la clé engendre exactement le trésor `FUiCbnDhEEJtz9Zcj66hGB54iGMGeyjRKD7CsTwpihJn`. Le workflow Release **refuse désormais tout build sans secret** (échec tôt avec message d'action) — plus jamais d'APK « gabarit zéro ».
 
-**Dernière vérification avant de soumettre :** le corps de la [release v1.6.7](https://github.com/Azumizeus/punch-clockin/releases/tag/v1.6.7) ne doit plus contenir l'avertissement « gabarit démo » (sinon re-taguer `v1.6.7` pour reconstruire).
+**Dernière vérification avant de soumettre :** le corps de la [release v1.6.8](https://github.com/Azumizeus/punch-clockin/releases/tag/v1.6.8) ne doit pas contenir d'avertissement « gabarit démo » (sinon re-taguer `v1.6.8` pour reconstruire).
 
 **Checklist complémentaire :**
 - [x] Liens APK de `README.md` pointés vers la GitHub Release (fait le 22/09)

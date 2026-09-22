@@ -220,7 +220,7 @@ export default function SettingsScreen() {
       <Section title={t.settingsAbout} s={s}>
         <View style={s.infoRow}>
           <Text style={s.infoLabel}>{t.settingsVersion}</Text>
-          <Text style={s.infoVal}>1.6.7</Text>
+          <Text style={s.infoVal}>1.6.8</Text>
         </View>
       </Section>
 
