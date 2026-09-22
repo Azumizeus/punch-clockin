@@ -4,7 +4,7 @@
 
 **SHA-256 :** `1c9c49e5bd97887ca0e085069f3835f28af8bab3dbb1a4cea99700fede6da196`
 
-**Vidéo démo :** `punch-clockin-demo.mp4` — 101 s, tournée sur Seeker (vrai pointage Seed Vault, board, globe, hellos, historique).
+**Vidéo démo :** `punch-clockin-demo.mp4` — 3 min 06, voix off EN, refaite le 22/09 sur Seeker v1.6.6 (connexion Seed Vault, pointage réel + feuille Transaction + ticket papier, board, wallet, globe, ping RPC, quitter le réseau, trésor sur l'explorer).
 
 ## Nouveau dans v1.6.6 — RPC au choix + test de connexion
 
