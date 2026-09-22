@@ -144,7 +144,9 @@ export const copy = {
     feeTable: "Every receipt",
     reset: "Start the demo over",
     pitch: "How we present it",
-    live: "Right now",
+    live: "Demo · live",
+    demoDataNote:
+      "Demo network: nearby Seekers and the live feed are simulated. Check-ins, payments and balances are real, on-chain.",
     seekerOnly: "Made for the Seeker phone",
     demoVault: "Demo wallet. On a real Seeker the phone itself signs.",
     copyAddr: "Copied",
@@ -437,7 +439,9 @@ export const copy = {
     feeTable: "Chaque reçu",
     reset: "Recommencer la démo",
     pitch: "Comment on le présente",
-    live: "En ce moment",
+    live: "Démo · en direct",
+    demoDataNote:
+      "Réseau de démo : les Seekers proches et le flux sont simulés. Pointages, paiements et soldes sont réels, on-chain.",
     seekerOnly: "Fait pour le téléphone Seeker",
     demoVault: "Portefeuille démo. Sur un vrai Seeker, c'est le téléphone qui signe.",
     copyAddr: "Copié",

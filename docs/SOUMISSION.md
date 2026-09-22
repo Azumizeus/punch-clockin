@@ -88,6 +88,20 @@ Judge guide: https://github.com/Azumizeus/punch-clockin/blob/master/docs/GUIDE-J
 Pitch deck: <fichier PDF joint ou lien>
 ```
 
+**Argumentaire prix SKR ($10k) — si le formulaire demande la candidature :**
+```
+1. SKR is the gate to earning power: staking 1,000 / 5,000 / 25,000 SKR unlocks Silver, Gold and
+   Guardian ranks that open better-paid missions — real utility, zero new supply, no speculation.
+2. The protocol's 5% fee doesn't disappear: it buys back SKR for holders, so every clock-in in the
+   app mechanically returns value to people who stake.
+3. Unstaking carries an honest 1.5% fee, printed on the receipt like everything else — no hidden
+   mechanics, the 92/3/5 rule is on every ticket.
+4. Every stake, unstake and reward flow is a real signed Seed Vault transaction on devnet —
+   verifiable on explorer.solana.com, nothing simulated.
+5. PUNCH makes SKR the trust layer of human presence: you don't hold SKR to trade it, you hold it
+   because it makes your daily work pay better. That's what a mobile-native L1 token should be.
+```
+
 ## 6. Règles d'éligibilité à connaître
 
 - Projet démarré **au plus tôt 3 mois avant le lancement** (8 juin 2026) → OK pour PUNCH (développé en sept. 2026).

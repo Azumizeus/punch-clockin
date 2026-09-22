@@ -366,6 +366,9 @@ export default function HomeScreen() {
         {t.openRanks[rank]} · {streak >= 3 ? t.earlyAccess : t.earlyAccessOff}
       </Text>
 
+      {/* Honnêteté radicale comme partout : le réseau social est simulé en démo,
+          l'argent est réel. On le dit une fois, là où la différence commence. */}
+      <Text style={s.demoDataNote}>{t.demoDataNote}</Text>
       <Text style={s.sectionTitle}>{t.live}</Text>
       {feed.slice(0, 4).map((item) => (
         <View key={item.id} style={s.feedRow}>
@@ -671,6 +674,15 @@ function makeStyles(
     greetBtnTxtDone: { color: c.dim },
     rankLine: { fontFamily: fonts.body, fontSize: 13, color: c.dim2, textAlign: "center", marginTop: 20, lineHeight: 18 },
     rankSub: { fontFamily: fonts.bodySemi, fontSize: 12, color: c.fg, textAlign: "center", marginTop: 4, marginBottom: 24 },
+    demoDataNote: {
+      fontFamily: fonts.body,
+      fontSize: 11,
+      color: c.dim2,
+      textAlign: "center",
+      marginTop: 16,
+      marginHorizontal: 24,
+      lineHeight: 15,
+    },
     feedRow: {
       flexDirection: "row",
       alignItems: "center",
