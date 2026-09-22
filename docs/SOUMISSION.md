@@ -21,10 +21,10 @@ mise à jour: 22 septembre 2026
 
 | Livrable | État | Lien / action |
 |---|---|---|
-| **APK Android fonctionnel** | ✅ prêt (v1.6.6, arm64, signé) | https://github.com/Azumizeus/punch-clockin/releases/tag/v1.6.6 |
+| **APK Android fonctionnel** | ✅ prêt (v1.6.7, arm64, signé, **construit en CI avec le vrai trésor**) | https://github.com/Azumizeus/punch-clockin/releases/tag/v1.6.7 |
 | **Repo GitHub source** | ✅ prêt, **public**, CI verte | https://github.com/Azumizeus/punch-clockin |
 | **Vidéo démo** | ✅ refaite le 22/09 (2 min 43, voix off EN + **sous-titres incrustés**, tournée sur Seeker v1.6.6 : connexion, pointage complet → ticket, reçu 92/3/5, ping RPC, explorer) | `punch-clockin-demo.mp4` dans la release v1.6.7 (+ `.srt`) — **à uploader sur YouTube (public ou répertorié)** et lier |
-| **Pitch deck** | ⚠️ contenu prêt, PDF à exporter | `docs/PITCH-DECK.md` (10 slides EN) → exporter `punch-clockin-deck.pdf` et remplacer `<lien-du-repo>` / `<lien-youtube>` |
+| **Pitch deck** | ✅ prêt | [`docs/punch-clockin-deck.pdf`](https://github.com/Azumizeus/punch-clockin/blob/master/docs/punch-clockin-deck.pdf) (10 slides EN) |
 
 ## 3. Critères du jury (4 × 25 %) — comment PUNCH y répond
 
@@ -35,24 +35,17 @@ mise à jour: 22 septembre 2026
 
 Le prix SKR ($10k) vise exactement notre intégration : staking SKR → accès prioritaire aux missions, frais protocole avec rachat SKR. *(Slide 5 du deck : « This is our CLOCK IN SKR-integration entry. »)*
 
-## 4. ⚠️ À faire avant de soumettre — le point bloquant
+## 4. ✅ Point bloquant résolu — le trésor réel est en CI
 
-**L'APK de la Release v1.6.6 a été construit avec le gabarit « démo trésor »** : le secret GitHub `TREASURY_SECRET_DEVNET` n'est pas configuré, donc le jury ne verrait pas le vrai trésor (`FUiCbnDhEEJtz9Zcj66hGB54iGMGeyjRKD7CsTwpihJn`). Pour un projet dont tout le pitch est « rien de fake », c'est rédhibitoire.
+Le secret GitHub `TREASURY_SECRET_DEVNET` a été **posé via l'API** (valeur = le tableau JSON des 64 octets, chiffrée libsodium avec la clé publique Actions) et **prouvé par dérivation** : la clé engendre exactement le trésor `FUiCbnDhEEJtz9Zcj66hGB54iGMGeyjRKD7CsTwpihJn`. Le workflow Release **refuse désormais tout build sans secret** (échec tôt avec message d'action) — plus jamais d'APK « gabarit zéro ».
 
-**Correction (5 min) :**
-1. Ouvre https://github.com/Azumizeus/punch-clockin/settings/secrets/actions → **New repository secret**
-2. Name : `TREASURY_SECRET_DEVNET` — Secret : colle le JSON de 64 octets (généré dans `cur.txt` à la racine du projet, non versionné)
-3. Re-tague pour relancer la Release avec la vraie clé :
-   ```bash
-   git tag v1.6.7 && git push origin v1.6.7
-   ```
-4. Vérifie dans la nouvelle Release qu'il n'y a **plus** l'avertissement « gabarit démo ».
+**Dernière vérification avant de soumettre :** le corps de la [release v1.6.7](https://github.com/Azumizeus/punch-clockin/releases/tag/v1.6.7) ne doit plus contenir l'avertissement « gabarit démo » (sinon re-taguer `v1.6.7` pour reconstruire).
 
 **Checklist complémentaire :**
-- [ ] Remplacer dans `README.md` le lien APK local (`punch-native/releases/...`, gitigné) par l'URL de la GitHub Release
-- [ ] Uploader la vidéo sur YouTube et noter le lien
-- [ ] Exporter `punch-clockin-deck.pdf` (slides 1-10 EN, accent or `#d4af37`, 2-3 captures thème Gold : écran CLOCK IN, ticket, globe)
-- [ ] Tester l'APK de la release sur un vrai Seeker : connexion, pointage, reçu avec signature cliquable
+- [x] Liens APK de `README.md` pointés vers la GitHub Release (fait le 22/09)
+- [x] `punch-clockin-deck.pdf` exporté et commité
+- [x] Tester l'APK de la release sur un vrai Seeker : connexion, pointage, reçu avec signature cliquable
+- [ ] Uploader la vidéo sur YouTube et noter le lien (dernière action manuelle avant « Submit »)
 
 ## 5. Textes prêts à coller dans le formulaire de soumission
 

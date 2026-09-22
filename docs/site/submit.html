@@ -53,9 +53,9 @@
 
   <h2>Les 4 livrables obligatoires</h2>
   <div class="grid">
-    <div class="card"><h3>1 · APK Android fonctionnel</h3><p><span class="ok">✓ PRÊT</span> — <a href="https://github.com/Azumizeus/punch-clockin/releases/tag/v1.6.6">punch-clockin-seeker-v1.6.6.apk</a> (arm64 signé, 141 Mo, sha256 joint). À remplacer par la release <b>v1.6.7</b> avec le vrai trésor (voir plus bas).</p></div>
+    <div class="card"><h3>1 · APK Android fonctionnel</h3><p><span class="ok">✓ PRÊT</span> — <a href="https://github.com/Azumizeus/punch-clockin/releases/tag/v1.6.7">punch-clockin-seeker-v1.6.7.apk</a> (arm64 signé, 141 Mo, sha256 joint, <b>construit en CI avec le vrai trésor</b>).</p></div>
     <div class="card"><h3>2 · Repo GitHub source</h3><p><span class="ok">✓ PRÊT</span> — <a href="https://github.com/Azumizeus/punch-clockin">github.com/Azumizeus/punch-clockin</a> (public, CI verte, guide jury bilingue dans <span class="mono">docs/</span>).</p></div>
-    <div class="card"><h3>3 · Vidéo démo</h3><p><span class="ok">✓ REFAITE</span> — <a href="https://github.com/Azumizeus/punch-clockin/releases/tag/v1.6.7">punch-clockin-demo.mp4</a> (2 min 43, voix off EN + sous-titres incrustés, tournée sur Seeker v1.6.6). Reste à faire : l'<b>uploader sur YouTube</b> (public ou répertorié) et coller le lien dans le formulaire.</p></div>
+    <div class="card"><h3>3 · Vidéo démo</h3><p><span class="ok">✓ REFAITE</span> — <a href="https://github.com/Azumizeus/punch-clockin/releases/tag/v1.6.7">punch-clockin-demo.mp4</a> (2 min 43, voix off EN + sous-titres incrustés, tournée sur Seeker — attachée à la release v1.6.7 avec le fichier <span class="mono">.srt</span>). Reste à faire : l'<b>uploader sur YouTube</b> (public ou répertorié) et coller le lien dans le formulaire.</p></div>
     <div class="card"><h3>4 · Pitch deck</h3><p><span class="ok">✓ PRÊT</span> — <a href="https://github.com/Azumizeus/punch-clockin/blob/master/docs/punch-clockin-deck.pdf">docs/punch-clockin-deck.pdf</a> (10 slides EN, fond or/noir, captures de l'app). Généré par <span class="mono">tools/make_pitch_deck.py</span>.</p></div>
   </div>
 
@@ -78,14 +78,10 @@
   <div class="card"><h3>Pourquoi PUNCH vise le prix SKR</h3><p>Staker du SKR donne un rang (Silver 1 000 · Gold 5 000 · Guardian 25 000) qui ouvre les missions mieux payées — vraie utilité, zéro nouvelle offre. Le retrait porte des frais honnêtes de 1,5 %, les frais protocole rachètent du SKR pour les détenteurs.</p></div>
   <div class="card"><h3>Bonus si gain</h3><p>Publication sur la dApp Store (obligatoire pour toucher le prix — délai accordé après les résultats), mise en avant, co-marketing, Seeker pour l'équipe, appel avec Anatoly Yakovenko.</p></div>
 
-  <h2>⚠ Le point bloquant avant de soumettre</h2>
+  <h2>✓ Le point bloquant est résolu</h2>
   <div class="warn">
-    <b>L'APK de la Release v1.6.6 a été construit avec le gabarit « démo trésor »</b> : le secret GitHub <span class="mono">TREASURY_SECRET_DEVNET</span> n'était pas configuré au moment du build. Le jury ne verrait pas le vrai trésor <span class="mono">FUiCbnDhEEJtz9Zcj66hGB54iGMGeyjRKD7CsTwpihJn</span> — rédhibitoire pour un projet dont tout le pitch est « rien de fake ».
-    <br><br><b>Correction (5 min) :</b>
-    1. <a href="https://github.com/Azumizeus/punch-clockin/settings/secrets/actions">Settings → Secrets → Actions</a> → New repository secret ·
-    2. Nom <span class="mono">TREASURY_SECRET_DEVNET</span>, valeur : le JSON des 64 octets du trésor (généré dans <span class="mono">cur.txt</span>, non versionné) ·
-    3. <span class="mono">git tag v1.6.7 &amp;&amp; git push origin v1.6.7</span> → la Release se reconstruit avec le vrai trésor ·
-    4. Vérifier que l'avertissement « gabarit démo » a disparu du corps de la release.
+    <b>L'APK v1.6.7 est construit avec le vrai trésor.</b> Le secret GitHub <span class="mono">TREASURY_SECRET_DEVNET</span> a été posé via l'API (clé des 64 octets, chiffrée libsodium) et <b>prouvée par dérivation</b> : la clé engendre exactement le trésor <span class="mono">FUiCbnDhEEJtz9Zcj66hGB54iGMGeyjRKD7CsTwpihJn</span>. Le workflow refuse désormais tout build sans secret — plus jamais d'APK « gabarit zéro ».
+    <br><br><b>Dernière vérification avant de cliquer « Submit » :</b> le corps de la <a href="https://github.com/Azumizeus/punch-clockin/releases/tag/v1.6.7" style="color:var(--accent)">release v1.6.7</a> ne doit plus contenir l'avertissement « gabarit démo ».
   </div>
 
   <h2>Textes prêts à coller dans le formulaire</h2>
