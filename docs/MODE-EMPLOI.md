@@ -11,7 +11,7 @@ PUNCH est l'appli de pointage du réseau Nexus, sur téléphone Solana Seeker. C
 
 - Un téléphone **Solana Seeker** avec **Seed Vault** configuré.
 - Une connexion internet (devnet est interrogé en direct).
-- L'APK installé (`punch-native/releases/punch-clockin-seeker-v1.6.5-fix-horloge-20260921.apk`, build arm64 signé — pas besoin d'Expo Go).
+- L'APK installé ([dernière GitHub Release](https://github.com/Azumizeus/punch-clockin/releases/latest), build arm64 signé — pas besoin d'Expo Go).
 
 > **Ton wallet démarre à zéro ?** À la première connexion, l'appli te crédite un **lot de bienvenue** payé par le trésor du réseau : **0,05 SOL + 5 USDC + 20 USDT + 5 000 SKR**. C'est ce qui te permet de tester tous les flux sans jamais avoir besoin de faucet.
 

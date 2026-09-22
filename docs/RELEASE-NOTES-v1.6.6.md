@@ -1,6 +1,6 @@
 # PUNCH — release v1.6.6
 
-**APK signé (arm64) :** `punch-clockin-seeker-v1.6.6-rpc-perso-20260921.apk` — 140 874 476 octets
+**APK signé (arm64) :** [`punch-clockin-seeker-v1.6.6.apk`](https://github.com/Azumizeus/punch-clockin/releases/tag/v1.6.6) — build CI, SHA-256 `847dc69d02300d10bf473795e3f8367a0a0cd46c4c6690b965396624b63b3b61` (fichier `.sha256` joint à la release). Build dev local de référence : `punch-clockin-seeker-v1.6.6-rpc-perso-20260921.apk` — 140 874 476 octets, SHA-256 `1c9c49e5bd97887ca0e085069f3835f28af8bab3dbb1a4cea99700fede6da196`.
 
 **SHA-256 :** `1c9c49e5bd97887ca0e085069f3835f28af8bab3dbb1a4cea99700fede6da196`
 
@@ -19,7 +19,7 @@ Le devnet public sature parfois (429) : **l'app ne mentira jamais sur un échec,
 ## Installer
 
 ```bash
-adb install -r punch-clockin-seeker-v1.6.6-rpc-perso-20260921.apk
+adb install -r punch-clockin-seeker-v1.6.6.apk
 ```
 
 (ou copier l'APK sur le téléphone et l'ouvrir — sources inconnues à autoriser une fois)

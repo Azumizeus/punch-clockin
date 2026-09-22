@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PUNCH — Soumission CLOCK IN · checklist</title>
+<style>
+  :root{--bg:#0a0908;--fg:#f4ecd8;--card:#161310;--dim:#8a7a56;--accent:#d4af37;--line:rgba(212,175,55,.28)}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--fg);font:17px/1.65 Georgia,'Times New Roman',serif;padding:56px 22px}
+  .wrap{max-width:820px;margin:0 auto}
+  .tag{display:inline-block;font:12px/1 ui-monospace,monospace;letter-spacing:2px;color:var(--dim);border:1px solid var(--line);border-radius:999px;padding:6px 14px;margin-bottom:18px}
+  h1{font-size:42px;letter-spacing:.5px;margin-bottom:6px}
+  h1 span{color:var(--accent)}
+  .sub{color:var(--dim);font-style:italic;margin-bottom:26px}
+  .deadline{background:var(--card);border:1px solid var(--accent);border-radius:10px;padding:16px 20px;margin:22px 0;font-size:19px}
+  .deadline b{color:var(--accent)}
+  h2{font-size:13px;font-family:ui-monospace,monospace;letter-spacing:3px;color:var(--dim);margin:36px 0 12px;text-transform:uppercase}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin:12px 0}
+  .card h3{font-size:16px;margin-bottom:4px}
+  .card p{color:var(--dim);font-size:14px}
+  .card .ok{color:var(--accent);font-family:ui-monospace,monospace;font-size:12px;letter-spacing:1px}
+  .card a{color:var(--accent)}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  @media(max-width:640px){.grid{grid-template-columns:1fr}}
+  .rule{display:flex;gap:10px;margin:22px 0}
+  .rule div{flex:1;text-align:center;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px}
+  .rule b{display:block;font-size:26px;color:var(--accent)}
+  .rule small{color:var(--dim)}
+  .warn{border-left:3px solid var(--accent);background:var(--card);border-radius:8px;padding:14px 18px;margin:16px 0;font-size:15px}
+  .warn b{color:var(--accent)}
+  pre{background:#060504;border:1px solid var(--line);border-radius:8px;padding:14px 16px;font:12.5px/1.55 ui-monospace,'Cascadia Mono',monospace;color:var(--fg);white-space:pre-wrap;word-break:break-word;margin:10px 0}
+  .mono{font-family:ui-monospace,'Cascadia Mono',monospace;font-size:13px;color:var(--dim)}
+  .cta{display:flex;gap:12px;flex-wrap:wrap;margin:8px 0 6px}
+  .btn{display:inline-block;background:var(--accent);color:#0a0908;font-weight:bold;text-decoration:none;border-radius:8px;padding:12px 20px;font-size:15px}
+  .btn.ghost{background:transparent;color:var(--accent);border:1px solid var(--accent)}
+  table{width:100%;border-collapse:collapse;margin:10px 0;font-size:15px}
+  td{border-bottom:1px solid var(--line);padding:8px 6px;vertical-align:top}
+  td:first-child{color:var(--dim);white-space:nowrap;padding-right:16px}
+  footer{margin-top:44px;color:var(--dim);font-size:13px;text-align:center;font-style:italic}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="tag">CLOCK IN HACKATHON — CHECKLIST DE SOUMISSION</div>
+  <h1>Soumettre <span>PUNCH</span> à CLOCK IN</h1>
+  <div class="sub">3ᵉ hackathon Solana Mobile, organisé par RadiantsDAO · $135 000 de prix · tout est prêt, il reste à cliquer.</div>
+
+  <div class="deadline">
+    ⏳ <b>Les soumissions ferment le 8 octobre 2026.</b> Résultats début novembre. Inscription et dépôt sur
+    <a href="https://solanamobile.com/hackathon" style="color:var(--accent)">solanamobile.com/hackathon</a> (site officiel Radiants).
+  </div>
+
+  <h2>Les 4 livrables obligatoires</h2>
+  <div class="grid">
+    <div class="card"><h3>1 · APK Android fonctionnel</h3><p><span class="ok">✓ PRÊT</span> — <a href="https://github.com/Azumizeus/punch-clockin/releases/tag/v1.6.6">punch-clockin-seeker-v1.6.6.apk</a> (arm64 signé, 141 Mo, sha256 joint). À remplacer par la release <b>v1.6.7</b> avec le vrai trésor (voir plus bas).</p></div>
+    <div class="card"><h3>2 · Repo GitHub source</h3><p><span class="ok">✓ PRÊT</span> — <a href="https://github.com/Azumizeus/punch-clockin">github.com/Azumizeus/punch-clockin</a> (public, CI verte, guide jury bilingue dans <span class="mono">docs/</span>).</p></div>
+    <div class="card"><h3>3 · Vidéo démo</h3><p><span class="ok">✓ MONTÉE</span> — <a href="https://github.com/Azumizeus/punch-clockin/releases/tag/v1.6.6">punch-clockin-demo.mp4</a> (2 min 30, voix off EN). Reste à faire : l'<b>uploader sur YouTube</b> (public ou répertorié) et coller le lien dans le formulaire.</p></div>
+    <div class="card"><h3>4 · Pitch deck</h3><p><span class="ok">✓ PRÊT</span> — <a href="https://github.com/Azumizeus/punch-clockin/blob/master/docs/punch-clockin-deck.pdf">docs/punch-clockin-deck.pdf</a> (10 slides EN, fond or/noir, captures de l'app). Généré par <span class="mono">tools/make_pitch_deck.py</span>.</p></div>
+  </div>
+
+  <h2>Comment le jury note (4 × 25 %)</h2>
+  <div class="grid">
+    <div class="card"><h3>Stickiness &amp; PMF</h3><p>Un rituel quotidien (pointer → missions → paiement), le staking SKR qui fidélise, cible naturelle : possesseurs de Seeker.</p></div>
+    <div class="card"><h3>User experience</h3><p>100 % natif Expo/RN, ticket papier après pointage, globe à vraie physique, identité Gold/Nuit, visite guidée interactive.</p></div>
+    <div class="card"><h3>Innovation</h3><p>La présence humaine devient une monnaie. Règle 92/3/5 imprimée partout, jamais cachée. « Dire bonjour » paie 0,10 $ réels.</p></div>
+    <div class="card"><h3>Présentation &amp; démo</h3><p>Vidéo déjà montée + <a href="guide-jury.html">guide jury pas à pas</a> + pitch. Chaque action d'argent est vérifiable sur l'explorer.</p></div>
+  </div>
+
+  <h2>Les prix</h2>
+  <div class="rule">
+    <div><b>$30k</b><small>1ᵉʳ (USDC)</small></div>
+    <div><b>$25k</b><small>2ᵉ</small></div>
+    <div><b>$20k</b><small>3ᵉ</small></div>
+    <div><b>$40k</b><small>4ᵉ-10ᵉ</small></div>
+    <div><b>$10k</b><small>en SKR — meilleure intégration SKR</small></div>
+  </div>
+  <div class="card"><h3>Pourquoi PUNCH vise le prix SKR</h3><p>Staker du SKR donne un rang (Silver 1 000 · Gold 5 000 · Guardian 25 000) qui ouvre les missions mieux payées — vraie utilité, zéro nouvelle offre. Le retrait porte des frais honnêtes de 1,5 %, les frais protocole rachètent du SKR pour les détenteurs.</p></div>
+  <div class="card"><h3>Bonus si gain</h3><p>Publication sur la dApp Store (obligatoire pour toucher le prix — délai accordé après les résultats), mise en avant, co-marketing, Seeker pour l'équipe, appel avec Anatoly Yakovenko.</p></div>
+
+  <h2>⚠ Le point bloquant avant de soumettre</h2>
+  <div class="warn">
+    <b>L'APK de la Release v1.6.6 a été construit avec le gabarit « démo trésor »</b> : le secret GitHub <span class="mono">TREASURY_SECRET_DEVNET</span> n'était pas configuré au moment du build. Le jury ne verrait pas le vrai trésor <span class="mono">FUiCbnDhEEJtz9Zcj66hGB54iGMGeyjRKD7CsTwpihJn</span> — rédhibitoire pour un projet dont tout le pitch est « rien de fake ».
+    <br><br><b>Correction (5 min) :</b>
+    1. <a href="https://github.com/Azumizeus/punch-clockin/settings/secrets/actions">Settings → Secrets → Actions</a> → New repository secret ·
+    2. Nom <span class="mono">TREASURY_SECRET_DEVNET</span>, valeur : le JSON des 64 octets du trésor (généré dans <span class="mono">cur.txt</span>, non versionné) ·
+    3. <span class="mono">git tag v1.6.7 &amp;&amp; git push origin v1.6.7</span> → la Release se reconstruit avec le vrai trésor ·
+    4. Vérifier que l'avertissement « gabarit démo » a disparu du corps de la release.
+  </div>
+
+  <h2>Textes prêts à coller dans le formulaire</h2>
+  <p style="color:var(--dim);font-size:14px">Project name :</p>
+  <pre>PUNCH — Proof of presence on Solana</pre>
+  <p style="color:var(--dim);font-size:14px">One-liner :</p>
+  <pre>Punch in once a day from a real Seeker: a real signed Solana transaction proves you
+showed up, and every payment follows one printed rule — 92% worker, 3% SKR holders,
+5% app. No fake check-ins, no hidden splits.</pre>
+  <p style="color:var(--dim);font-size:14px">Liens :</p>
+  <pre>GitHub repo (source + judge guide): https://github.com/Azumizeus/punch-clockin
+Signed APK (arm64): https://github.com/Azumizeus/punch-clockin/releases/latest
+Demo video: &lt;lien-youtube&gt;
+Pitch deck: https://github.com/Azumizeus/punch-clockin/blob/master/docs/punch-clockin-deck.pdf
+Devnet treasury on explorer: https://explorer.solana.com/address/FUiCbnDhEEJtz9Zcj66hGB54iGMGeyjRKD7CsTwpihJn?cluster=devnet</pre>
+  <p style="color:var(--dim);font-size:14px">Description complète EN : voir <a href="https://github.com/Azumizeus/punch-clockin/blob/master/docs/SOUMISSION.md" style="color:var(--accent)">docs/SOUMISSION.md</a>.</p>
+
+  <h2>Liens officiels du hackathon</h2>
+  <table>
+    <tr><td>Inscription</td><td><a href="https://solanamobile.com/hackathon">solanamobile.com/hackathon</a></td></tr>
+    <tr><td>Annonce</td><td><a href="https://solanamobile.com/blog/clock-in-the-solana-mobile-hackathon">« CLOCK IN: The Solana Mobile Hackathon » — blog Solana Mobile</a></td></tr>
+    <tr><td>Timeline</td><td>Soumissions 8 sept → 8 oct 2026 · gagnants début novembre 2026</td></tr>
+    <tr><td>Workshops</td><td>Discord Radiants (support + ateliers techniques hebdomadaires)</td></tr>
+    <tr><td>Docs dev</td><td><a href="https://docs.solanamobile.com">docs.solanamobile.com</a> · Mobile Wallet Adapter · guide dApp Store</td></tr>
+  </table>
+
+  <div class="cta">
+    <a class="btn" href="index.html">← Retour à l'accueil</a>
+    <a class="btn ghost" href="https://github.com/Azumizeus/punch-clockin/blob/master/docs/SOUMISSION.md">Checklist complète (docs/SOUMISSION.md)</a>
+  </div>
+
+  <footer>PUNCH — built for CLOCK IN · soumissions closes le 8 octobre 2026 · Clock in. Build. Get paid. 92 / 3 / 5.</footer>
+</div>
+</body>
+</html>
