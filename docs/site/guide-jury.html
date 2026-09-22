@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>PUNCH — Judge guide (How to test)</title>
+<title>PUNCH — Judge guide / Guide du jury (EN/FR)</title>
 <style>
   :root{--bg:#0a0908;--fg:#f4ecd8;--card:#161310;--dim:#8a7a56;--accent:#d4af37;--line:rgba(212,175,55,.28)}
   *{box-sizing:border-box;margin:0;padding:0}
@@ -23,17 +23,19 @@
   .btn{display:inline-block;background:var(--accent);color:#0a0908;font-weight:bold;text-decoration:none;border-radius:8px;padding:12px 20px;font-size:15px;margin-bottom:24px}
   .btn.ghost{background:transparent;color:var(--accent);border:1px solid var(--accent)}
   .note{border-left:3px solid var(--accent);background:var(--card);border-radius:8px;padding:14px 18px;margin:18px 0;font-size:15px}
+  .langsep{border:none;border-top:1px solid var(--line);margin:44px 0}
+  .langtag{font:12px/1 ui-monospace,monospace;letter-spacing:3px;color:var(--dim)}
   footer{margin-top:44px;color:var(--dim);font-size:13px;text-align:center;font-style:italic}
   a{color:var(--accent)}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <div class="tag">JUDGE GUIDE — 15 MINUTES — REAL DEVNET</div>
+  <div class="tag">JUDGE GUIDE — 15 MINUTES — REAL DEVNET · GUIDE DU JURY — VRAI DEVNET</div>
   <h1>How to test PUNCH <span>·</span> step by step</h1>
-  <div class="sub">Everything money-related in the app is a real signed devnet transaction. Nothing is simulated.</div>
+  <div class="sub">Everything money-related in the app is a real signed devnet transaction. Nothing is simulated. — <span lang="fr">Tout ce qui touche à l'argent dans l'app est une vraie transaction devnet signée. Rien n'est simulé.</span></div>
 
-  <a class="btn" href="https://github.com/Azumizeus/punch-clockin/releases/latest">1 · Download the signed APK (arm64)</a>
+  <a class="btn" href="https://github.com/Azumizeus/punch-clockin/releases/latest">1 · Download the signed APK (arm64) · Télécharger l'APK signé</a>
 
   <ol>
     <li><b>Install</b> the APK on the Solana Seeker (or any Android with an MWA wallet on devnet). No account, no signup.</li>
@@ -54,9 +56,40 @@
   <h2>In the box</h2>
   <div class="card"><h3>Two identities, one composition</h3><p><b>Gold Seeker Premium</b> (default) and <b>Seeker Nuit</b> — Settings → Identité. Serif Fraunces, 2 px angles, LOCAL TIME clock.</p></div>
   <div class="card"><h3>Proof of work</h3><p>Guided tour: Settings → <b>“Commencer le mode d'emploi”</b> (8 screens). Receipt history: Wallet → <b>Historique des tickets</b> (100 receipts, all signatures clickable). Test harness: <span class="mono">node scripts/test-store-economy.mjs</span> (54 offline checks of the 92/3/5 split and fees).</p></div>
+  <div class="card"><h3>Social data honesty (v1.6.8)</h3><p>The “People here” stat and the live feed are a simulated social network in demo mode — labeled <b>“Demo · live”</b>. Money actions are always real, on-chain.</p></div>
 
-  <a class="btn ghost" href="index.html">← Back</a>
-  <footer>PUNCH — built for CLOCK IN · v1.6.6 · guide source: docs/GUIDE-JURY.md</footer>
+  <a class="btn ghost" href="index.html">← Back · Retour</a>
+
+  <hr class="langsep">
+  <span class="langtag">FRANÇAIS — LE MÊME GUIDE</span>
+  <h1>Comment tester PUNCH <span>·</span> pas à pas</h1>
+  <div class="sub">Tout ce qui touche à l'argent dans l'app est une vraie transaction devnet signée. Rien n'est simulé.</div>
+
+  <a class="btn" href="https://github.com/Azumizeus/punch-clockin/releases/latest">1 · Télécharger l'APK signé (arm64)</a>
+
+  <ol>
+    <li><b>Installe</b> l'APK sur le Solana Seeker (ou tout Android avec un wallet MWA sur devnet). Sans compte, sans inscription.</li>
+    <li><b>Ouvre l'app → « Ouvrir mon portefeuille ».</b> La feuille Seed Vault du système demande une vraie autorisation sur devnet.</li>
+    <li><b>Un lot de bienvenue arrive</b> du trésor en quelques secondes si ton wallet est vide : 0,05 SOL + 5 USDC + 20 USDT + 5 000 SKR. Vérifie ton adresse sur l'explorer — c'est un vrai transfert.</li>
+    <li><b>Touche l'éclair (CLOCK IN).</b> Seed Vault demande ta signature — une vraie transaction mémo. Le ticket papier montre l'heure, le pays, la règle 92/3/5 et un tampon on-chain (signature cliquable).</li>
+    <li><b>Teste les fonctionnalités d'argent</b> — chacune demande une vraie signature : Argent → Échanger SKR⇄USDC · Garder/Relâcher le SKR (frais honnêtes de 1,5 %) · Missions du board · Dire bonjour à un Seeker proche (0,10 USDC du trésor).</li>
+    <li><b>Quitte le réseau</b> (Réglages) : une vraie transaction signée qui décrémente honnêtement les compteurs partagés.</li>
+  </ol>
+
+  <div class="note">
+    <b>Ce qu'un juge doit vérifier :</b> chaque action déclenche la feuille Seed Vault · l'adresse du trésor
+    <span class="mono">FUiCbnDhEEJtz9Zcj66hGB54iGMGeyjRKD7CsTwpihJn</span>
+    bouge sur <a href="https://explorer.solana.com/address/FUiCbnDhEEJtz9Zcj66hGB54iGMGeyjRKD7CsTwpihJn?cluster=devnet">explorer.solana.com (cluster=devnet)</a>
+    · la signature de chaque reçu est cliquable · les échecs affichent la vraie raison et ne changent rien.
+  </div>
+
+  <h2>Dans la boîte</h2>
+  <div class="card"><h3>Deux identités, une composition</h3><p><b>Gold Seeker Premium</b> (défaut) et <b>Seeker Nuit</b> — Réglages → Identité. Serif Fraunces, angles 2 px, horloge HEURE LOCALE.</p></div>
+  <div class="card"><h3>Preuve de travail</h3><p>Visite guidée : Réglages → <b>« Commencer le mode d'emploi »</b> (8 écrans). Historique des reçus : Argent → <b>Historique des tickets</b> (100 reçus, signatures cliquables). Harnais de test : <span class="mono">node scripts/test-store-economy.mjs</span> (54 vérifications hors-ligne du split 92/3/5 et des frais).</p></div>
+  <div class="card"><h3>Honnêteté des données sociales (v1.6.8)</h3><p>La stat « Personnes là » et le flux live sont un réseau social simulé en démo — étiqueté <b>« Démo · en direct »</b>. Les actions d'argent restent toujours réelles, on-chain.</p></div>
+
+  <a class="btn ghost" href="index.html">← Retour</a>
+  <footer>PUNCH — built for CLOCK IN · v1.6.8 · guide source: docs/GUIDE-JURY.md (English then Français)</footer>
 </div>
 </body>
 </html>
