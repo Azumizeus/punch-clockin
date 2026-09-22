@@ -23,7 +23,7 @@ mise à jour: 22 septembre 2026
 |---|---|---|
 | **APK Android fonctionnel** | ✅ prêt (v1.6.6, arm64, signé) | https://github.com/Azumizeus/punch-clockin/releases/tag/v1.6.6 |
 | **Repo GitHub source** | ✅ prêt, **public**, CI verte | https://github.com/Azumizeus/punch-clockin |
-| **Vidéo démo** | ✅ refaite le 22/09 (3 min 06, voix off EN neuronale, tournée sur Seeker v1.6.6 : connexion, pointage + ticket, board, wallet, globe, ping RPC, sortie, explorer) | `punch-clockin-demo.mp4` dans la release — **à uploader sur YouTube (public ou répertorié)** et lier |
+| **Vidéo démo** | ✅ refaite le 22/09 (2 min 43, voix off EN + **sous-titres incrustés**, tournée sur Seeker v1.6.6 : connexion, pointage complet → ticket, reçu 92/3/5, ping RPC, explorer) | `punch-clockin-demo.mp4` dans la release v1.6.7 (+ `.srt`) — **à uploader sur YouTube (public ou répertorié)** et lier |
 | **Pitch deck** | ⚠️ contenu prêt, PDF à exporter | `docs/PITCH-DECK.md` (10 slides EN) → exporter `punch-clockin-deck.pdf` et remplacer `<lien-du-repo>` / `<lien-youtube>` |
 
 ## 3. Critères du jury (4 × 25 %) — comment PUNCH y répond
