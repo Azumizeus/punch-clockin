@@ -27,6 +27,11 @@
   .card h3{font-size:16px;margin-bottom:4px}
   .card p{color:var(--dim);font-size:14px}
   .mono{font-family:ui-monospace,'Cascadia Mono',monospace;font-size:13px;color:var(--dim)}
+  .dl{display:flex;justify-content:space-between;align-items:baseline;gap:14px;padding:12px 0;border-top:1px solid var(--line);flex-wrap:wrap}
+  .dl:first-child{border-top:none}
+  .dl b{font-size:15px}
+  .dl small{display:block;color:var(--dim);font-size:13px}
+  .dl a{color:var(--accent);text-decoration:none;border-bottom:1px dotted var(--accent);white-space:nowrap}
   footer{margin-top:44px;color:var(--dim);font-size:13px;text-align:center;font-style:italic}
 </style>
 </head>
@@ -54,12 +59,28 @@
     <a class="btn ghost" href="submit.html">Soumission CLOCK IN — checklist</a>
   </div>
 
+  <h2>Télécharger</h2>
+  <div class="card">
+    <div class="dl">
+      <div><b>App Android — APK arm64 signé (v1.6.7)</b><small>Construit et signé par la CI · Solana Seeker · vérifiez le SHA-256 joint après téléchargement</small></div>
+      <div><a href="https://github.com/Azumizeus/punch-clockin/releases/download/v1.6.7/punch-clockin-seeker-v1.6.7.apk">APK (~141 Mo)</a> · <a href="https://github.com/Azumizeus/punch-clockin/releases/download/v1.6.7/punch-clockin-seeker-v1.6.7.apk.sha256">SHA-256</a></div>
+    </div>
+    <div class="dl">
+      <div><b>Vidéo démo — 3 min 06, voix off EN</b><small>Tournée sur Seeker : connexion Seed Vault, pointage réel, board, wallet, globe, RPC, trésor sur l'explorer</small></div>
+      <div><a href="https://github.com/Azumizeus/punch-clockin/releases/download/v1.6.6/punch-clockin-demo.mp4">MP4 (17 Mo)</a></div>
+    </div>
+    <div class="dl">
+      <div><b>Version précédente (v1.6.6)</b><small>Notes de release, APK et SHA-256 du build local de référence</small></div>
+      <div><a href="https://github.com/Azumizeus/punch-clockin/releases/tag/v1.6.6">Release v1.6.6</a></div>
+    </div>
+  </div>
+
   <h2>Pourquoi c'est réel</h2>
   <div class="card"><h3>Le téléphone signe, l'explorer prouve</h3><p>Chaque pointage, échange, staking ou bonjour passe par une vraie transaction devnet signée dans le Seed Vault — visible sur <span class="mono">explorer.solana.com</span> (cluster=devnet, trésor <span class="mono">FUiCbnDhEEJtz9Zcj66hGB54iGMGeyjRKD7CsTwpihJn</span>).</p></div>
   <div class="card"><h3>L'échec est honnête</h3><p>Hors ligne, RPC saturé, signature refusée : l'app affiche la raison exacte et rien ne bouge. L'explorer prouve que rien n'a eu lieu.</p></div>
   <div class="card"><h3>L'économie est vivante</h3><p>Staker du SKR donne un rang (Silver 1 000 · Gold 5 000 · Guardian 25 000) qui ouvre les missions mieux payées. Les frais financent le protocole et le rachat de SKR.</p></div>
 
-  <footer>PUNCH — built for CLOCK IN · app v1.6.6 · APK arm64 signé sur GitHub Releases</footer>
+  <footer>PUNCH — built for CLOCK IN · app v1.6.7 · APK arm64 signé sur GitHub Releases</footer>
 </div>
 </body>
 </html>

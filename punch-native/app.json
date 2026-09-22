@@ -2,7 +2,7 @@
   "expo": {
     "name": "Punch Clock'in",
     "slug": "punch-native",
-    "version": "1.6.6",
+    "version": "1.6.7",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "punchnative",
@@ -19,7 +19,7 @@
       },
       "predictiveBackGestureEnabled": false,
       "package": "com.anonymous.punchnative",
-      "versionCode": 20
+      "versionCode": 21
     },
     "web": {
       "output": "single",
