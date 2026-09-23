@@ -46,3 +46,9 @@ jobs:
       - name: Typecheck web
         working-directory: "punch app grok/PUNCH"
         run: npx tsc --noEmit
+
+      # 4) Garde-fou vitrine : docs/site/device/ doit correspondre a la
+      #    version d'app.json (MANIFEST + sha256). Echoue si un bump a ete
+      #    pousse sans relancer scripts/device/vitrine.py sur le Seeker.
+      - name: Device gallery sync
+        run: python tools/check_device_sync.py

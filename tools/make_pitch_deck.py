@@ -99,7 +99,7 @@ SLIDES = [
             "A wrong endpoint fails honestly: the exact reason is shown, nothing moves, nothing is signed.",
             "About: Version 1.6.8 — and \u201cQuitter le r\u00e9seau\u201d requires a real signed Seed Vault transaction.",
         ],
-        "img": os.path.join(ROOT, "punch-native", "_shots", "v168-vitrine", "38-reglages-version.png"),
+        "img": os.path.join(ROOT, "docs", "site", "device", "settings.png"),
         "img_h": 168,
     },
     {
@@ -111,7 +111,7 @@ SLIDES = [
             "Seeker Premium identity: Gold / Nuit themes, ticket history with clickable signatures, interactive guided tour.",
             "100% native (Expo / React Native) — signed APK, no Expo Go needed for judges.",
         ],
-        "img": "B-05-globe-fin.png",
+        "img": os.path.join(ROOT, "docs", "site", "device", "home.png"),
         "img_h": 150,
     },
     {

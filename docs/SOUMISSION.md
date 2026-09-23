@@ -24,7 +24,15 @@ mise à jour: 23 septembre 2026 (dates officielles Radiants vérifiées : clôtu
 | **APK Android fonctionnel** | ✅ prêt (v1.6.8, arm64, signé, **construit en CI avec le vrai trésor**) | https://github.com/Azumizeus/punch-clockin/releases/tag/v1.6.8 |
 | **Repo GitHub source** | ✅ prêt, **public**, CI verte | https://github.com/Azumizeus/punch-clockin |
 | **Vidéo démo** | ✅ refaite le 22/09 (2 min 43, voix off EN + **sous-titres incrustés**, tournée sur Seeker v1.6.6 : connexion, pointage complet → ticket, reçu 92/3/5, ping RPC, explorer) | `punch-clockin-demo.mp4` dans la release v1.6.7 (+ `.srt`) — **à uploader sur YouTube (public ou répertorié)** et lier |
-| **Pitch deck** | ✅ prêt | [`docs/punch-clockin-deck.pdf`](https://github.com/Azumizeus/punch-clockin/blob/master/docs/punch-clockin-deck.pdf) (10 slides EN) |
+| **Pitch deck** | ✅ prêt | [`docs/punch-clockin-deck.pdf`](https://github.com/Azumizeus/punch-clockin/blob/master/docs/punch-clockin-deck.pdf) (11 slides EN, dont la diapo de preuve Réseau/Version v1.6.8) |
+
+### Preuves visuelles du livrable 1 (captures Seeker v1.6.8)
+
+| Accueil | Réglages (Réseau · Version · Quitter) |
+|---|---|
+| ![Accueil v1.6.8](site/device/home.png) | ![Réglages v1.6.8](site/device/settings.png) |
+
+À gauche : l'accueil connecté, avec l'étiquette **« Démo · en direct »** sur les données sociales simulées (honnêteté assumée). À droite : les Réglages montrent le test RPC (**« RPC public actif »**), la **Version 1.6.8** et la sortie signée **« Quitter le réseau »**. Ces captures sont régénérées par `punch-native/scripts/device/vitrine.py` ; leurs SHA-256 sont tracés dans [`site/device/MANIFEST.json`](site/device/MANIFEST.json) et vérifiés en CI par le garde-fou `tools/check_device_sync.py`.
 
 ## 3. Critères du jury (4 × 25 %) — comment PUNCH y répond
 
