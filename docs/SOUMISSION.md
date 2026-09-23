@@ -1,6 +1,6 @@
 ---
 titre: Soumission — hackathon CLOCK IN (Solana Mobile × RadiantsDAO)
-usage: tout ce qu'il faut pour inscrire et soumettre PUNCH avant le 8 octobre 2026
+usage: tout ce qu'il faut pour inscrire et soumettre PUNCH avant le 9 octobre 2026, 08:59 (UTC+2)
 mise à jour: 23 septembre 2026 (dates officielles Radiants vérifiées : clôture 9 oct 08:59 UTC+2, gagnants 11 nov)
 ---
 
