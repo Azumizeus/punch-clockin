@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """
 Génère docs/punch-clockin-deck.pdf — le pitch deck de soumission CLOCK IN.
-10 slides EN (contenu : docs/PITCH-DECK.md), fond sombre #0a0908, accent or #d4af37,
-captures de l'app (rushes QA _shots/demo-v165, identité Gold).
+11 slides EN (contenu : docs/PITCH-DECK.md), fond sombre #0a0908, accent or #d4af37,
+captures de l'app (rushes QA _shots/demo-v165, vitrine v1.6.8).
 
 Usage : python tools/make_pitch_deck.py
 Prérequis : pip install fpdf2  (PIL non requis)
@@ -14,6 +14,7 @@ from fpdf import FPDF
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT = os.path.join(ROOT, "docs", "punch-clockin-deck.pdf")
 SHOTS = os.path.join(ROOT, "punch-native", "_shots", "demo-v165")
+RATIO = 1200 / 2670.0  # largeur/hauteur des captures Seeker (1200x2670)
 
 BG = (10, 9, 8)          # fond noir chaud
 FG = (244, 236, 216)     # crème
@@ -23,7 +24,7 @@ LINE = (60, 52, 34)      # filets
 
 REPO = "github.com/Azumizeus/punch-clockin"
 TREASURY = "FUiCbnDhEEJtz9Zcj66hGB54iGMGeyjRKD7CsTwpihJn"
-RELEASE = "github.com/Azumizeus/punch-clockin/releases/tag/v1.6.6"
+RELEASE = "github.com/Azumizeus/punch-clockin/releases/tag/v1.6.8"
 
 FONTS = {
     "R": ["C:/Windows/Fonts/georgia.ttf", "/usr/share/fonts/truetype/msttcorefonts/Georgia-Regular.ttf"],
@@ -91,7 +92,18 @@ SLIDES = [
         "mono": ["Treasury: " + TREASURY, "explorer.solana.com/address/" + TREASURY + "?cluster=devnet"],
     },
     {
-        "kicker": "06 · UX & DELIGHT",
+        "kicker": "06 · PROOF ON DEVICE (v1.6.8)",
+        "title": "The Settings screen proves it:\npublic RPC, version 1.6.8, honest exit",
+        "bullets": [
+            "Network section: custom RPC endpoint with a live \u201cTest connection\u201d check — \u201cRPC public actif\u201d when the endpoint answers.",
+            "A wrong endpoint fails honestly: the exact reason is shown, nothing moves, nothing is signed.",
+            "About: Version 1.6.8 — and \u201cQuitter le r\u00e9seau\u201d requires a real signed Seed Vault transaction.",
+        ],
+        "img": os.path.join(ROOT, "punch-native", "_shots", "v168-vitrine", "38-reglages-version.png"),
+        "img_h": 168,
+    },
+    {
+        "kicker": "07 · UX & DELIGHT",
         "title": "A punch clock you actually\nwant to come back to",
         "bullets": [
             "A real drag-physics globe: every punch in the world drops a live dot.",
@@ -103,7 +115,7 @@ SLIDES = [
         "img_h": 150,
     },
     {
-        "kicker": "07 · MARKET & STICKINESS",
+        "kicker": "08 · MARKET & STICKINESS",
         "title": "A daily ritual for Seeker owners,\nan honest wage for communities",
         "bullets": [
             "Launch: Solana Mobile Seeker owners — Seed Vault built in, no seed phrases.",
@@ -114,7 +126,7 @@ SLIDES = [
         "img_h": 138,
     },
     {
-        "kicker": "08 · ROADMAP",
+        "kicker": "09 · ROADMAP",
         "title": "Devnet today, mainnet when it\ndeserves it",
         "bullets": [
             "Now (hackathon): full devnet economy, signed APK, verifiable receipts.",
@@ -123,12 +135,12 @@ SLIDES = [
         ],
     },
     {
-        "kicker": "09 · TEAM & LINKS",
+        "kicker": "10 · TEAM & LINKS",
         "title": "Nexus Seeker — honest money\nfor real presence",
         "links": [
             ("GitHub repo — source, judge guide, signed APK", "https://" + REPO),
             ("Judge guide (step-by-step test)", "https://" + REPO + "/blob/master/docs/GUIDE-JURY.md"),
-            ("Signed APK + demo video (Release v1.6.6)", "https://" + RELEASE),
+            ("Signed APK + demo video (Release v1.6.8)", "https://" + RELEASE),
             ("Treasury on devnet explorer", "https://explorer.solana.com/address/" + TREASURY + "?cluster=devnet"),
         ],
         "close": "Thank you — Clock in. Build. Get paid. 92 / 3 / 5.",
@@ -156,7 +168,7 @@ class Deck(FPDF):
         self.set_font("M", size=8)
         self.set_y(-14)
         self.cell(0, 6, "PUNCH — built for CLOCK IN · 92 / 3 / 5", align="L")
-        self.cell(0, 6, f"{self.slide_no:02d} / 10", align="R")
+        self.cell(0, 6, f"{self.slide_no:02d} / {len(SLIDES)}", align="R")
 
 
 def chrome(pdf, kicker):
@@ -191,10 +203,10 @@ def add_slide(pdf, s):
     chrome(pdf, s["kicker"])
 
     img = s.get("img")
-    img_path = os.path.join(SHOTS, img) if img else None
+    img_path = img if (img and os.path.isabs(img)) else (os.path.join(SHOTS, img) if img else None)
     if img and not os.path.exists(img_path):
         raise SystemExit("Capture introuvable : " + img_path)
-    img_w = (s.get("img_h", 150) / 1.0) * (1080 / 2400.0) if img else 0
+    img_w = (s.get("img_h", 150) / 1.0) * RATIO if img else 0
     text_w = 297 - 36 - (img_w + 14 if img else 0)
 
     # Titre
@@ -248,14 +260,16 @@ def add_slide(pdf, s):
             pdf.ln(5.4)
 
     if s.get("close"):
-        pdf.set_y(min(max(pdf.get_y() + 6, 158), 176))
+        # Sur la slide liens, le close remonte pour laisser 4 lignes de liens
+        # au-dessus du pied de page (196 mm).
+        pdf.set_y(140 if s.get("links") else min(max(pdf.get_y() + 6, 158), 176))
         pdf.set_x(18)
         pdf.set_font("I", size=13)
         pdf.set_text_color(*GOLD)
         pdf.multi_cell(text_w, 7, s["close"], markdown=False)
 
     if s.get("links"):
-        pdf.set_y(pdf.get_y() + 4)
+        pdf.set_y(152)
         for label, url in s["links"]:
             y0 = pdf.get_y()
             pdf.set_x(18)
@@ -271,7 +285,7 @@ def add_slide(pdf, s):
     # Capture téléphone, bordée d'or
     if img:
         h = s.get("img_h", 150)
-        w = h * (1080 / 2400.0)
+        w = h * RATIO
         x = 297 - 18 - w
         y = (210 - h) / 2
         pdf.set_draw_color(*GOLD)

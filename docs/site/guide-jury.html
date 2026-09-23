@@ -25,6 +25,12 @@
   .note{border-left:3px solid var(--accent);background:var(--card);border-radius:8px;padding:14px 18px;margin:18px 0;font-size:15px}
   .langsep{border:none;border-top:1px solid var(--line);margin:44px 0}
   .langtag{font:12px/1 ui-monospace,monospace;letter-spacing:3px;color:var(--dim)}
+  .shots{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:16px 0 4px}
+  .shots figure{margin:0;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 10px 8px;text-align:center}
+  .shots img{width:100%;border-radius:8px;border:1px solid var(--line);display:block}
+  .shots figcaption{font-size:12.5px;color:var(--dim);margin-top:8px;line-height:1.4}
+  .shots figcaption b{color:var(--fg)}
+  @media (max-width:640px){.shots{grid-template-columns:1fr}}
   footer{margin-top:44px;color:var(--dim);font-size:13px;text-align:center;font-style:italic}
   a{color:var(--accent)}
 </style>
@@ -58,6 +64,13 @@
   <div class="card"><h3>Proof of work</h3><p>Guided tour: Settings → <b>“Commencer le mode d'emploi”</b> (8 screens). Receipt history: Wallet → <b>Historique des tickets</b> (100 receipts, all signatures clickable). Test harness: <span class="mono">node scripts/test-store-economy.mjs</span> (54 offline checks of the 92/3/5 split and fees).</p></div>
   <div class="card"><h3>Social data honesty (v1.6.8)</h3><p>The “People here” stat and the live feed are a simulated social network in demo mode — labeled <b>“Demo · live”</b>. Money actions are always real, on-chain.</p></div>
 
+  <h2>What you'll see on the device</h2>
+  <div class="shots">
+    <figure><img src="device/01-accueil-v168.png" alt="Home screen — Clock in, Demo · live label, people here" loading="lazy"><figcaption><b>Home</b> — local-time clock, CLOCK IN bolt, the people-here stat honestly labeled <b>“Démo · en direct”</b>.</figcaption></figure>
+    <figure><img src="device/30-reglages.png" alt="Settings top — language, theme Gold, identity" loading="lazy"><figcaption><b>Settings (top)</b> — language EN/FR, theme <b>Gold Seeker Premium</b>, identity.</figcaption></figure>
+    <figure><img src="device/38-reglages-version.png" alt="Settings bottom — Network section, RPC public actif, Version 1.6.8, Quitter le réseau" loading="lazy"><figcaption><b>Settings (bottom)</b> — Network section with RPC test (<b>“RPC public actif”</b>), <b>Version 1.6.8</b>, and the signed <b>“Quitter le réseau”</b> exit.</figcaption></figure>
+  </div>
+
   <a class="btn ghost" href="index.html">← Back · Retour</a>
 
   <hr class="langsep">
@@ -87,6 +100,13 @@
   <div class="card"><h3>Deux identités, une composition</h3><p><b>Gold Seeker Premium</b> (défaut) et <b>Seeker Nuit</b> — Réglages → Identité. Serif Fraunces, angles 2 px, horloge HEURE LOCALE.</p></div>
   <div class="card"><h3>Preuve de travail</h3><p>Visite guidée : Réglages → <b>« Commencer le mode d'emploi »</b> (8 écrans). Historique des reçus : Argent → <b>Historique des tickets</b> (100 reçus, signatures cliquables). Harnais de test : <span class="mono">node scripts/test-store-economy.mjs</span> (54 vérifications hors-ligne du split 92/3/5 et des frais).</p></div>
   <div class="card"><h3>Honnêteté des données sociales (v1.6.8)</h3><p>La stat « Personnes là » et le flux live sont un réseau social simulé en démo — étiqueté <b>« Démo · en direct »</b>. Les actions d'argent restent toujours réelles, on-chain.</p></div>
+
+  <h2>Ce que vous verrez sur l'appareil</h2>
+  <div class="shots">
+    <figure><img src="device/01-accueil-v168.png" alt="Accueil — Clock in, étiquette Démo · en direct, personnes là" loading="lazy"><figcaption><b>Accueil</b> — horloge heure locale, éclair CLOCK IN, la stat personnes là honnêtement étiquetée <b>« Démo · en direct »</b>.</figcaption></figure>
+    <figure><img src="device/30-reglages.png" alt="Réglages haut — langue, thème Gold, identité" loading="lazy"><figcaption><b>Réglages (haut)</b> — langue EN/FR, thème <b>Gold Seeker Premium</b>, identité.</figcaption></figure>
+    <figure><img src="device/38-reglages-version.png" alt="Réglages bas — section Réseau, RPC public actif, Version 1.6.8, Quitter le réseau" loading="lazy"><figcaption><b>Réglages (bas)</b> — section Réseau avec test RPC (<b>« RPC public actif »</b>), <b>Version 1.6.8</b> et la sortie signée <b>« Quitter le réseau »</b>.</figcaption></figure>
+  </div>
 
   <a class="btn ghost" href="index.html">← Retour</a>
   <footer>PUNCH — built for CLOCK IN · v1.6.8 · guide source: docs/GUIDE-JURY.md (English then Français)</footer>
