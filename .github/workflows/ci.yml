@@ -58,3 +58,13 @@ jobs:
       #    page a derive du manifeste.
       - name: Proof page sync
         run: python tools/make_proof_page.py --check
+
+      # 6) Garde-fou release : l'APK publie correspond a son .sha256 embarque
+      #    (re-telecharge et verifie octet par octet) et le MANIFEST.json
+      #    embarque sur la release est celui du repo. GITHUB_TOKEN est fourni
+      #    par Actions ; PUNCH_RELEASE_TAG force une release precise sinon
+      #    c'est la latest.
+      - name: Release assets check
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python tools/check_release_assets.py

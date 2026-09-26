@@ -77,6 +77,17 @@ def main():
     if missing_refs:
         fail("guide-jury.html reference des images absentes du MANIFEST : %s" % ", ".join(sorted(missing_refs)))
 
+    # 5. Les badges hash du guide correspondent aux empreintes du MANIFEST.
+    #    Format : <a class="hash" href="device/MANIFEST.json" ...>✓ 7c076aa4</a>
+    #    Le badge colle a une image doit porter les 8 premiers caracteres de
+    #    son sha256 : impossible de copier-coller un badge d'une autre image.
+    for m in re.finditer(r'<a class="hash"[^>]*>\s*✓\s*([0-9a-f]{8})\s*</a>', guide):
+        badge = m.group(1)
+        if badge not in {str(meta.get("sha256", ""))[:8] for meta in shots.values()}:
+            fail("badge hash du guide-jury introuvable dans le MANIFEST : %s" % badge,
+                 "Le MANIFEST a change (vitrine relancee ?) sans mettre a jour les badges.",
+                 "Mets a jour docs/site/guide-jury.html avec les nouveaux prefixes sha256.")
+
     print("OK : device sync v%s — %d image(s) verifiee(s) (%s)" % (version, len(shots), ", ".join(sorted(shots))))
 
 

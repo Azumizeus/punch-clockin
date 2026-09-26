@@ -129,6 +129,33 @@ Images: https://azumizeus.github.io/punch-clockin/device/home.png
         https://azumizeus.github.io/punch-clockin/device/settings.png
 ```
 
+**Verifiable proof chain (EN) — à coller si le formulaire demande « comment vérifier votre projet » :**
+```
+Verifiable proof chain — from the phone to CI
+
+Every device artifact we publish follows one path, and every link is checkable:
+
+1. On the Seeker. One command (scripts/device/vitrine.py) captures the screens
+   on the physical device, hashes them and writes device/MANIFEST.json
+   (version, date, SHA-256, byte size — plus the recorded network-demo video).
+2. To the repo. The manifest and the screenshots are committed; a CI guard
+   (tools/check_device_sync.py) recomputes every hash and fails the build if
+   the gallery drifts from what the phone produced.
+3. To the public proof page. docs/site/proof.html is GENERATED from the
+   manifest (tools/make_proof_page.py) — no hand-typed hashes — and CI fails
+   again if the page ever drifts from the manifest.
+4. To the release. The same MANIFEST.json ships as a release asset, next to
+   the signed APK and its .sha256 companion file; CI (check_release_assets.py)
+   downloads the APK back and verifies it byte-for-byte against that file.
+
+So a judge can re-compute any SHA-256 — screenshots, video, APK — and match it
+against a public page that CI itself keeps honest. What you see online is what
+the phone produced; nothing in the chain is hand-typed.
+
+Proof page: https://azumizeus.github.io/punch-clockin/proof.html
+Raw manifest: https://azumizeus.github.io/punch-clockin/device/MANIFEST.json
+```
+
 **Argumentaire prix SKR ($10k) — si le formulaire demande la candidature :**
 ```
 1. SKR is the gate to earning power: staking 1,000 / 5,000 / 25,000 SKR unlocks Silver, Gold and

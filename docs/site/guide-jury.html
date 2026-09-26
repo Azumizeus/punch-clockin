@@ -30,6 +30,8 @@
   .shots img{width:100%;border-radius:8px;border:1px solid var(--line);display:block}
   .shots figcaption{font-size:12.5px;color:var(--dim);margin-top:8px;line-height:1.4}
   .shots figcaption b{color:var(--fg)}
+  .shots .hash{display:inline-block;margin-top:7px;font:11px/1 ui-monospace,monospace;color:var(--dim);border:1px solid var(--line);border-radius:999px;padding:4px 10px;text-decoration:none}
+  .shots .hash:hover{color:var(--accent)}
   @media (max-width:640px){.shots{grid-template-columns:1fr}}
   footer{margin-top:44px;color:var(--dim);font-size:13px;text-align:center;font-style:italic}
   a{color:var(--accent)}
@@ -66,8 +68,8 @@
 
   <h2>What you'll see on the device</h2>
   <div class="shots">
-    <figure><img src="device/home.png" alt="Home screen — Clock in, Demo · live label, nearby Seekers" loading="lazy"><figcaption><b>Home</b> — local-time clock, CLOCK IN bolt, the people-here stat honestly labeled <b>“Démo · en direct”</b>, nearby Seekers.</figcaption></figure>
-    <figure><img src="device/settings.png" alt="Settings — Network section, RPC public actif, Version 1.6.8, Quitter le réseau" loading="lazy"><figcaption><b>Settings</b> — one screen holds it all: Network section with the RPC test (<b>“RPC public actif”</b>), <b>Version 1.6.8</b>, and the signed <b>“Quitter le réseau”</b> exit.</figcaption></figure>
+    <figure><img src="device/home.png" alt="Home screen — Clock in, Demo · live label, nearby Seekers" loading="lazy"><figcaption><b>Home</b> — local-time clock, CLOCK IN bolt, the people-here stat honestly labeled <b>“Démo · en direct”</b>, nearby Seekers.</figcaption><a class="hash" href="device/MANIFEST.json" title="SHA-256 checked in CI against device/MANIFEST.json — what's online is what the phone produced">✓ 7c076aa4</a></figure>
+    <figure><img src="device/settings.png" alt="Settings — Network section, RPC public actif, Version 1.6.8, Quitter le réseau" loading="lazy"><figcaption><b>Settings</b> — one screen holds it all: Network section with the RPC test (<b>“RPC public actif”</b>), <b>Version 1.6.8</b>, and the signed <b>“Quitter le réseau”</b> exit.</figcaption><a class="hash" href="device/MANIFEST.json" title="SHA-256 checked in CI against device/MANIFEST.json — what's online is what the phone produced">✓ 477db2c8</a></figure>
   </div>
 
   <a class="btn ghost" href="index.html">← Back · Retour</a>
@@ -102,8 +104,8 @@
 
   <h2>Ce que vous verrez sur l'appareil</h2>
   <div class="shots">
-    <figure><img src="device/home.png" alt="Accueil — Clock in, étiquette Démo · en direct, Seekers proches" loading="lazy"><figcaption><b>Accueil</b> — horloge heure locale, éclair CLOCK IN, la stat personnes là honnêtement étiquetée <b>« Démo · en direct »</b>, Seekers proches.</figcaption></figure>
-    <figure><img src="device/settings.png" alt="Réglages — section Réseau, RPC public actif, Version 1.6.8, Quitter le réseau" loading="lazy"><figcaption><b>Réglages</b> — un seul écran réunit tout : section Réseau avec test RPC (<b>« RPC public actif »</b>), <b>Version 1.6.8</b> et la sortie signée <b>« Quitter le réseau »</b>.</figcaption></figure>
+    <figure><img src="device/home.png" alt="Accueil — Clock in, étiquette Démo · en direct, Seekers proches" loading="lazy"><figcaption><b>Accueil</b> — horloge heure locale, éclair CLOCK IN, la stat personnes là honnêtement étiquetée <b>« Démo · en direct »</b>, Seekers proches.</figcaption><a class="hash" href="device/MANIFEST.json" title="SHA-256 vérifié en CI contre device/MANIFEST.json — ce qui est en ligne est ce que le téléphone a produit">✓ 7c076aa4</a></figure>
+    <figure><img src="device/settings.png" alt="Réglages — section Réseau, RPC public actif, Version 1.6.8, Quitter le réseau" loading="lazy"><figcaption><b>Réglages</b> — un seul écran réunit tout : section Réseau avec test RPC (<b>« RPC public actif »</b>), <b>Version 1.6.8</b> et la sortie signée <b>« Quitter le réseau »</b>.</figcaption><a class="hash" href="device/MANIFEST.json" title="SHA-256 vérifié en CI contre device/MANIFEST.json — ce qui est en ligne est ce que le téléphone a produit">✓ 477db2c8</a></figure>
   </div>
 
   <a class="btn ghost" href="index.html">← Retour</a>
