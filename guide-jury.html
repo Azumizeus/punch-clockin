@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PUNCH — Judge guide / Guide du jury (EN/FR)</title>
+<style>
+  :root{--bg:#0a0908;--fg:#f4ecd8;--card:#161310;--dim:#8a7a56;--accent:#d4af37;--line:rgba(212,175,55,.28)}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--fg);font:17px/1.65 Georgia,'Times New Roman',serif;padding:56px 22px}
+  .wrap{max-width:820px;margin:0 auto}
+  .tag{display:inline-block;font:12px/1 ui-monospace,monospace;letter-spacing:2px;color:var(--dim);border:1px solid var(--line);border-radius:999px;padding:6px 14px;margin-bottom:18px}
+  h1{font-size:40px;margin-bottom:6px}
+  h1 span{color:var(--accent)}
+  .sub{color:var(--dim);font-style:italic;margin-bottom:30px}
+  h2{font-size:22px;color:var(--accent);margin:34px 0 10px}
+  ol{margin:0 0 0 22px}
+  li{margin-bottom:10px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin:12px 0}
+  .card h3{font-size:16px;margin-bottom:4px;color:var(--accent)}
+  .card p,.card li{color:var(--fg);font-size:15px}
+  .mono{font-family:ui-monospace,'Cascadia Mono',monospace;font-size:13px;color:var(--dim);word-break:break-all}
+  .btn{display:inline-block;background:var(--accent);color:#0a0908;font-weight:bold;text-decoration:none;border-radius:8px;padding:12px 20px;font-size:15px;margin-bottom:24px}
+  .btn.ghost{background:transparent;color:var(--accent);border:1px solid var(--accent)}
+  .note{border-left:3px solid var(--accent);background:var(--card);border-radius:8px;padding:14px 18px;margin:18px 0;font-size:15px}
+  .langsep{border:none;border-top:1px solid var(--line);margin:44px 0}
+  .langtag{font:12px/1 ui-monospace,monospace;letter-spacing:3px;color:var(--dim)}
+  .shots{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;max-width:640px;margin:16px 0 4px}
+  .shots figure{margin:0;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 10px 8px;text-align:center}
+  .shots img{width:100%;border-radius:8px;border:1px solid var(--line);display:block}
+  .shots figcaption{font-size:12.5px;color:var(--dim);margin-top:8px;line-height:1.4}
+  .shots figcaption b{color:var(--fg)}
+  .shots .hash{display:inline-block;margin-top:7px;font:11px/1 ui-monospace,monospace;color:var(--dim);border:1px solid var(--line);border-radius:999px;padding:4px 10px;text-decoration:none}
+  .shots .hash:hover{color:var(--accent)}
+  @media (max-width:640px){.shots{grid-template-columns:1fr}}
+  footer{margin-top:44px;color:var(--dim);font-size:13px;text-align:center;font-style:italic}
+  a{color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="tag">JUDGE GUIDE — 15 MINUTES — REAL DEVNET · GUIDE DU JURY — VRAI DEVNET</div>
+  <h1>How to test PUNCH <span>·</span> step by step</h1>
+  <div class="sub">Everything money-related in the app is a real signed devnet transaction. Nothing is simulated. — <span lang="fr">Tout ce qui touche à l'argent dans l'app est une vraie transaction devnet signée. Rien n'est simulé.</span></div>
+
+  <a class="btn" href="https://github.com/Azumizeus/punch-clockin/releases/latest">1 · Download the signed APK (arm64) · Télécharger l'APK signé</a>
+
+  <ol>
+    <li><b>Install</b> the APK on the Solana Seeker (or any Android with an MWA wallet on devnet). No account, no signup.</li>
+    <li><b>Open the app → “Ouvrir mon portefeuille”.</b> The system Seed Vault sheet asks for a real authorization on devnet.</li>
+    <li><b>A welcome grant arrives</b> from the treasury within seconds if your wallet is empty: 0.05 SOL + 5 USDC + 20 USDT + 5,000 SKR. Check your address on the explorer — it's a real transfer.</li>
+    <li><b>Tap the bolt (CLOCK IN).</b> Seed Vault asks for your signature — a real memo transaction. The paper ticket shows time, country, the 92/3/5 rule and an on-chain stamp (clickable signature).</li>
+    <li><b>Try the money features</b> — each one asks for a real signature: Wallet → Swap SKR⇄USDC · Stake/Unstake (honest 1.5% fee) · Board missions · Say hi to a nearby Seeker (0.10 USDC from the treasury).</li>
+    <li><b>Leave the network</b> (Settings): a real signed transaction that honestly decrements the shared counters.</li>
+  </ol>
+
+  <div class="note">
+    <b>What to verify as a judge:</b> every action triggers the Seed Vault prompt · the treasury address
+    <span class="mono">FUiCbnDhEEJtz9Zcj66hGB54iGMGeyjRKD7CsTwpihJn</span>
+    moves on <a href="https://explorer.solana.com/address/FUiCbnDhEEJtz9Zcj66hGB54iGMGeyjRKD7CsTwpihJn?cluster=devnet">explorer.solana.com (cluster=devnet)</a>
+    · every receipt's signature is clickable · failures show the exact reason and change nothing.
+  </div>
+
+  <h2>In the box</h2>
+  <div class="card"><h3>Two identities, one composition</h3><p><b>Gold Seeker Premium</b> (default) and <b>Seeker Nuit</b> — Settings → Identité. Serif Fraunces, 2 px angles, LOCAL TIME clock.</p></div>
+  <div class="card"><h3>Proof of work</h3><p>Guided tour: Settings → <b>“Commencer le mode d'emploi”</b> (8 screens). Receipt history: Wallet → <b>Historique des tickets</b> (100 receipts, all signatures clickable). Test harness: <span class="mono">node scripts/test-store-economy.mjs</span> (54 offline checks of the 92/3/5 split and fees).</p></div>
+  <div class="card"><h3>Social data honesty (v1.6.8)</h3><p>The “People here” stat and the live feed are a simulated social network in demo mode — labeled <b>“Demo · live”</b>. Money actions are always real, on-chain.</p></div>
+
+  <h2>What you'll see on the device</h2>
+  <div class="shots">
+    <figure><img src="device/home.png" alt="Home screen — Clock in, Demo · live label, nearby Seekers" loading="lazy"><figcaption><b>Home</b> — local-time clock, CLOCK IN bolt, the people-here stat honestly labeled <b>“Démo · en direct”</b>, nearby Seekers.</figcaption><a class="hash" href="device/MANIFEST.json" title="SHA-256 checked in CI against device/MANIFEST.json — what's online is what the phone produced">✓ 7c076aa4</a></figure>
+    <figure><img src="device/settings.png" alt="Settings — Network section, RPC public actif, Version 1.6.8, Quitter le réseau" loading="lazy"><figcaption><b>Settings</b> — one screen holds it all: Network section with the RPC test (<b>“RPC public actif”</b>), <b>Version 1.6.8</b>, and the signed <b>“Quitter le réseau”</b> exit.</figcaption><a class="hash" href="device/MANIFEST.json" title="SHA-256 checked in CI against device/MANIFEST.json — what's online is what the phone produced">✓ 477db2c8</a></figure>
+  </div>
+
+  <a class="btn ghost" href="index.html">← Back · Retour</a>
+
+  <hr class="langsep">
+  <span class="langtag">FRANÇAIS — LE MÊME GUIDE</span>
+  <h1>Comment tester PUNCH <span>·</span> pas à pas</h1>
+  <div class="sub">Tout ce qui touche à l'argent dans l'app est une vraie transaction devnet signée. Rien n'est simulé.</div>
+
+  <a class="btn" href="https://github.com/Azumizeus/punch-clockin/releases/latest">1 · Télécharger l'APK signé (arm64)</a>
+
+  <ol>
+    <li><b>Installe</b> l'APK sur le Solana Seeker (ou tout Android avec un wallet MWA sur devnet). Sans compte, sans inscription.</li>
+    <li><b>Ouvre l'app → « Ouvrir mon portefeuille ».</b> La feuille Seed Vault du système demande une vraie autorisation sur devnet.</li>
+    <li><b>Un lot de bienvenue arrive</b> du trésor en quelques secondes si ton wallet est vide : 0,05 SOL + 5 USDC + 20 USDT + 5 000 SKR. Vérifie ton adresse sur l'explorer — c'est un vrai transfert.</li>
+    <li><b>Touche l'éclair (CLOCK IN).</b> Seed Vault demande ta signature — une vraie transaction mémo. Le ticket papier montre l'heure, le pays, la règle 92/3/5 et un tampon on-chain (signature cliquable).</li>
+    <li><b>Teste les fonctionnalités d'argent</b> — chacune demande une vraie signature : Argent → Échanger SKR⇄USDC · Garder/Relâcher le SKR (frais honnêtes de 1,5 %) · Missions du board · Dire bonjour à un Seeker proche (0,10 USDC du trésor).</li>
+    <li><b>Quitte le réseau</b> (Réglages) : une vraie transaction signée qui décrémente honnêtement les compteurs partagés.</li>
+  </ol>
+
+  <div class="note">
+    <b>Ce qu'un juge doit vérifier :</b> chaque action déclenche la feuille Seed Vault · l'adresse du trésor
+    <span class="mono">FUiCbnDhEEJtz9Zcj66hGB54iGMGeyjRKD7CsTwpihJn</span>
+    bouge sur <a href="https://explorer.solana.com/address/FUiCbnDhEEJtz9Zcj66hGB54iGMGeyjRKD7CsTwpihJn?cluster=devnet">explorer.solana.com (cluster=devnet)</a>
+    · la signature de chaque reçu est cliquable · les échecs affichent la vraie raison et ne changent rien.
+  </div>
+
+  <h2>Dans la boîte</h2>
+  <div class="card"><h3>Deux identités, une composition</h3><p><b>Gold Seeker Premium</b> (défaut) et <b>Seeker Nuit</b> — Réglages → Identité. Serif Fraunces, angles 2 px, horloge HEURE LOCALE.</p></div>
+  <div class="card"><h3>Preuve de travail</h3><p>Visite guidée : Réglages → <b>« Commencer le mode d'emploi »</b> (8 écrans). Historique des reçus : Argent → <b>Historique des tickets</b> (100 reçus, signatures cliquables). Harnais de test : <span class="mono">node scripts/test-store-economy.mjs</span> (54 vérifications hors-ligne du split 92/3/5 et des frais).</p></div>
+  <div class="card"><h3>Honnêteté des données sociales (v1.6.8)</h3><p>La stat « Personnes là » et le flux live sont un réseau social simulé en démo — étiqueté <b>« Démo · en direct »</b>. Les actions d'argent restent toujours réelles, on-chain.</p></div>
+
+  <h2>Ce que vous verrez sur l'appareil</h2>
+  <div class="shots">
+    <figure><img src="device/home.png" alt="Accueil — Clock in, étiquette Démo · en direct, Seekers proches" loading="lazy"><figcaption><b>Accueil</b> — horloge heure locale, éclair CLOCK IN, la stat personnes là honnêtement étiquetée <b>« Démo · en direct »</b>, Seekers proches.</figcaption><a class="hash" href="device/MANIFEST.json" title="SHA-256 vérifié en CI contre device/MANIFEST.json — ce qui est en ligne est ce que le téléphone a produit">✓ 7c076aa4</a></figure>
+    <figure><img src="device/settings.png" alt="Réglages — section Réseau, RPC public actif, Version 1.6.8, Quitter le réseau" loading="lazy"><figcaption><b>Réglages</b> — un seul écran réunit tout : section Réseau avec test RPC (<b>« RPC public actif »</b>), <b>Version 1.6.8</b> et la sortie signée <b>« Quitter le réseau »</b>.</figcaption><a class="hash" href="device/MANIFEST.json" title="SHA-256 vérifié en CI contre device/MANIFEST.json — ce qui est en ligne est ce que le téléphone a produit">✓ 477db2c8</a></figure>
+  </div>
+
+  <a class="btn ghost" href="index.html">← Retour</a>
+  <footer>PUNCH — built for CLOCK IN · v1.6.8 · guide source: docs/GUIDE-JURY.md (English then Français)</footer>
+</div>
+</body>
+</html>
