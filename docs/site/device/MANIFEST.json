@@ -10,5 +10,12 @@
       "sha256": "477db2c8fc42566798f4ee47eaa23f7d559903b4789b7b6918fd4114d904fe36"
     }
   },
-  "version": "1.6.8"
+  "version": "1.6.8",
+  "video": {
+    "bytes": 24433592,
+    "date": "2026-09-26",
+    "name": "punch-demo-reseau-v168.mp4",
+    "sha256": "a907b8671c3d885581386197e3645fb00f93bf0ace50965a9b2e086e64fe3f3d",
+    "url": "https://github.com/Azumizeus/punch-clockin/releases/download/v1.6.8/punch-demo-reseau-v168.mp4"
+  }
 }

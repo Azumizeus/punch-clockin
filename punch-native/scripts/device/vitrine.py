@@ -15,9 +15,12 @@ Sortie :
     docs/site/device/                          # images allegées pour Pages
     docs/site/device/MANIFEST.json             # version + sha256 + date
 
-Le dossier docs/site/device/ alimente la galerie du guide jury et le check
-CI (tools/check_device_sync.py) : apres un bump de version, relancer ce
+Le dossier docs/site/device/ alimente la galerie du guide jury, la page proof et
+le check CI (tools/check_device_sync.py) : apres un bump de version, relancer ce
 script pour qu'il redevienne a jour.
+
+Les cles de premier niveau inconnues du MANIFEST (ex. "video", ajoutee a la main
+pour tracer la demo Reseau) sont PRESERVEES d'un run a l'autre.
 """
 import hashlib
 import json
@@ -148,7 +151,18 @@ def version_on_screen(version):
 def export(version, SHOTS):
     """Copie allegée vers docs/site/device/ + MANIFEST.json (version + sha256)."""
     os.makedirs(SITE_DEVICE, exist_ok=True)
+    out = os.path.join(SITE_DEVICE, "MANIFEST.json")
     manifest = {"version": version, "generated": time.strftime("%Y-%m-%d %H:%M UTC", time.gmtime()), "shots": {}}
+    # Les cles extra (ex. "video" : trace de la demo Reseau) survivent au run.
+    if os.path.exists(out):
+        try:
+            with open(out, encoding="utf-8") as fh:
+                old = json.load(fh)
+            for k, v in old.items():
+                if k not in manifest:
+                    manifest[k] = v
+        except (OSError, ValueError):
+            pass  # MANIFEST illisible : on repart d'un manifeste propre
     for src_name, web_name in EXPORT.items():
         src = os.path.join(SHOTS, src_name)
         if not os.path.exists(src):
@@ -161,7 +175,6 @@ def export(version, SHOTS):
         digest = hashlib.sha256(open(dst, "rb").read()).hexdigest()
         manifest["shots"][web_name] = {"sha256": digest, "bytes": os.path.getsize(dst)}
         print("  [export] docs/site/device/%s (%d o, sha256 %s...)" % (web_name, os.path.getsize(dst), digest[:8]), flush=True)
-    out = os.path.join(SITE_DEVICE, "MANIFEST.json")
     with open(out, "w", encoding="utf-8") as fh:
         json.dump(manifest, fh, indent=2, sort_keys=True)
         fh.write("\n")

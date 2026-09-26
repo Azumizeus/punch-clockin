@@ -32,7 +32,7 @@ mise à jour: 23 septembre 2026 (dates officielles Radiants vérifiées : clôtu
 |---|---|
 | ![Accueil v1.6.8](site/device/home.png) | ![Réglages v1.6.8](site/device/settings.png) |
 
-À gauche : l'accueil connecté, avec l'étiquette **« Démo · en direct »** sur les données sociales simulées (honnêteté assumée). À droite : les Réglages montrent le test RPC (**« RPC public actif »**), la **Version 1.6.8** et la sortie signée **« Quitter le réseau »**. Ces captures sont régénérées par `punch-native/scripts/device/vitrine.py` ; leurs SHA-256 sont tracés dans [`site/device/MANIFEST.json`](site/device/MANIFEST.json) — **aussi embarqué comme [asset de la release v1.6.8](https://github.com/Azumizeus/punch-clockin/releases/download/v1.6.8/MANIFEST.json) pour la traçabilité hors repo** — et vérifiés en CI par le garde-fou `tools/check_device_sync.py`.
+À gauche : l'accueil connecté, avec l'étiquette **« Démo · en direct »** sur les données sociales simulées (honnêteté assumée). À droite : les Réglages montrent le test RPC (**« RPC public actif »**), la **Version 1.6.8** et la sortie signée **« Quitter le réseau »**. Ces captures sont régénérées par `punch-native/scripts/device/vitrine.py` ; leurs SHA-256 sont tracés dans [`site/device/MANIFEST.json`](site/device/MANIFEST.json) — **aussi embarqué comme [asset de la release v1.6.8](https://github.com/Azumizeus/punch-clockin/releases/download/v1.6.8/MANIFEST.json) pour la traçabilité hors repo** — et vérifiés en CI par le garde-fou `tools/check_device_sync.py`. La page publique [**proof**](https://azumizeus.github.io/punch-clockin/proof.html) affiche ces empreintes (version, date, SHA-256 et poids de chaque capture et de la vidéo), générée automatiquement depuis le MANIFEST et vérifiée elle aussi en CI.
 
 **Démo Réseau re-tournée sur Seeker v1.6.8 (26/09)** — séquence complète capturée en vidéo ([`punch-demo-reseau-v168.mp4`](https://github.com/Azumizeus/punch-clockin/releases/download/v1.6.8/punch-demo-reseau-v168.mp4), 3 min) : ping du RPC public → verdict vert **« Connexion OK · 249 ms »** ; endpoint bidon `rpc-inexistant-punch.example` → erreur honnête **`UnknownHostException`** (la vraie raison, jamais un mensonge) ; **« Revenir au RPC public »** → re-ping vert **254 ms**, avec la **Version 1.6.8** visible sur le même écran. Captures étape par étape dans `punch-native/_shots/reseau-v168/` (01 à 06).
 
@@ -95,6 +95,7 @@ Signed APK (arm64): https://github.com/Azumizeus/punch-clockin/releases/latest
 Demo video: <lien-youtube>
 Devnet treasury on explorer: https://explorer.solana.com/address/FUiCbnDhEEJtz9Zcj66hGB54iGMGeyjRKD7CsTwpihJn?cluster=devnet
 Judge guide: https://github.com/Azumizeus/punch-clockin/blob/master/docs/GUIDE-JURY.md
+Proof (SHA-256 of captures & video): https://azumizeus.github.io/punch-clockin/proof.html
 Pitch deck: <fichier PDF joint ou lien>
 ```
 

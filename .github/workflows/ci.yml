@@ -52,3 +52,9 @@ jobs:
       #    pousse sans relancer scripts/device/vitrine.py sur le Seeker.
       - name: Device gallery sync
         run: python tools/check_device_sync.py
+
+      # 5) Garde-fou page preuve : docs/site/proof.html doit etre regeneree
+      #    depuis le MANIFEST courant (version, sha256, poids). Echoue si la
+      #    page a derive du manifeste.
+      - name: Proof page sync
+        run: python tools/make_proof_page.py --check
