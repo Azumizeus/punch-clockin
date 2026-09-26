@@ -102,8 +102,18 @@ def main():
              "Re-uploade : curl -X POST --data-binary @docs/site/device/MANIFEST.json "
              "\"https://uploads.github.com/repos/%s/releases/<id>/assets?name=MANIFEST.json\"" % REPO)
     online = http_get(assets["MANIFEST.json"]["browser_download_url"], token)
-    if hashlib.sha256(online).hexdigest() != hashlib.sha256(open(local, "rb").read()).hexdigest():
+    local_bytes = open(local, "rb").read()
+    # Comparaison SEMANTIQUE (JSON parse) et non octet-pour-octet : l'asset a
+    # pu etre televerse depuis Windows (CRLF) alors que le blob du repo est
+    # normalise en LF. Ce qui compte, c'est que la TRACE soit la meme.
+    try:
+        online_json = json.loads(online.decode("utf-8"))
+    except (ValueError, UnicodeDecodeError):
+        fail("asset MANIFEST.json de la release illisible (JSON corrompu ?)",
+             "Re-uploade docs/site/device/MANIFEST.json sur la release.")
+    if online_json != json.loads(local_bytes.decode("utf-8")):
         fail("MANIFEST.json embarque sur la release != docs/site/device/MANIFEST.json du repo",
+             "  release : %d o | repo : %d o" % (len(online), len(local_bytes)),
              "La trace device de la release a diverge : re-uploade le MANIFEST du repo sur la release.",
              "Si la version a change, re-taguer la release apres avoir relance la vitrine.")
     print("OK : MANIFEST.json embarque = MANIFEST.json du repo")
