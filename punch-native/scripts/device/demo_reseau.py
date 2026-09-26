@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Demo de la section Reseau (v1.6.6) : RPC au choix de l'utilisateur + test.
+"""Demo de la section Reseau (v1.6.8) : RPC au choix de l'utilisateur + test.
 
 AUCUNE signature Seed Vault : Reglages est accessible hors connexion.
 Sequence (chaque etape = capture-preuve) :
@@ -18,7 +18,7 @@ sys.stdout.reconfigure(errors="replace")
 from ui_probe import fresh_dump, find_text, screenshot, sh, tap  # noqa: E402
 
 PKG = "com.anonymous.punchnative"
-SHOTS = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "_shots", "reseau-v166"))
+SHOTS = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "_shots", "reseau-v168"))
 os.makedirs(SHOTS, exist_ok=True)
 
 
@@ -128,7 +128,7 @@ def ensure_connected():
 
 
 def main():
-    log("== Demo Reseau v1.6.6 — RPC au choix + test de connexion ==")
+    log("== Demo Reseau v1.6.8 — RPC au choix + test de connexion ==")
     wake()
     focus()
 
@@ -213,7 +213,7 @@ def main():
         log("7. Re-ping public : %s" % (v[2] if v else "non lu"))
         shot("06-ping-public-confirme.png")
 
-    log("== Fin de la demo — captures dans _shots/reseau-v166 ==")
+    log("== Fin de la demo — captures dans _shots/reseau-v168 ==")
     return 0
 
 
