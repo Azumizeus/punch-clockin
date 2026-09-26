@@ -89,7 +89,7 @@ PAGE = """<!DOCTYPE html>
   <div class="note">
     <b>How this page is built · Comment cette page est construite :</b> one command on the device (<span class="mono">punch-native/scripts/device/vitrine.py</span>)
     exports the screenshots, hashes them and writes <span class="mono">docs/site/device/MANIFEST.json</span>; this page is generated from that manifest
-    (<span class="mono">tools/make_proof_page.py</span>). CI fails if the gallery ever drifts from the device (<span class="mono">tools/check_device_sync.py</span>),
+    (<span class="mono">tools/make_proof_page.py</span>) — raw manifest: <a href="device/MANIFEST.json">device/MANIFEST.json</a>. CI fails if the gallery ever drifts from the device (<span class="mono">tools/check_device_sync.py</span>),
     and fails again if this page ever drifts from the manifest (<span class="mono">make_proof_page.py --check</span>).
     — <span lang="fr">Une commande sur l'appareil exporte les captures et écrit le MANIFEST ; cette page est générée depuis ce manifeste. La CI échoue si la galerie dérive du téléphone, et échoue aussi si cette page dérive du manifeste.</span>
   </div>

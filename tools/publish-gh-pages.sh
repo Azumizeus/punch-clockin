@@ -8,6 +8,7 @@ mkdir -p .gh-pages-tmp
 cp docs/site/index.html docs/site/guide-jury.html docs/site/submit.html docs/site/proof.html .gh-pages-tmp/
 mkdir -p .gh-pages-tmp/device
 cp docs/site/device/*.png .gh-pages-tmp/device/
+cp docs/site/device/MANIFEST.json .gh-pages-tmp/device/
 # Les pages de livraison monolithiques (autonomes) en bonus :
 cp docs/LIVRAISON.html .gh-pages-tmp/livraison.html
 cp docs/qr-delivery.svg .gh-pages-tmp/qr-delivery.svg
