@@ -24,6 +24,12 @@ jobs:
           distribution: temurin
           java-version: 17
 
+      # Cohérence des étiquettes AVANT tout build : le tag poussé doit égalier
+      # app.json, qui doit égalier le MANIFEST device. Un désaccord arrête la
+      # release ici — impossible de publier un APK menteur sur sa version.
+      - name: Release tag sync (tag = app.json = MANIFEST)
+        run: python tools/check_release_tag.py --tag ${{ github.ref_name }}
+
       - name: Install native deps
         working-directory: punch-native
         run: npm ci
@@ -102,6 +108,7 @@ jobs:
           files: |
             punch-clockin-seeker-${{ github.ref_name }}.apk
             punch-clockin-seeker-${{ github.ref_name }}.apk.sha256
+            docs/site/device/MANIFEST.json
             punch-native/releases/punch-clockin-demo.mp4
             punch-native/releases/punch-clockin-demo.srt
           fail_on_unmatched_files: true

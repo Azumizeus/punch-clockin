@@ -59,7 +59,16 @@ jobs:
       - name: Proof page sync
         run: python tools/make_proof_page.py --check
 
-      # 6) Garde-fou release : l'APK publie correspond a son .sha256 embarque
+      # 6) Cohérence release/code : le tag de la dernière release publiée ne
+      #    doit pas être PLUS RÉCENT que app.json (sinon l'APK en ligne affiche
+      #    une version que le code ne porte plus). Plus ancien = avertissement
+      #    seulement (fenêtre transitoire bump -> re-tag).
+      - name: Release tag sync
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python tools/check_release_tag.py
+
+      # 7) Garde-fou release : l'APK publie correspond a son .sha256 embarque
       #    (re-telecharge et verifie octet par octet) et le MANIFEST.json
       #    embarque sur la release est celui du repo. GITHUB_TOKEN est fourni
       #    par Actions ; PUNCH_RELEASE_TAG force une release precise sinon
