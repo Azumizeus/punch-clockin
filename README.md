@@ -1,5 +1,9 @@
 # PUNCH — proof of presence on Solana
 
+[![CI](https://github.com/Azumizeus/punch-clockin/actions/workflows/ci.yml/badge.svg)](https://github.com/Azumizeus/punch-clockin/actions/workflows/ci.yml)
+[![Release](https://img.shields.io/github/v/release/Azumizeus/punch-clockin)](https://github.com/Azumizeus/punch-clockin/releases/latest)
+[![Proof chain](https://img.shields.io/badge/proof-chain%20verified-8A7A56)](docs/PROOF-CHAIN.md)
+
 > **FR :** PUNCH est l'app du hackathon **CLOCK IN** (Solana Mobile) : tu pointes une fois par jour depuis un vrai téléphone Seeker, une vraie transaction Solana (devnet) prouve ta présence, et l'économie qui en découle suit une règle unique, affichée partout : **92 % à la personne qui a fait le geste, 3 % aux détenteurs de SKR, 5 % à l'app**. Fais partie de l'écosystème **Nexus Seeker**.
 
 **EN:** PUNCH is our entry for the **CLOCK IN** hackathon (Solana Mobile): punch in once a day from a real Seeker phone, a real Solana transaction (devnet) proves your presence, and the resulting economy follows one rule, printed everywhere: **92% to the person who showed up, 3% to SKR holders, 5% to the app**. Part of the **Nexus Seeker** ecosystem.
@@ -28,6 +32,8 @@ Scan the QR code with Expo Go, or flash the signed APK on a Seeker / any Android
 
 - [`docs/PITCH-JURY.md`](docs/PITCH-JURY.md) — le pitch, EN puis FR / the pitch, EN first then FR
 - [`docs/GUIDE-JURY.md`](docs/GUIDE-JURY.md) — comment tester, EN puis FR / how to test, EN first then FR
+- [`docs/RUNBOOK-BUMP.md`](docs/RUNBOOK-BUMP.md) — procédure de bump de version + garde-fous / version bump runbook + CI guards
+- [`docs/PROOF-CHAIN.md`](docs/PROOF-CHAIN.md) — la chaîne de preuve vérifiable (device → MANIFEST → proof → release → CI) / the verifiable proof chain
 - [`docs/MODE-EMPLOI.md`](docs/MODE-EMPLOI.md) — mode d'emploi / user guide (EN + FR)
 - [`docs/ROADMAP.md`](docs/ROADMAP.md) — ce qui est fait, ce qui reste / done & next
 - [`docs/AEGIS-7.md`](docs/AEGIS-7.md) — document "cerveau" interne (FR) / internal project brain (FR)
