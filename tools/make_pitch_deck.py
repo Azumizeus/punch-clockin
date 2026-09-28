@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 Génère docs/punch-clockin-deck.pdf — le pitch deck de soumission CLOCK IN.
-11 slides EN (contenu : docs/PITCH-DECK.md), fond sombre #0a0908, accent or #d4af37,
+12 slides EN (contenu : docs/PITCH-DECK.md), fond sombre #0a0908, accent or #d4af37,
 captures de l'app (rushes QA _shots/demo-v165, vitrine v1.6.8).
 
 Usage : python tools/make_pitch_deck.py
@@ -103,7 +103,18 @@ SLIDES = [
         "img_h": 168,
     },
     {
-        "kicker": "07 · UX & DELIGHT",
+        "kicker": "07 · THE PROOF CHAIN",
+        "title": "Everything you see online\nis what the phone produced",
+        "chain": True,
+        "mono": [
+            "Re-compute any SHA-256 and match it against the public proof page —",
+            "CI keeps the chain honest: proof.html is generated, never hand-typed.",
+            "azumizeus.github.io/punch-clockin/proof.html",
+        ],
+        "close": "A release tag that doesn't match the code is refused before the APK is even built.",
+    },
+    {
+        "kicker": "08 · UX & DELIGHT",
         "title": "A punch clock you actually\nwant to come back to",
         "bullets": [
             "A real drag-physics globe: every punch in the world drops a live dot.",
@@ -115,7 +126,7 @@ SLIDES = [
         "img_h": 150,
     },
     {
-        "kicker": "08 · MARKET & STICKINESS",
+        "kicker": "09 · MARKET & STICKINESS",
         "title": "A daily ritual for Seeker owners,\nan honest wage for communities",
         "bullets": [
             "Launch: Solana Mobile Seeker owners — Seed Vault built in, no seed phrases.",
@@ -126,7 +137,7 @@ SLIDES = [
         "img_h": 138,
     },
     {
-        "kicker": "09 · ROADMAP",
+        "kicker": "10 · ROADMAP",
         "title": "Devnet today, mainnet when it\ndeserves it",
         "bullets": [
             "Now (hackathon): full devnet economy, signed APK, verifiable receipts.",
@@ -135,7 +146,7 @@ SLIDES = [
         ],
     },
     {
-        "kicker": "10 · TEAM & LINKS",
+        "kicker": "11 · TEAM & LINKS",
         "title": "Nexus Seeker — honest money\nfor real presence",
         "links": [
             ("GitHub repo — source, judge guide, signed APK", "https://" + REPO),
@@ -249,6 +260,35 @@ def add_slide(pdf, s):
     if s.get("bullets"):
         pdf.set_y(62 if Deck.slide_no == 1 else pdf.get_y() + 4)
         bullet_list(pdf, s["bullets"], 18, pdf.get_y(), text_w)
+
+    # Diagramme de la chaîne de preuve (slide 07) : 5 boîtes enchaînées.
+    if s.get("chain"):
+        boxes = [
+            ("Seeker", "real device\nadb captures"),
+            ("MANIFEST.json", "sha256 · bytes\ndate · version"),
+            ("Repo + CI", "hashes re-checked\non every push"),
+            ("proof.html", "generated page\nzero hand-typed"),
+            ("Release", "APK = .sha256\nMANIFEST embedded"),
+        ]
+        bx, by, bw, bh, gap = 18, 64, 46, 26, 7
+        for i, (head, sub) in enumerate(boxes):
+            x = bx + i * (bw + gap)
+            pdf.set_fill_color(*LINE)
+            pdf.set_draw_color(*LINE)
+            pdf.rect(x, by, bw, bh, style="DF")
+            pdf.set_xy(x, by + 4)
+            pdf.set_font("B", size=10.5)
+            pdf.set_text_color(*GOLD)
+            pdf.cell(bw, 6, head, align="C")
+            pdf.set_xy(x + 2, by + 11)
+            pdf.set_font("R", size=8)
+            pdf.set_text_color(*DIM)
+            pdf.multi_cell(bw - 4, 4.2, sub, align="C")
+            if i < len(boxes) - 1:
+                pdf.set_draw_color(*GOLD)
+                pdf.set_line_width(0.6)
+                pdf.line(x + bw + 1, by + bh / 2, x + bw + gap - 1, by + bh / 2)
+        pdf.set_y(by + bh + 10)  # le texte suit SOUS le diagramme, jamais dessus
 
     if s.get("mono"):
         pdf.set_y(min(pdf.get_y() + 4, 150))

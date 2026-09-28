@@ -96,6 +96,7 @@ PAGE = """<!DOCTYPE html>
 
   <a class="btn ghost" href="index.html">← Back · Retour</a>
   <a class="btn ghost" href="guide-jury.html">Judge guide · Guide jury</a>
+  <a class="btn ghost" href="https://github.com/Azumizeus/punch-clockin/blob/master/docs/PROOF-CHAIN.md">How this chain works · Comment la chaîne fonctionne</a>
   <footer>PUNCH — built for CLOCK IN · page generated from device/MANIFEST.json · do not edit by hand · page générée, ne pas éditer à la main</footer>
 </div>
 </body>
