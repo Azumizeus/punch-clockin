@@ -103,6 +103,25 @@ def main():
              "\"https://uploads.github.com/repos/%s/releases/<id>/assets?name=MANIFEST.json\"" % REPO)
     online = http_get(assets["MANIFEST.json"]["browser_download_url"], token)
     local_bytes = open(local, "rb").read()
+    # Fenetre transitoire alignee sur check_release_tag.py : si la derniere
+    # release publiee est PLUS ANCIENNE que app.json (flux bump -> push ->
+    # re-tag en cours), le MANIFEST du repo decrit la version COURANTE
+    # (captures regenerees -> nouveaux sha256) et ne peut logiquement pas
+    # egaler celui de la release anterieure : avertissement, pas d'echec.
+    # La comparaison stricte redevient applicable des que les versions
+    # s'alignent (re-tag). Le controle APK == .sha256 reste integrite partout.
+    with open(os.path.join(ROOT, "punch-native", "app.json"), encoding="utf-8") as fh:
+        mapp = re.search(r'"version"\s*:\s*"([\d.]+)"', fh.read())
+    app_ver = mapp.group(1) if mapp else ""
+    rel_ver = tag[1:] if tag.startswith("v") else tag
+    ka = [int(x) for x in rel_ver.split(".")]
+    kb = [int(x) for x in app_ver.split(".")] if app_ver else []
+    if kb and ka < kb:
+        print("::warning::release %s plus ancienne que app.json (%s) — fenetre bump -> re-tag : " % (tag, app_ver))
+        print("   comparaison MANIFEST sautee (le MANIFEST du repo decrit la version courante).")
+        print("OK (avec avertissement) : %s intact (match .sha256) ; MANIFEST strict des le re-tag." % apk_name)
+        print("Release %s : assets verifies (fenetre transitoire)." % tag)
+        return 0
     # Comparaison SEMANTIQUE (JSON parse) et non octet-pour-octet : l'asset a
     # pu etre televerse depuis Windows (CRLF) alors que le blob du repo est
     # normalise en LF. Ce qui compte, c'est que la TRACE soit la meme.

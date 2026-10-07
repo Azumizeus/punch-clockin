@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { View, Text, TouchableOpacity, ScrollView, StyleSheet, ActivityIndicator, TextInput, Alert } from "react-native";
 import { useRouter } from "expo-router";
+import Constants from "expo-constants";
 import { usePunch, useT, useColors } from "../../lib/punch/store";
 import { DEFAULT_RPC, getRpcUrl, isCustomRpc, pingRpc, rebuildConnection, setRpcUrl } from "../../lib/solana/rpc";
 import { fonts } from "../../lib/punch/fonts";
@@ -220,7 +221,7 @@ export default function SettingsScreen() {
       <Section title={t.settingsAbout} s={s}>
         <View style={s.infoRow}>
           <Text style={s.infoLabel}>{t.settingsVersion}</Text>
-          <Text style={s.infoVal}>1.6.8</Text>
+          <Text style={s.infoVal}>{Constants.expoConfig?.version ?? Constants.nativeApplicationVersion ?? "—"}</Text>
         </View>
       </Section>
 
