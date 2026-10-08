@@ -51,7 +51,19 @@ import type {
   View,
 } from "./types";
 
-const DEMO_COOLDOWN_MS = 75_000;
+// La règle du produit : UN punch par jour (calendaire local) — "one tap a day",
+// aligné sur le memo on-chain `PUNCH <date du jour>` (app/(tabs)/index.tsx).
+// L'ancien cooldown démo de 75 s est remplacé par cette règle réelle.
+const sameDay = (a: number, b: number): boolean => {
+  const da = new Date(a);
+  const db = new Date(b);
+  return da.getFullYear() === db.getFullYear() && da.getMonth() === db.getMonth() && da.getDate() === db.getDate();
+};
+const msUntilTomorrow = (now: number): number => {
+  const d = new Date(now);
+  const next = new Date(d.getFullYear(), d.getMonth(), d.getDate() + 1, 0, 0, 0, 0);
+  return next.getTime() - now;
+};
 const SPREAD = 0.0035;
 
 // Frais protocole sur les transactions "d'entrée / de sortie" du réseau et
@@ -193,12 +205,12 @@ export const usePunch = create<
       punchedToday: () => {
         const at = get().lastPunchAt;
         if (!at) return false;
-        return Date.now() - at < DEMO_COOLDOWN_MS;
+        return sameDay(at, Date.now());
       },
       cooldownLeft: () => {
         const at = get().lastPunchAt;
         if (!at) return 0;
-        return Math.max(0, DEMO_COOLDOWN_MS - (Date.now() - at));
+        return sameDay(at, Date.now()) ? msUntilTomorrow(Date.now()) : 0;
       },
       setLocale: (locale) => set({ locale }),
       chooseLocale: (locale) => set({ locale, localeChosen: true }),
@@ -263,7 +275,7 @@ export const usePunch = create<
       },
       punchIn: (signature) => {
         const s = get();
-        if (s.lastPunchAt && Date.now() - s.lastPunchAt < DEMO_COOLDOWN_MS) return false;
+        if (s.lastPunchAt && sameDay(s.lastPunchAt, Date.now())) return false;
         const bump = s.lastPunchAt ? 1 : 0;
         const code = s.country || "FR";
         const sig = signature ?? fakeSig();
