@@ -80,3 +80,32 @@ Point d'entrée unique : [`punch-native/lib/solana/devnetConfig.ts`](../punch-na
 **Phase 3 — dApp Store** → voir [CHECKLIST-DAPP-STORE.md](CHECKLIST-DAPP-STORE.md) (le build mainnet signé est l'APK à publier).
 
 **Retour arrière** : garder master en devnet jusqu'à la fin de la Phase 2 vérifiée ; si problème, `ACTIVE_CLUSTER = "devnet"` + re-tag = retour à l'état soumission v1.6.9.
+
+## 6. Plan mainnet SANS fonds (rédigé le 9 oct 2026 — à ne pas oublier)
+
+> Contrainte réelle : pas de sponsor, pas de trésorerie, pas de gains hackathon garantis.
+> Principe : le minimum vital on-chain ne coûte **presque rien** — c'est l'habillage
+> (RPC payant, audits, marketing) qui coûte cher, et tout ça peut attendre la traction.
+
+### Budget minimal de lancement (~30–50 $)
+
+| Poste | Coût | Détail |
+|---|---|---|
+| SOL de frais | ~0,1 SOL (15–20 $) | Des milliers de transactions (chaque tx ≈ 0,000005 SOL). Alimente trésor + comptes. |
+| Domaine SNS | ~5–10 $ | Ex. `punchnexus.sol` — requis pour signer la publication dApp Store (cf. CHECKLIST-DAPP-STORE.md). |
+| RPC mainnet | 0 $ | Helius/QuickNode free tier au lancement (D2 passe à payant seulement avec de vrais utilisateurs). |
+| Trésorerie USDC initiale | 10–20 $ | ~100–200 punchs réels + say-hi. **Boucle auto-entretenue** : les 5 % de frais reviennent au trésor. |
+| Landing page + Twitter | 0 $ | Cloudflare Pages/Workers gratuit ; hébergement statique sans coût. |
+
+### Ordre de financement (sans sponsor)
+
+1. **Submit CLOCK IN en devnet** (fait/prêt — 9 oct 08:59). Les jurys financent souvent le passage mainnet : si prix → financer Phase 1+2 avec les gains, zéro poche.
+2. **Si pas de prix** : 30–50 $ de poche suffisent techniquement (table ci-dessus). C'est le seul investissement obligatoire du projet.
+3. **Ne PAS payer avant d'avoir des utilisateurs** : RPC payant (~$49/mois, D2), audit, KYC, marketing payant, programme Anchor peut attendre la traction (le staking reste comptable côté app, comme en devnet).
+4. **Économie auto-entretenue** : dès que le trésor mainnet tourne, les frais de 5 % reconstituent la réserve — le seul coût continu est le RPC, gratuit jusqu'à ~100k requêtes/jour.
+
+### Rappel d'ordre (le plan §5 ci-dessus reste la référence technique)
+
+Phase 0 (config par cluster, gratuit, devnet) → Phase 1 (keypair offline + secret CI, gratuit) →
+**achat SNS + financement trésor (les 30–50 $)** → Phase 2 (bascule) → Phase 3 (dApp Store).
+Le programme Anchor dédié reste hors budget jusqu'à la traction (décision ROADMAP du 20 sept).

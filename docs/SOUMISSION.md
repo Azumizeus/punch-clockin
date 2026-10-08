@@ -23,7 +23,7 @@ mise à jour: 23 septembre 2026 (dates officielles Radiants vérifiées : clôtu
 |---|---|---|
 | **APK Android fonctionnel** | ✅ prêt (v1.6.9, arm64, signé, **construit en CI avec le vrai trésor**) | https://github.com/Azumizeus/punch-clockin/releases/tag/v1.6.9 |
 | **Repo GitHub source** | ✅ prêt, **public**, CI verte | https://github.com/Azumizeus/punch-clockin |
-| **Vidéo démo** | ✅ refaite le 22/09 (2 min 43, voix off EN + **sous-titres incrustés**, tournée sur Seeker v1.6.6 : connexion, pointage complet → ticket, reçu 92/3/5, ping RPC, explorer). **Séquence Réseau re-tournée sur Seeker v1.6.8 le 26/09** : ping public vert (249 ms) → endpoint faux → erreur honnête (`UnknownHostException` réel) → retour public → re-ping vert (254 ms) — voir `punch-demo-reseau-v168.mp4` dans la release v1.6.9 | `punch-clockin-demo.mp4` dans la release v1.6.9 (+ `.srt`) — **à uploader sur YouTube (public ou répertorié)** et lier |
+| **Vidéo démo** | ✅ **refaite le 08/10 sur Seeker v1.6.9 (sans relief 3D)** — 2 versions : **FR** (2 min 17, voix fr-FR-HenriNeural) et **EN** (2 min 23, voix en-US-AndrewNeural, pour le jury anglophone). Script officiel mot pour mot : hook 92/3/5 → connexion Seed Vault → punch signé → ticket → board → wallet/SKR → globe + say hi → réglages réseau → quitter le réseau. Sous-titres SRT séparés (FR 25 cartes / EN 22 cartes). Métadonnées YouTube prêtes : `docs/YOUTUBE-METADATA.md` | `punch-clockin-demo-fr.mp4` + `punch-clockin-demo-en.mp4` dans `punch-native/releases/` — **à uploader sur YouTube (public ou répertorié)** et lier |
 | **Pitch deck** | ✅ prêt | [`docs/punch-clockin-deck.pdf`](https://github.com/Azumizeus/punch-clockin/blob/master/docs/punch-clockin-deck.pdf) (12 slides EN, dont la diapo de preuve Réseau/Version (tournée sur v1.6.8) et la diapo « proof chain » avec diagramme Seeker → MANIFEST → CI → proof → Release) |
 
 ### Preuves visuelles du livrable 1 (captures Seeker v1.6.9)
@@ -55,7 +55,8 @@ Le secret GitHub `TREASURY_SECRET_DEVNET` a été **posé via l'API** (valeur = 
 - [x] Liens APK de `README.md` pointés vers la GitHub Release (fait le 22/09)
 - [x] `punch-clockin-deck.pdf` exporté et commité
 - [x] Tester l'APK de la release sur un vrai Seeker : connexion, pointage, reçu avec signature cliquable
-- [ ] Uploader la vidéo sur YouTube et noter le lien (dernière action manuelle avant « Submit »)
+- [ ] Uploader la vidéo **EN** sur YouTube avec les métadonnées de `docs/YOUTUBE-METADATA.md` et noter le lien (dernière action manuelle avant « Submit » — la vidéo FR est un plus)
+- [x] Ancienne vidéo v1.6.6 + SRT supprimés, vieilles APK archivées dans `punch-native/releases/_archive/` (nettoyage du 08/10) ; seule la v1.6.9 reste à la racine de releases/
 
 ## 5. Textes prêts à coller dans le formulaire de soumission
 

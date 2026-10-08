@@ -24,6 +24,7 @@ sys.stdout.reconfigure(errors="replace")
 ADB = os.path.join(os.environ["LOCALAPPDATA"], "Android", "Sdk", "platform-tools", "adb.exe")
 PKG = "com.anonymous.punchnative"
 LANG = (sys.argv[1] if len(sys.argv) > 1 else "en").lower()
+ARC_ONLY = len(sys.argv) > 2 and sys.argv[2] == "arc-only"
 SHOTS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "_shots", "demo-v169-" + LANG)
 os.makedirs(SHOTS, exist_ok=True)
 EV = os.path.join(SHOTS, "evidence-" + LANG + ".md")
@@ -139,12 +140,51 @@ MARK = {"en": ["Home", "Jobs", "World"], "fr": ["Accueil", "Missions", "Monde"]}
 LANG_BTN = (1113, 184)
 
 def switch_lang(target):
-    for _ in range(3):
+    def row_pos(rows, needles):
+        for t, d, b in rows:
+            hay = ((t or "") + " " + (d or "")).lower()
+            if any(n in hay for n in needles) and b:
+                parts = b.strip("[]").split("][")
+                x0, y0 = [int(v) for v in parts[0].split(",")]
+                x1, y1 = [int(v) for v in parts[1].split(",")]
+                return ((x0 + x1) // 2, (y0 + y1) // 2)
+        return None
+    # Ecran de bienvenue (session purgee) : la langue se lit sur la CTA
+    # ("Open my wallet" = EN, "Ouvrir mon portefeuille" = FR) et se change
+    # avec le bouton FR/EN haut droite (libelle = langue cible).
+    # 1er lancement (apres reinstall) : ecran CHOIX de langue avec lignes
+    # Francais / English a taper directement.
+    WELCOME_HINT = ("ouvrir mon portefeuille", "open my wallet")
+    CHOOSER_HINT = ("choisis ta langue", "choose your language")
+    CTA_LANG = {"fr": "ouvrir mon portefeuille", "en": "open my wallet"}
+    LANG_LINE = {"fr": ["français", "francais"], "en": ["english"]}
+    BTN_LABELS = ("fr", "en")
+    for attempt in range(4):
         rows = dump_rows()
         j = joined_text(rows)
         if all(m in j for m in MARK[target]):
             log("OK", "langue %s confirmee" % target)
             return True
+        jl = j.lower()
+        if any(h in jl for h in CHOOSER_HINT):
+            pos = row_pos(rows, LANG_LINE[target])
+            if pos:
+                log("INFO", "choix de langue : tap ligne %s %s" % (target, pos))
+                tap(*pos, 3.0)
+                continue
+            log("ECHEC", "choix de langue detecte mais ligne %s introuvable" % target)
+            return False
+        if any(h in jl for h in WELCOME_HINT):
+            if CTA_LANG[target] in j.lower():
+                log("OK", "bienvenue deja en %s (CTA lue) — on continue" % target)
+                return True
+            pos = row_pos(rows, BTN_LABELS)
+            if pos:
+                log("INFO", "bienvenue : tap bouton langue %s" % (pos,))
+                tap(*pos, 2.5)
+                continue
+            log("ECHEC", "bienvenue detecte mais bouton FR/EN introuvable")
+            return False
         tap(*LANG_BTN, 2.5)
     log("ECHEC", "bascule langue %s non confirmee" % target)
     return False
@@ -267,8 +307,13 @@ def p_leave_connect_punch():
     """Quitter le reseau (SIGNE) -> reconnexion (SIGNE) -> test punch (SIGNE)."""
     tap_tab(TAB_X["settings"])
     time.sleep(3)
-    rows = dump_rows()
-    pos = None
+    shot("08-settings")
+    # Le bouton Quitter est sous le pli : défiler avant de chercher.
+    for _ in range(3):
+        sh("input swipe 540 1800 540 800 400")
+        time.sleep(1.5)
+        rows = dump_rows()
+        pos = None
     for t, d, b in rows:
         hay = ((t or "") + " " + (d or "")).lower()
         if ("quitter" in hay or "leave" in hay) and b and b.find("][") > 0:
@@ -280,7 +325,8 @@ def p_leave_connect_punch():
                 pos = ((x0 + x1) // 2, (y0 + y1) // 2)
                 break
     if not pos:
-        return ("ECHEC", ["bouton Quitter introuvable"])
+        shot("08-settings-scroll")
+        return ("ECHEC", ["bouton Quitter introuvable meme apres defilement"])
     tap(*pos, 2.0)
     print("  >>> SIGNE LA SORTIE DU RESEAU SUR LE TELEPHONE <<<", flush=True)
     if not wait_signed("leave", 60):
@@ -336,18 +382,24 @@ def step(seg, title, actions):
     log(status, "%s : %s" % (title, " ; ".join(lines)))
     results.append((seg, title, status))
 
-print("== Passe %s ==" % LANG.upper())
-switch_lang(LANG)
+print("== Passe %s ==" % LANG.upper(), flush=True)
+if not switch_lang(LANG):
+    print("ABANDON : langue %s non confirmee — ne pas filmer dans la mauvaise langue." % LANG, flush=True)
+    sys.exit(2)
 
-step("seg-00-connect", "Bienvenue + connexion (DOIGT)", p_connect)
-step("seg-01-punch", "Punch + ticket 92/3/5 (DOIGT)", p_punch)
-step("seg-02-jobs", "Board — missions", p_jobs)
-step("seg-03-money", "Wallet — soldes", p_money)
-step("seg-04-world", "Globe", p_world)
-step("seg-05-hellos", "Say hi (DOIGT)", p_hellos)
-step("seg-06-cut", "La part 92/3/5", p_cut)
-step("seg-07-settings", "Reglages (reseau+version)", p_settings)
-step("seg-08-arc", "Quitter+Reconnexion+Punch (3 DOIGTS)", p_leave_connect_punch)
+STEPS = [
+    ("seg-00-connect", "Bienvenue + connexion (DOIGT)", p_connect),
+    ("seg-01-punch", "Punch + ticket 92/3/5 (DOIGT)", p_punch),
+    ("seg-02-jobs", "Board — missions", p_jobs),
+    ("seg-03-money", "Wallet — soldes", p_money),
+    ("seg-04-world", "Globe", p_world),
+    ("seg-05-hellos", "Say hi (DOIGT)", p_hellos),
+    ("seg-06-cut", "La part 92/3/5", p_cut),
+    ("seg-07-settings", "Reglages (reseau+version)", p_settings),
+    ("seg-08-arc", "Quitter+Reconnexion+Punch (3 DOIGTS)", p_leave_connect_punch),
+]
+for seg, title, fn in (STEPS[-1:] if ARC_ONLY else STEPS):
+    step(seg, title, fn)
 
 ok = sum(1 for _, _, s in results if s == "OK")
 with open(EV, "a", encoding="utf-8") as f:
