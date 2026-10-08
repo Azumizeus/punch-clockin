@@ -10,13 +10,13 @@
 |---|---|---|
 | D1 | Clé du trésor mainnet : qui la génère, où, qui garde la sauvegarde | Génération **offline** (machine sans internet, `solana-keygen new --no-bip39-passphrase` ou avec), sauvegarde papier + 2 emplacements physiques. Jamais dans un repo, jamais dans un secret CI à côté d'une sauvegarde numérique non chiffrée. |
 | D2 | RPC mainnet | Le RPC public est trop lent pour une app grand public : prévoir un endpoint payant (Helius / QuickNode / Triton) — budget ~$49/mois au début. Le test « RPC public actif » des Réglages doit lire ce endpoint. |
-| D3 | Budget de lancement trésorerie | Rent + frais + ~2 000transactions de démo : **1–2 SOL** de carburant + la trésorerie USDC/USDT/SKR réelle (montant produit, ex. $500 USDC de départ). |
+| D3 | Budget de lancement trésorerie | Rent + frais + ~2 000 transactions de démo : **1–2 SOL** de carburant + la trésorerie USDC/USDT/SKR réelle (montant produit, ex. $500 USDC de départ). |
 | D4 | SKR mainnet | Utiliser le **vrai mint SKR** (existe uniquement sur mainnet, cf. commentaire de `devnetConfig.ts`). Vérifier l'adresse officielle sur docs.solanamobile.com / le compte Solana Mobile au moment de la migration — ne jamais recopier une adresse non vérifiée. |
 | D5 | Étapes déployées dans quel ordre | Phase 1 (code prêt, testable en devnet avec la nouvelle config par cluster) → Phase 2 (bascule mainnet) → Phase 3 (dApp Store). Voir §5. |
 
 ## 1. Trésorerie réelle
 
-1. **Générer le keypair mainnet offline** → `treasury-mainnet.json` (format arrayamino JSON 64 octets, identique au format actuel).
+1. **Générer le keypair mainnet offline** → `treasury-mainnet.json` (format array JSON de 64 octets, identique au format actuel).
 2. **Dérivation de preuve** : vérifier que la clé engendre la pubkey attendue (même méthode que la preuve devnet — dérivation locale, jamais de print de la clé).
 3. **Financer** : transférer 1–2 SOL (frais + rent des ATAs) puis la réserve initiale USDC/USDT réels (+ SKR si disponible).
 4. **Poser le secret CI** `TREASURY_SECRET_MAINNET` (même format que `TREASURY_SECRET_DEVNET`, cf. §3).
