@@ -1,21 +1,21 @@
 {
-  "generated": "2026-10-07 20:58 UTC",
-  "shots": {
-    "home.png": {
-      "bytes": 174148,
-      "sha256": "5e5a7e01f2b718a8a60c52718f4cba0e95467c416a5e36b69db509d560403d9e"
-    },
-    "settings.png": {
-      "bytes": 144098,
-      "sha256": "c38b5ffde84ac441c2834f614400575369d72aebbc519e4487c328cf091e30da"
-    }
+ "generated": "2026-10-07 20:58 UTC",
+ "shots": {
+  "home.png": {
+   "bytes": 174148,
+   "sha256": "5e5a7e01f2b718a8a60c52718f4cba0e95467c416a5e36b69db509d560403d9e"
   },
-  "version": "1.6.9",
-  "video": {
-    "bytes": 24433592,
-    "date": "2026-09-26",
-    "name": "punch-demo-reseau-v168.mp4",
-    "sha256": "a907b8671c3d885581386197e3645fb00f93bf0ace50965a9b2e086e64fe3f3d",
-    "url": "https://github.com/Azumizeus/punch-clockin/releases/download/v1.6.8/punch-demo-reseau-v168.mp4"
+  "settings.png": {
+   "bytes": 144098,
+   "sha256": "c38b5ffde84ac441c2834f614400575369d72aebbc519e4487c328cf091e30da"
   }
+ },
+ "version": "1.6.9",
+ "video": {
+  "bytes": 24433592,
+  "date": "2026-09-26",
+  "name": "punch-demo-reseau-v168.mp4",
+  "sha256": "a907b8671c3d885581386197e3645fb00f93bf0ace50965a9b2e086e64fe3f3d",
+  "url": "https://github.com/Azumizeus/punch-clockin/releases/download/v1.6.9/punch-demo-reseau-v168.mp4"
+ }
 }
