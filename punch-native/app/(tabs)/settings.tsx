@@ -22,8 +22,6 @@ export default function SettingsScreen() {
   const setLocale = usePunch((st) => st.setLocale);
   const theme = usePunch((st) => st.theme);
   const setTheme = usePunch((st) => st.setTheme);
-  const skin = usePunch((st) => st.skin);
-  const setSkin = usePunch((st) => st.setSkin);
   const wallet = usePunch((st) => st.wallet);
   const { leaving, confirmLeave, walletReal } = useLeaveNetwork();
 
@@ -125,32 +123,6 @@ export default function SettingsScreen() {
             <Text style={s.identitySub}>{t.identityNuitSub}</Text>
           </View>
           {theme === "nuit" && <Text style={[s.identityCheck, { color: c.accent }]}>✓</Text>}
-        </TouchableOpacity>
-      </Section>
-
-      <Section title={t.skin3dTitle} s={s}>
-        {/* Le RENDU de la composition : à plat (héritage) ou en relief 3D
-            vectoriel. La couleur reste portée par l'identité (or / nuit). */}
-        <Text style={s.identityTag}>{t.skin3dTag}</Text>
-        <TouchableOpacity
-          style={[s.identityCard, { backgroundColor: c.card }, skin === "flat" && { borderColor: c.accent, borderWidth: 2 }]}
-          onPress={() => setSkin("flat")}
-          activeOpacity={0.85}
-        >
-          <View style={s.identityTxt}>
-            <Text style={s.identityMain}>{t.skin3dFlat}</Text>
-          </View>
-          {skin === "flat" && <Text style={[s.identityCheck, { color: c.accent }]}>✓</Text>}
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[s.identityCard, { backgroundColor: c.card }, skin === "depth3d" && { borderColor: c.accent, borderWidth: 2 }]}
-          onPress={() => setSkin("depth3d")}
-          activeOpacity={0.85}
-        >
-          <View style={s.identityTxt}>
-            <Text style={s.identityMain}>✦ {t.skin3dDepth}</Text>
-          </View>
-          {skin === "depth3d" && <Text style={[s.identityCheck, { color: c.accent }]}>✓</Text>}
         </TouchableOpacity>
       </Section>
 

@@ -25,8 +25,6 @@ import { PublicKey } from "@solana/web3.js";
 import { sendPunchMemo } from "../../lib/solana/wallet";
 import { activeConnection } from "../../lib/solana/rpc";
 import { lookTokens, lookShape } from "../../lib/punch/looks";
-import { Dial3D, useSkin3d, isoTilt, liftShadow, floatShadow } from "../../components/Skin3D";
-import { skin3d as makeSkin3d } from "../../lib/punch/skin3d";
 
 const appIcon = require("../../assets/images/icon.png");
 const DIAL_SIZE = 208;
@@ -59,10 +57,6 @@ export default function HomeScreen() {
   const [greetingId, setGreetingId] = useState<string | null>(null);
   const place = countryByCode(country);
   const look = usePunch((st) => st.look);
-  const theme = usePunch((st) => st.theme);
-  const skin3dOn = useSkin3d();
-  // Kit 3D du thème actif (uniquement si l'habillage relief est porté).
-  const k3d = useMemo(() => (skin3dOn ? makeSkin3d(theme, c) : null), [skin3dOn, theme, c]);
   const shape = useMemo(() => lookShape(look), [look]);
   const lk = useMemo(() => lookTokens(look), [look]);
   const s = useMemo(() => makeStyles(c, shape, lk), [c, shape, lk]);
@@ -149,10 +143,9 @@ export default function HomeScreen() {
   return (
     <ScrollView style={s.wrap} contentContainerStyle={s.content}>
       {wallet.genesis && <Text style={s.genesis}>{t.genesis}</Text>}
-      {/* Les rayons globaux suivent l'habillage (a = pilules, b = angles).
-          Skin 3D : le bloc-titre prend son tirage isométrique léger. */}
+      {/* Les rayons globaux suivent l'habillage (a = pilules, b = angles). */}
       {!punched ? (
-        <View style={[s.preWrap, k3d ? isoTilt(k3d) : null]}>
+        <View style={s.preWrap}>
           <Text
             style={[
               s.clockIn,
@@ -175,7 +168,7 @@ export default function HomeScreen() {
           >
             {lk.monoTitle ? "TIME-CLOCK PUNCH" : t.nexusLine}
           </Text>
-          <PunchDial c={c} s={s} lk={lk} punched={false} cooldown={cd} onPress={handlePunch} skin3dOn={skin3dOn} theme={theme} />
+          <PunchDial c={c} s={s} lk={lk} punched={false} cooldown={cd} onPress={handlePunch} />
           {/* Portage des compositions home.tsx : le CTA de la source n'est pas
               "Je me pointe" mais SESSION LEDGER — c'est lui qui rend les 3
               habillages méconnaissables entre eux. */}
@@ -221,8 +214,6 @@ export default function HomeScreen() {
           <Animated.View
             style={[
               s.ticket,
-              // Skin 3D : le ticket papier flotte (ombre portée multi-plateforme).
-              skin3dOn ? floatShadow : null,
               {
                 backgroundColor: c.paper,
                 borderRadius: lk.ticketRadius,
@@ -327,9 +318,9 @@ export default function HomeScreen() {
       )}
 
       <View style={[s.stats]}>
-        <Stat s={s} k={t.streak} v={`${streak}`} sub={t.days} r={shape.radius} lift={skin3dOn} />
-        <Stat s={s} k={t.crew} v={crewOnline.toLocaleString()} sub={t.live} r={shape.radius} lift={skin3dOn} />
-        <Stat s={s} k={t.today} v={formatUsd(todayEarnedUsd)} sub="USD" r={shape.radius} lift={skin3dOn} />
+        <Stat s={s} k={t.streak} v={`${streak}`} sub={t.days} r={shape.radius} />
+        <Stat s={s} k={t.crew} v={crewOnline.toLocaleString()} sub={t.live} r={shape.radius} />
+        <Stat s={s} k={t.today} v={formatUsd(todayEarnedUsd)} sub="USD" r={shape.radius} />
       </View>
 
       <Text style={s.sectionTitle}>{t.nearby}</Text>
@@ -392,17 +383,15 @@ function Stat({
   v,
   sub,
   r,
-  lift,
 }: {
   s: ReturnType<typeof makeStyles>;
   k: string;
   v: string;
   sub: string;
   r: number;
-  lift: boolean;
 }) {
   return (
-    <View style={[s.statCard, { borderRadius: r }, lift ? liftShadow : null]}>
+    <View style={[s.statCard, { borderRadius: r }]}>
       <Text style={s.statK}>{k}</Text>
       <Text style={[s.statV, { fontFamily: r === 999 ? fonts.mono : fonts.display }]}>{v}</Text>
       <Text style={s.statSub}>{sub}</Text>
@@ -417,8 +406,6 @@ function PunchDial({
   punched,
   cooldown,
   onPress,
-  skin3dOn,
-  theme,
 }: {
   c: ReturnType<typeof useColors>;
   s: ReturnType<typeof makeStyles>;
@@ -426,17 +413,14 @@ function PunchDial({
   punched: boolean;
   cooldown: number;
   onPress: () => void;
-  skin3dOn: boolean;
-  theme: "gold" | "nuit";
 }) {
-  // Hooks TOUJOURS appelés (règle React) — la branche relief vient après.
   const pulse = useRef(new Animated.Value(1)).current;
 
   // Anneau du cadran : la maquette a.jpg + l'accent a.dark du CSS imposent
   // l'or machine #d4af37 quel que soit le thème pour l'habillage a.
   const ringColor = lk.dialRing === "gold" ? "#d4af37" : c.accent;
   useEffect(() => {
-    if (punched || skin3dOn) return;
+    if (punched) return;
     // pulse-ring du CSS source : 2,4 s ease-out infini, scale 1→1.18,
     // opacité 0.35→0 — le cycle repart doucement, sans saut.
     const loop = Animated.loop(
@@ -444,20 +428,7 @@ function PunchDial({
     );
     loop.start();
     return () => loop.stop();
-  }, [punched, skin3dOn]);
-
-  // HABILLAGE RELIEF (skin 3D) : le cadran est délégué à Dial3D — bague
-  // métal, assiette sombre, double pulse. Le reste de l'écran ne change pas.
-  if (skin3dOn) {
-    const progress3d = punched ? Math.min(1, cooldown / COOLDOWN_TOTAL) : 1;
-    return (
-      <View style={s.dialWrap}>
-        <Dial3D theme={theme} progress={progress3d} active={!punched} onPress={onPress}>
-          <Image source={appIcon} style={s.dialIcon} />
-        </Dial3D>
-      </View>
-    );
-  }
+  }, [punched]);
 
   const progress = punched ? Math.min(1, cooldown / COOLDOWN_TOTAL) : 1;
 
