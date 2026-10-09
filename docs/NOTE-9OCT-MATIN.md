@@ -11,6 +11,11 @@ Objectif interne : soumettre le **10 octobre**. Docs déjà mises à jour partou
 - Commits : 88cd6c3 (nom), 9297ba9 (dates), 05423cb (checklist restaurée).
 - CI master : **tout est vert sauf « Device gallery sync »** (voir ci-dessous). Le Release v1.7.0 attend la même chose.
 
+## Mise à jour 04h30-09h (pendant ton sommeil)
+- ✅ Ta signature Seed Vault est passée : app reconnectée, **vitrine v1.7.0 réussie** (accueil connecté + Réglages « Version 1.7.0 »), MANIFEST/badges/proof page à jour.
+- ✅ **CI master : VERT** (tous les garde-fous passent).
+- 🔧 Release v1.7.0 : l'APK CI se construisait bien mais l'étape finale échouait sur les anciens assets vidéo supprimés → workflow corrigé (commit 9b8969b), build relancé. Les vidéos FR/EN seront ajoutées à la main comme assets de la release.
+
 ## Ce qu'il reste à faire CE MATIN (dans l'ordre)
 1. **Écoute la voix FR corrigée** : `punch-native/releases/punch-clockin-demo-fr.mp4`
    (« l'application », « explorateur », « Siiker », chiffres dictés 92-3-5). Si OK → c'est la version finale.
