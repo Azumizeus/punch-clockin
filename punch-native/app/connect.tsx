@@ -2,7 +2,6 @@ import { useMemo, useRef, useState } from "react";
 import {
   View,
   Text,
-  TouchableOpacity,
   StyleSheet,
   ActivityIndicator,
   Alert,
@@ -28,6 +27,7 @@ export default function ConnectScreen() {
   const s = useMemo(() => makeStyles(c, lk), [c, lk]);
   const connect = usePunch((s) => s.connect);
   const connectReal = usePunch((s) => s.connectReal);
+  const guideSeen = usePunch((s) => s.guideSeen);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
@@ -36,23 +36,29 @@ export default function ConnectScreen() {
   const pressIn = () => Animated.spring(pressAnim, { toValue: 0.985, useNativeDriver: true }).start();
   const pressOut = () => Animated.spring(pressAnim, { toValue: 1, useNativeDriver: true }).start();
 
+  // Après la connexion : premier lancement -> mode d'emploi interactif,
+  // sinon -> accueil. C'est la destination UNIE de tout le flux de connexion.
+  function land() {
+    router.replace(guideSeen ? "/" : "/guide");
+  }
+
   async function handleConnect() {
     setLoading(true);
     try {
       const { address, authToken } = await connectSeedVault();
       await connectReal(address, authToken);
-      router.replace("/");
+      land();
     } catch {
       // Web : pas de Mobile Wallet Adapter, et Alert.alert est un no-op sur
       // web (la modale n'existe pas) — on entre donc directement en mode
       // démo, exactement ce que fait le bouton OK de l'Alert sur mobile.
       if (Platform.OS === "web") {
         connect("punch");
-        router.replace("/");
+        land();
         return;
       }
       Alert.alert("Wallet", "Mobile Wallet Adapter not available. Entering demo mode.", [
-        { text: "OK", onPress: () => { connect("punch"); router.replace("/"); } },
+        { text: "OK", onPress: () => { connect("punch"); land(); } },
       ]);
     } finally {
       setLoading(false);

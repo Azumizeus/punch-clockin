@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import {
   View,
   Text,
@@ -32,6 +32,9 @@ export default function SplitScreen() {
   const openReceipt = usePunch((st) => st.openReceipt);
   const router = useRouter();
   const { leaving, confirmLeave } = useLeaveNetwork();
+  // Le bouton « Comment on le présente » déplie le pitch (il faisait office
+  // de vignette muette avant — un bouton qui ne fait rien n'a pas sa place).
+  const [pitchOpen, setPitchOpen] = useState(false);
 
   return (
     <ScrollView style={s.wrap} contentContainerStyle={s.content}>
@@ -147,10 +150,18 @@ export default function SplitScreen() {
         </TouchableOpacity>
       ))}
 
-      <View style={s.footer}>
-        <View style={s.pitchBtn}>
-          <Text style={s.pitchBtnTxt}>{t.pitch}</Text>
+      {pitchOpen && (
+        <View style={s.pitchPanel}>
+          <Text style={s.pitchTitle}>{t.howTitle}</Text>
+          <Text style={s.pitchLine}>{t.how1b}</Text>
+          <Text style={s.pitchLine}>{t.how2b}</Text>
+          <Text style={s.pitchLine}>{t.how3b}</Text>
         </View>
+      )}
+      <View style={s.footer}>
+        <TouchableOpacity style={s.pitchBtn} onPress={() => setPitchOpen((v) => !v)} activeOpacity={0.8}>
+          <Text style={s.pitchBtnTxt}>{t.pitch}</Text>
+        </TouchableOpacity>
         <TouchableOpacity onPress={confirmLeave} disabled={leaving}>
           {leaving ? (
             <ActivityIndicator color={c.dim} />
@@ -206,6 +217,9 @@ function makeStyles(c: ReturnType<typeof useColors>, lk: ReturnType<typeof lookT
     footer: { marginTop: 12, gap: 10, alignItems: "stretch" },
     pitchBtn: { backgroundColor: c.accent, borderRadius: lk.ctaRadius, paddingVertical: 14, alignItems: "center" },
     pitchBtnTxt: { fontFamily: fonts.bodySemi, fontSize: 14, color: c.accentFg },
+    pitchPanel: { backgroundColor: c.card, borderRadius: 12, padding: 16, gap: 8, marginTop: 4 },
+    pitchTitle: { fontFamily: fonts.display, fontSize: 17, color: c.fg },
+    pitchLine: { fontFamily: fonts.body, fontSize: 14, color: c.dim2, lineHeight: 20 },
     resetTxt: { fontFamily: fonts.body, fontSize: 14, color: c.dim, textAlign: "center", paddingVertical: 8 },
     demoVault: { fontFamily: fonts.body, fontSize: 11, color: c.dim, textAlign: "center" },
   });

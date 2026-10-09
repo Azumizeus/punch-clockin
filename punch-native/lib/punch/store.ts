@@ -98,6 +98,7 @@ function seed(): PunchState {
     theme: "gold", // UNE identité : Gold Seeker Premium (les sélecteurs ○/●/✦ ont été retirés)
     look: "b" as Look,
     seenHow: false,
+    guideSeen: false,
     product: "punch",
     tab: "punch",
     view: "app",
@@ -159,6 +160,7 @@ export const usePunch = create<
     setTheme: (theme: Theme) => void;
     setLook: (look: Look) => void;
     dismissHow: () => void;
+    markGuideSeen: () => void;
     setProduct: (product: Product) => void;
     setTab: (tab: Tab) => void;
     setView: (view: View, shiftId?: string | null) => void;
@@ -217,6 +219,9 @@ export const usePunch = create<
       setTheme: (theme) => set({ theme }),
       setLook: (look) => set({ look }),
       dismissHow: () => set({ seenHow: true, view: "app", tab: "punch" }),
+      // Le mode d'emploi : marqué vu des qu'on l'affiche, pour ne le proposer
+      // qu'une fois au premier lancement (relançable depuis Réglages).
+      markGuideSeen: () => set({ guideSeen: true }),
       setProduct: (product) => {
         set({
           product,
@@ -1012,6 +1017,7 @@ export const usePunch = create<
         theme: s.theme,
         look: s.look,
         seenHow: s.seenHow,
+        guideSeen: s.guideSeen,
         country: s.country,
         streak: s.streak,
         todayEarnedUsd: s.todayEarnedUsd,
@@ -1042,6 +1048,7 @@ export const usePunch = create<
           theme: p.theme === "nuit" ? "nuit" : "gold",
           look: "b",
           seenHow: Boolean(p.seenHow),
+          guideSeen: Boolean(p.guideSeen),
           greetedIds: Array.isArray(p.greetedIds) ? p.greetedIds : [],
           view: "app",
           tab: "punch",

@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
 import { useRouter } from "expo-router";
 import { usePunch, useT, useColors } from "../lib/punch/store";
@@ -24,6 +24,13 @@ export default function GuideScreen() {
   const [stamped, setStamped] = useState(false);
   const [hi, setHi] = useState(false);
   const [sealed, setSealed] = useState(false);
+  // Le guide est marqué « vu » dès qu'il s'affiche : il ne sera re-proposé
+  // automatiquement qu'au premier lancement, jamais après (relançable
+  // manuellement depuis Réglages).
+  const markGuideSeen = usePunch((st) => st.markGuideSeen);
+  useEffect(() => {
+    markGuideSeen();
+  }, [markGuideSeen]);
 
   function next() {
     setStep((v) => Math.min(LAST, v + 1));

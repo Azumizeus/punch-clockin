@@ -110,6 +110,7 @@ export interface PunchState {
   theme: Theme;
   look: Look;
   seenHow: boolean;
+  guideSeen: boolean; // le mode d'emploi interactif / a été fait au moins une fois
   product: Product;
   tab: Tab;
   view: View;
