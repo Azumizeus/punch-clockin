@@ -1,16 +1,16 @@
 {
-  "generated": "2026-10-09 02:05 UTC",
+  "generated": "2026-10-09 22:47 UTC",
   "shots": {
     "home.png": {
-      "bytes": 127436,
-      "sha256": "7a0be29b06476c9e440b9b313c9f3b91be2043bc3ebfac838780e6ff68dc12c6"
+      "bytes": 129000,
+      "sha256": "1a41c5100ea8452f4074ce0cd7c3528cbb409ea4a18274e80d6c79ec73f9f321"
     },
     "settings.png": {
-      "bytes": 122276,
-      "sha256": "f140ed1c619a85a2c17d6f2b33d7f5f5d585ab4c53f67d7badb13d5babc45c80"
+      "bytes": 121432,
+      "sha256": "19bda42dcc132a66af7ea709cb71e836139f716e8315754fed449b941465c03f"
     }
   },
-  "version": "1.7.0",
+  "version": "1.7.1",
   "video": {
     "bytes": 24433592,
     "date": "2026-09-26",
