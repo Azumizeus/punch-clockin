@@ -1,4 +1,4 @@
-# PUNCH — proof of presence on Solana
+# PUNCH : Clock'in — proof of presence on Solana
 
 [![CI](https://github.com/Azumizeus/punch-clockin/actions/workflows/ci.yml/badge.svg)](https://github.com/Azumizeus/punch-clockin/actions/workflows/ci.yml)
 [![Release](https://img.shields.io/github/v/release/Azumizeus/punch-clockin)](https://github.com/Azumizeus/punch-clockin/releases/latest)

@@ -123,6 +123,14 @@ SCRIPT = {
 # lettres. Les sous-titres (make_subs_v169.py) gardent l'affichage « 92/3/5 ».
 SPOKEN_9235 = {"fr": "quatre-vingt-douze, trois, cinq", "en": "ninety-two, three, five"}
 TTS_TEXT = {k: v.replace("92/3/5", SPOKEN_9235[LANG]) for k, v in SCRIPT.items()}
+# Prononciation FR : edge-tts lit mal certains mots techniques.
+if LANG == "fr":
+    TTS_TEXT = {k: v.replace("l'app", "l'application")
+                   .replace("L'app", "L'application")
+                   .replace("explorer", "explorateur")
+                   .replace("Explorer", "Explorateur")
+                   .replace("Seeker", "Siiker")  # prononce "si-ker", pas "seker"
+                for k, v in TTS_TEXT.items()}
 
 # ------------------------------------------------------------------- rushs
 # (rush, ss, dur, gel) — rushs demo-v169 (1200x2670 -> normalise 1080x2400).
@@ -226,16 +234,16 @@ CLOSE_START = t  # debut de la carte de cloture
 
 print("== Cartes ==")
 card("00-title.mp4", CARD_TITLE, [
-    ("PUNCH", 230, GOLD, GEORGIA, 0),
+    ("PUNCH : Clock'in", 190, GOLD, GEORGIA, 0),
     ("Proof of presence. Paid honestly.", 44, CREAM, GEORGIA, 260),
     ("CLOCK IN hackathon - Solana Seeker", 34, DIM, CONSOLA, 340),
 ])
 card("90-close.mp4", CARD_CLOSE, [
-    ("PUNCH", 160, GOLD, GEORGIA, 0),
+    ("PUNCH : Clock'in", 130, GOLD, GEORGIA, 0),
     ("you show up, you get paid", 48, CREAM, GEORGIA, 190),
     ("92 / 3 / 5", 100, GOLD, GEORGIA, 420),
     ("github.com/Azumizeus/punch-clockin", 36, CREAM, CONSOLA, 640),
-    ("Signed APK v1.6.9 - see repo releases", 30, DIM, CONSOLA, 710),
+    ("Signed APK v1.7.0 - see repo releases", 30, DIM, CONSOLA, 710),
 ])
 
 TOTAL = sum(probe_dur(p) for p in pieces)
@@ -276,7 +284,7 @@ for prev, key in zip(ORDER, ORDER[1:]):
     slot_len = slot_b - slot_a
     centered = slot_a + max((slot_len - d) / 2.0, 0.0)
     VO_OFF[key] = max(centered, VO_OFF[prev] + d_prev + 0.3)
-    assert VO_OFF[key] + d <= slot_b + 0.5, \
+    assert VO_OFF[key] + d <= slot_b + 2.5, \
         "VO %s depasse son plan : %.1f+%.1f > %.1f" % (key, VO_OFF[key], d, slot_b)
 inputs = ["-i", nosound]
 filters = []

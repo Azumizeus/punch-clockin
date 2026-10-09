@@ -36,7 +36,7 @@
 
 **Nom de l'app** (unique, fonctionnel) :
 ```
-PUNCH — Clock In
+PUNCH : Clock'in
 ```
 
 **Description courte** (≤ 30 caractères — exigence stricte) :

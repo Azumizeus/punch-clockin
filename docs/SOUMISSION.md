@@ -6,6 +6,8 @@ mise à jour: 23 septembre 2026 (dates officielles Radiants vérifiées : clôtu
 
 # Soumettre PUNCH à CLOCK IN
 
+> **Nom officiel du projet** : **PUNCH : Clock'in** (app : PUNCH, écosystème : Nexus Seeker). Utilisé partout : README, app.json, label Android, dApp Store, vidéos, soumission.
+
 ## 1. L'essentiel
 
 | | |
