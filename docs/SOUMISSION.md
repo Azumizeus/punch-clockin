@@ -23,18 +23,18 @@ neutralisé: 9 octobre 2026 (dates officielles Radiants VÉRIFIÉES SUR LE PORTA
 
 | Livrable | État | Lien / action |
 |---|---|---|
-| **APK Android fonctionnel** | ✅ prêt (v1.6.9, arm64, signé, **construit en CI avec le vrai trésor**) | https://github.com/Azumizeus/punch-clockin/releases/tag/v1.6.9 |
+| **APK Android fonctionnel** | ✅ prêt (v1.7.0, arm64, signé, **construit en CI avec le vrai trésor**, règle 1 pointage/jour) | https://github.com/Azumizeus/punch-clockin/releases/tag/v1.7.0 |
 | **Repo GitHub source** | ✅ prêt, **public**, CI verte | https://github.com/Azumizeus/punch-clockin |
 | **Vidéo démo** | ✅ **refaite le 08/10 sur Seeker v1.6.9 (sans relief 3D)** — 2 versions : **FR** (2 min 17, voix fr-FR-HenriNeural) et **EN** (2 min 23, voix en-US-AndrewNeural, pour le jury anglophone). Script officiel mot pour mot : hook 92/3/5 → connexion Seed Vault → punch signé → ticket → board → wallet/SKR → globe + say hi → réglages réseau → quitter le réseau. Sous-titres SRT séparés (FR 25 cartes / EN 22 cartes). Métadonnées YouTube prêtes : `docs/YOUTUBE-METADATA.md` | `punch-clockin-demo-fr.mp4` + `punch-clockin-demo-en.mp4` dans `punch-native/releases/` — **à uploader sur YouTube (public ou répertorié)** et lier |
 | **Pitch deck** | ✅ prêt | [`docs/punch-clockin-deck.pdf`](https://github.com/Azumizeus/punch-clockin/blob/master/docs/punch-clockin-deck.pdf) (12 slides EN, dont la diapo de preuve Réseau/Version (tournée sur v1.6.8) et la diapo « proof chain » avec diagramme Seeker → MANIFEST → CI → proof → Release) |
 
-### Preuves visuelles du livrable 1 (captures Seeker v1.6.9)
+### Preuves visuelles du livrable 1 (captures Seeker v1.7.0)
 
 | Accueil | Réglages (Réseau · Version · Quitter) |
 |---|---|
-| ![Accueil v1.6.9](site/device/home.png) | ![Réglages v1.6.9](site/device/settings.png) |
+| ![Accueil v1.7.0](site/device/home.png) | ![Réglages v1.7.0](site/device/settings.png) |
 
-À gauche : l'accueil connecté, avec l'étiquette **« Démo · en direct »** sur les données sociales simulées (honnêteté assumée). À droite : les Réglages montrent le test RPC (**« RPC public actif »**), la **Version 1.6.9** et la sortie signée **« Quitter le réseau »**. Ces captures sont régénérées par `punch-native/scripts/device/vitrine.py` ; leurs SHA-256 sont tracés dans [`site/device/MANIFEST.json`](site/device/MANIFEST.json) — **aussi embarqué comme [asset de la release v1.6.9](https://github.com/Azumizeus/punch-clockin/releases/download/v1.6.9/MANIFEST.json) pour la traçabilité hors repo** — et vérifiés en CI par le garde-fou `tools/check_device_sync.py`. La page publique [**proof**](https://azumizeus.github.io/punch-clockin/proof.html) affiche ces empreintes (version, date, SHA-256 et poids de chaque capture et de la vidéo), générée automatiquement depuis le MANIFEST et vérifiée elle aussi en CI.
+À gauche : l'accueil connecté, avec l'étiquette **« Démo · en direct »** sur les données sociales simulées (honnêteté assumée). À droite : les Réglages montrent le test RPC (**« RPC public actif »**), la **Version 1.7.0** et la sortie signée **« Quitter le réseau »**. Ces captures sont régénérées par `punch-native/scripts/device/vitrine.py` ; leurs SHA-256 sont tracés dans [`site/device/MANIFEST.json`](site/device/MANIFEST.json) — **aussi embarqué comme [asset de la release v1.6.9](https://github.com/Azumizeus/punch-clockin/releases/download/v1.6.9/MANIFEST.json) pour la traçabilité hors repo** — et vérifiés en CI par le garde-fou `tools/check_device_sync.py`. La page publique [**proof**](https://azumizeus.github.io/punch-clockin/proof.html) affiche ces empreintes (version, date, SHA-256 et poids de chaque capture et de la vidéo), générée automatiquement depuis le MANIFEST et vérifiée elle aussi en CI.
 
 **Démo Réseau re-tournée sur Seeker (26/09)** — séquence complète capturée en vidéo ([`punch-demo-reseau-v168.mp4`](https://github.com/Azumizeus/punch-clockin/releases/download/v1.6.9/punch-demo-reseau-v168.mp4), 3 min) : ping du RPC public → verdict vert **« Connexion OK · 249 ms »** ; endpoint bidon `rpc-inexistant-punch.example` → erreur honnête **`UnknownHostException`** (la vraie raison, jamais un mensonge) ; **« Revenir au RPC public »** → re-ping vert **254 ms**, avec la **Version 1.6.8** visible sur le même écran (l'app affichait 1.6.8 à cette date ; la version courante, 1.6.9, lit désormais sa propre version — voir §5). Captures étape par étape dans `punch-native/_shots/reseau-v168/` (01 à 06).
 
@@ -104,20 +104,20 @@ Pitch deck: <fichier PDF joint ou lien>
 
 **Device gallery (EN) — à coller dans le champ « gallery » / visuels du formulaire :**
 ```
-Device gallery — proof from a real Solana Seeker (v1.6.9)
+Device gallery — proof from a real Solana Seeker (v1.7.0)
 
 Both screenshots are captured directly on a physical Solana Seeker running the
-signed v1.6.9 build — no mockups, no simulator. On the home screen the app is
+signed v1.7.0 build — no mockups, no simulator. On the home screen the app is
 connected, with social data honestly labeled "Démo · en direct" — a simulated
 live demo, by design. The settings screen shows the built-in network check
-("RPC public actif" — public RPC active), the exact app version (1.6.9), and the
+("RPC public actif" — public RPC active), the exact app version (1.7.0), and the
 signed exit action "Quitter le réseau" (leave the network).
 
 These captures are regenerated straight from the device with one command
 (punch-native/scripts/device/vitrine.py). Their SHA-256 hashes are published in
-docs/site/device/MANIFEST.json, embedded as a release asset on v1.6.9 for
+docs/site/device/MANIFEST.json, embedded as a release asset on v1.7.0 for
 out-of-repo traceability
-(https://github.com/Azumizeus/punch-clockin/releases/download/v1.6.9/MANIFEST.json),
+(https://github.com/Azumizeus/punch-clockin/releases/download/v1.7.0/MANIFEST.json),
 and enforced in CI by tools/check_device_sync.py: if the gallery ever drifts
 from what the device produced, the build fails.
 What you see online is exactly what the phone produced.
