@@ -5,7 +5,7 @@ set -e
 cd "$(git rev-parse --show-toplevel)"
 rm -rf .gh-pages-tmp 2>/dev/null || true
 mkdir -p .gh-pages-tmp
-cp docs/site/index.html docs/site/guide-jury.html docs/site/submit.html docs/site/proof.html .gh-pages-tmp/
+cp docs/site/index.html docs/site/guide-jury.html docs/site/submit.html docs/site/proof.html docs/site/nexus.html .gh-pages-tmp/
 mkdir -p .gh-pages-tmp/device
 cp docs/site/device/*.png .gh-pages-tmp/device/
 cp docs/site/device/MANIFEST.json .gh-pages-tmp/device/
