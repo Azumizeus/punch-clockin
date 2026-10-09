@@ -99,7 +99,7 @@ Point d'entrée unique : [`punch-native/lib/solana/devnetConfig.ts`](../punch-na
 
 ### Ordre de financement (sans sponsor)
 
-1. **Submit CLOCK IN en devnet** (fait/prêt — 9 oct 08:59). Les jurys financent souvent le passage mainnet : si prix → financer Phase 1+2 avec les gains, zéro poche.
+1. **Submit CLOCK IN en devnet** (fait/prêt — 13 oct 01:59 UTC+2, date repoussée). Les jurys financent souvent le passage mainnet : si prix → financer Phase 1+2 avec les gains, zéro poche.
 2. **Si pas de prix** : 30–50 $ de poche suffisent techniquement (table ci-dessus). C'est le seul investissement obligatoire du projet.
 3. **Ne PAS payer avant d'avoir des utilisateurs** : RPC payant (~$49/mois, D2), audit, KYC, marketing payant, programme Anchor peut attendre la traction (le staking reste comptable côté app, comme en devnet).
 4. **Économie auto-entretenue** : dès que le trésor mainnet tourne, les frais de 5 % reconstituent la réserve — le seul coût continu est le RPC, gratuit jusqu'à ~100k requêtes/jour.

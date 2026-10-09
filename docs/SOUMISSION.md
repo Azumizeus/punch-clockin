@@ -1,7 +1,7 @@
 ---
 titre: Soumission — hackathon CLOCK IN (Solana Mobile × RadiantsDAO)
-usage: tout ce qu'il faut pour inscrire et soumettre PUNCH avant le 9 octobre 2026, 08:59 (UTC+2)
-mise à jour: 23 septembre 2026 (dates officielles Radiants vérifiées : clôture 9 oct 08:59 UTC+2, gagnants 11 nov)
+usage: tout ce qu'il faut pour inscrire et soumettre PUNCH avant le 13 octobre 2026, 01:59 (UTC+2)
+neutralisé: 9 octobre 2026 (dates officielles Radiants VÉRIFIÉES SUR LE PORTAIL : clôture 13 oct 01:59 UTC+2 — repoussée, jugement 13 oct → 9 nov, gagnants 11 nov)
 ---
 
 # Soumettre PUNCH à CLOCK IN
@@ -13,7 +13,7 @@ mise à jour: 23 septembre 2026 (dates officielles Radiants vérifiées : clôtu
 | | |
 |---|---|
 | **Hackathon** | CLOCK IN — 3ᵉ hackathon Solana Mobile, organisé par RadiantsDAO (annoncé le 8 sept sur le blog Solana Mobile) |
-| **Dates** | Inscription & soumissions : **8 sept → 9 oct 2026, 08:59 (UTC+2)** · Jugement : 10 oct → 9 nov · Résultats : **11 novembre 2026** |
+| **Dates** | Inscription & soumissions : **8 sept → 13 oct 2026, 01:59 (UTC+2)** · Jugement : 13 oct → 9 nov · Résultats : **11 novembre 2026** |
 | **Plateforme officielle** | **https://solanamobile.radiant.nexus/** (création de compte + soumission du projet) — à faire avec ton compte, je ne peux pas le faire à ta place |
 | **Prix** | **$135 000 au total** : $125 000 USDC (1ᵉʳ $30k, 2ᵉ $25k, 3ᵉ $20k, 4ᵉ $15k, 5ᵉ $10k, 6ᵉ-10ᵉ $5k chacun) + **$10 000 en SKR** pour la meilleure intégration SKR (prix séparé, optionnel) |
 | **Bonus gagnants** | Publication dApp Store, mise en avant, co-marketing, Seeker pour l'équipe, appel avec Anatoly Yakovenko |
