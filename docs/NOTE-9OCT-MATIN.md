@@ -13,18 +13,15 @@ Objectif interne : soumettre le **10 octobre**. Docs déjà mises à jour partou
 
 ## Mise à jour 04h30-09h (pendant ton sommeil)
 - ✅ Ta signature Seed Vault est passée : app reconnectée, **vitrine v1.7.0 réussie** (accueil connecté + Réglages « Version 1.7.0 »), MANIFEST/badges/proof page à jour.
-- ✅ **CI master : VERT** (tous les garde-fous passent).
-- 🔧 Release v1.7.0 : l'APK CI se construisait bien mais l'étape finale échouait sur les anciens assets vidéo supprimés → workflow corrigé (commit 9b8969b), build relancé. Les vidéos FR/EN seront ajoutées à la main comme assets de la release.
+- ✅ **CI master : VERT** — tous les garde-fous passent (dernier run sur 261af4e).
+- ✅ **Release v1.7.0 PUBLIÉE** : https://github.com/Azumizeus/punch-clockin/releases/tag/v1.7.0 — APK signée CI + .sha256 + MANIFEST + **vidéos FR et EN comme assets** (le workflow Release a été corrigé : il ne cherchait plus les anciens fichiers démo). Corps de release = notes v1.7.0 (1 pointage/jour), sans avertissement demo-treasury.
+- 🔧 Docs alignées sur v1.7.0 (SOUMISSION, submit.html, index.html, guide-jury.html).
 
 ## Ce qu'il reste à faire CE MATIN (dans l'ordre)
 1. **Écoute la voix FR corrigée** : `punch-native/releases/punch-clockin-demo-fr.mp4`
-   (« l'application », « explorateur », « Siiker », chiffres dictés 92-3-5). Si OK → c'est la version finale.
-2. **Vitrine pour débloquer le CI/Release** (5 min, Seeker branché) :
-   - Ouvre l'app PUNCH sur le Seeker → si écran connexion, tape « Open my wallet » et **signe avec le Seed Vault**.
-   - Puis je lance : `cd punch-native && PYTHONIOENCODING=utf-8 python -u scripts/device/vitrine.py`
-   - Ensuite : commit MANIFEST 1.7.0 → re-push du tag v1.7.0 → CI + Release verts.
-3. **Soumission sur le portail** (toi seul : https://solanamobile.radiant.nexus/) — tout est prêt dans [docs/SOUMISSION.md](SOUMISSION.md).
-4. Demain : YouTube (métadonnées prêtes dans [docs/YOUTUBE-METADATA.md](YOUTUBE-METADATA.md)), Twitter Seeker Nexus, landing page.
+   (« l'application », « explorateur », « Siiker », chiffres dictés 92-3-5). Si OK → c'est la version finale (elle est déjà en asset de la release v1.7.0 ; si tu la modifies, il faudra re-uploader l'asset).
+2. **Soumission sur le portail** (toi seul : https://solanamobile.radiant.nexus/) — tout est prêt dans [docs/SOUMISSION.md](SOUMISSION.md), APK + vidéos = release v1.7.0. **⏰ Échéance portail : 13 oct 01:59 UTC+2** — on a de la marge, mais vise le 10.
+3. Demain (10 oct) : YouTube (métadonnées prêtes dans [docs/YOUTUBE-METADATA.md](YOUTUBE-METADATA.md) — mets à jour « v1.6.9 » en haut en « v1.7.0 »), Twitter Seeker Nexus, landing page Seeker Nexus.
 
 ## Réponses à tes questions (en détail dans la conversation)
 - **Rangs Silver/Gold/Guardian** : oui ils se débloquent vraiment. Les transactions (punch/paiements/stake) sont 100 % réelles on-chain signées Seed Vault ; seule la *comptabilité des rangs* est tenue côté app pour l'instant (documenté honnêtement dans ROADMAP.md / AEGIS-7.md — programme Anchor dédié en Phase 1 post-hackathon). Rien de fake.
