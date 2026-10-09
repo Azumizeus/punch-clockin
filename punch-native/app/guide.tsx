@@ -241,29 +241,26 @@ function StepHi({ t, s, c, hi, onHi }: any) {
   );
 }
 
-// Étape 8 (portage du guide web) : l'enveloppe PLI se scelle au toucher —
-// cire "PL" qui passe à "OK", comme sur l'export. Obligatoire pour finir.
+// Étape 8 : le ticket final du guide — le tap déclenche le bilan. Uniquement
+// de l'univers PUNCH : ni enveloppe PLI, ni cire d'un autre produit.
 function StepPli({ t, s, c, sealed, onSeal }: any) {
   return (
     <View style={s.colStart}>
       <Text style={s.h2}>{t.g8t}</Text>
       <Text style={s.p}>{t.g8b}</Text>
       <TouchableOpacity
-        style={[s.envelope, { backgroundColor: c.input }]}
+        style={[s.receiptBadge, { backgroundColor: c.paper }]}
         onPress={onSeal}
         disabled={sealed}
         activeOpacity={0.85}
       >
-        <View style={[s.envFlap, { backgroundColor: c.card }]} />
-        <View style={s.envBody}>
-          <View style={s.envHead}>
-            <Text style={[s.envFrom, { color: c.dim }]}>Nexus</Text>
-            <View style={[s.wax, { backgroundColor: c.accent }]}>
-              <Text style={[s.waxTxt, { color: c.accentFg }]}>{sealed ? "OK" : "PL"}</Text>
-            </View>
+        <View style={s.receiptHead}>
+          <Text style={[s.receiptFrom, { color: c.paperMuted }]}>PUNCH</Text>
+          <View style={[s.stamp, { borderColor: c.accent }]}>
+            <Text style={[s.stampTxt, { color: c.accent }]}>{sealed ? "✓" : t.rxBadge}</Text>
           </View>
-          <Text style={[s.envTitle, { color: c.fg }]}>{sealed ? t.pliLetter : t.g8go}</Text>
         </View>
+        <Text style={[s.receiptTitle, { color: c.paperFg }]}>{sealed ? t.pliLetter : t.g8go}</Text>
       </TouchableOpacity>
       <Text style={s.pliDone}>{t.guideDone}</Text>
     </View>
@@ -319,14 +316,14 @@ function makeStyles(c: ReturnType<typeof useColors>, lk: ReturnType<typeof lookT
     hiBtn: { paddingHorizontal: 16, paddingVertical: 10, borderRadius: lk.ctaRadius },
     hiBtnTxt: { fontFamily: fonts.bodySemi, fontSize: 13 },
     hiNote: { fontFamily: fonts.body, fontSize: 14, marginTop: 14 },
-    envelope: { borderRadius: 6, overflow: "hidden", marginTop: 20 },
-    envFlap: { height: 10 },
-    envBody: { padding: 16 },
-    envHead: { flexDirection: "row", alignItems: "center", justifyContent: "space-between" },
-    envFrom: { fontFamily: fonts.body, fontSize: 13 },
-    wax: { width: 28, height: 28, borderRadius: 14, alignItems: "center", justifyContent: "center" },
-    waxTxt: { fontFamily: fonts.mono, fontSize: 10, letterSpacing: 0.5 },
-    envTitle: { fontFamily: fonts.display, fontSize: 22, marginTop: 10 },
+    // Étape 8 : le tap se fait sur un ticket papier (même skin que le vrai
+    // reçu) avec un tampon qui passe de « PUNCH » à ✓.
+    receiptBadge: { borderRadius: lk.ticketRadius, padding: 16, marginTop: 20 },
+    receiptHead: { flexDirection: "row", alignItems: "center", justifyContent: "space-between" },
+    receiptFrom: { fontFamily: fonts.mono, fontSize: 10, textTransform: "uppercase", letterSpacing: 2 },
+    stamp: { borderWidth: 1.5, borderRadius: lk.ctaRadius, paddingHorizontal: 10, paddingVertical: 6 },
+    stampTxt: { fontFamily: fonts.mono, fontSize: 10, letterSpacing: 1 },
+    receiptTitle: { fontFamily: fonts.display, fontSize: 22, marginTop: 12 },
     pliDone: { fontFamily: fonts.display, fontSize: 19, color: c.fg, textAlign: "center", marginTop: 36 },
     footer: { flexDirection: "row", paddingHorizontal: 20, paddingBottom: 24 },
     footerRow: { flexDirection: "row", gap: 8, width: "100%" },
