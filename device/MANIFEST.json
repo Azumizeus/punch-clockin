@@ -1,0 +1,21 @@
+{
+  "generated": "2026-10-09 02:05 UTC",
+  "shots": {
+    "home.png": {
+      "bytes": 127436,
+      "sha256": "7a0be29b06476c9e440b9b313c9f3b91be2043bc3ebfac838780e6ff68dc12c6"
+    },
+    "settings.png": {
+      "bytes": 122276,
+      "sha256": "f140ed1c619a85a2c17d6f2b33d7f5f5d585ab4c53f67d7badb13d5babc45c80"
+    }
+  },
+  "version": "1.7.0",
+  "video": {
+    "bytes": 24433592,
+    "date": "2026-09-26",
+    "name": "punch-demo-reseau-v168.mp4",
+    "sha256": "a907b8671c3d885581386197e3645fb00f93bf0ace50965a9b2e086e64fe3f3d",
+    "url": "https://github.com/Azumizeus/punch-clockin/releases/download/v1.6.9/punch-demo-reseau-v168.mp4"
+  }
+}
