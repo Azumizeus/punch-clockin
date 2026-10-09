@@ -5,7 +5,7 @@ import Constants from "expo-constants";
 import { usePunch, useT, useColors } from "../../lib/punch/store";
 import { DEFAULT_RPC, getRpcUrl, isCustomRpc, pingRpc, rebuildConnection, setRpcUrl } from "../../lib/solana/rpc";
 import { fonts } from "../../lib/punch/fonts";
-import { lookGallery, lookTokens } from "../../lib/punch/looks";
+import { lookTokens } from "../../lib/punch/looks";
 import { useLeaveNetwork } from "../../lib/punch/useLeaveNetwork";
 import type { Locale } from "../../lib/punch/types";
 
@@ -46,11 +46,17 @@ export default function SettingsScreen() {
 
   const saveRpc = () => {
     const url = rpcDraft.trim();
-    if (!/^https?:\/\/.+/i.test(url)) {
+    // Double barrière avec setRpcUrl() qui rejette aussi le non-https en dur.
+    if (!/^https:\/\/.+/i.test(url)) {
       Alert.alert(t.netInvalid);
       return;
     }
-    setRpcUrl(url);
+    try {
+      setRpcUrl(url);
+    } catch (e) {
+      Alert.alert(t.netInvalid, e instanceof Error ? e.message : undefined);
+      return;
+    }
     rebuildConnection();
     setRpcCustom(isCustomRpc());
     void testRpc(url); // preuve immédiate que ça répond

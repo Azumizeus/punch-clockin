@@ -1,9 +1,7 @@
 import { Tabs } from "expo-router";
-import { StyleSheet } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { usePunch, useT, useColors } from "../../lib/punch/store";
+import { useT, useColors } from "../../lib/punch/store";
 import { fonts } from "../../lib/punch/fonts";
-import { lookShape } from "../../lib/punch/looks";
 import { TopBar } from "../../components/TopBar";
 
 export default function TabsLayout() {

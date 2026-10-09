@@ -21,7 +21,6 @@ export default function PostScreen() {
   const look = usePunch((st) => st.look);
   const lk = useMemo(() => lookTokens(look), [look]);
   const s = useMemo(() => makeStyles(c, lk), [c, lk]);
-  const locale = usePunch((s) => s.locale);
   const postShift = usePunch((s) => s.postShift);
   const router = useRouter();
 

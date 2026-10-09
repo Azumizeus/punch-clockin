@@ -114,13 +114,14 @@ export default function ReceiptScreen() {
 
           {/* La PREUVE que ça fonctionne : la signature réelle ouvre la page tx
               sur l'explorateur devnet. Une signature fictive (mode démo) n'a
-              pas de page — elle reste du texte, pas un faux lien. */}
+              pas de page — elle reste du texte, pas un faux lien, et elle est
+              étiquetée "démo" pour que le jury comprenne d'un coup d'œil. */}
           {isRealSig(receipt.signature) ? (
             <TouchableOpacity onPress={() => Linking.openURL(txUrl(receipt.signature))} activeOpacity={0.7}>
               <Text style={[s.sig, s.sigLink]} numberOfLines={1}>{t.tx} {shortAddr(receipt.signature)} ↗</Text>
             </TouchableOpacity>
           ) : (
-            <Text style={s.sig} numberOfLines={1}>{t.tx} {shortAddr(receipt.signature)}</Text>
+            <Text style={s.sig} numberOfLines={1}>{t.tx} {shortAddr(receipt.signature)} · {t.demoSig}</Text>
           )}
         </View>
         </ReceiptIn>

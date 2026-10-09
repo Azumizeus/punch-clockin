@@ -29,11 +29,22 @@ export function isCustomRpc(): boolean {
 /**
  * Enregistre l'endpoint personnalisé (null ou vide = revenir au défaut).
  * Appeler rebuildConnection() après, pour que les flux on-chain suivent.
+ *
+ * Garde-fou https : une transaction signée envoyée en `http://` part en clair
+ * sur le réseau, et un endpoint hostile peut mentir sur les soldes. On rejette
+ * donc tout ce qui n'est pas une URL https valide — pas de regexp approximative,
+ * `new URL()` fait la vérification et lève une erreur sur les gibberish.
  */
 export function setRpcUrl(url: string | null): void {
   const clean = url?.trim() ?? "";
-  if (clean === "" || clean === DEFAULT_RPC) rpcStore.remove(KEY);
-  else rpcStore.set(KEY, clean);
+  if (clean === "" || clean === DEFAULT_RPC) {
+    rpcStore.remove(KEY);
+    return;
+  }
+  const parsed = new URL(clean);
+  if (parsed.protocol !== "https:")
+    throw new Error(`RPC must be https:// (got ${parsed.protocol}//)`);
+  rpcStore.set(KEY, clean);
 }
 
 // Connexion partagée : TOUS les flux on-chain (lot, pointage, swap, stake,

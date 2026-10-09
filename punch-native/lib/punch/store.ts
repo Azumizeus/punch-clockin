@@ -321,7 +321,6 @@ export const usePunch = create<
             const pubkey = new PublicKey(s.wallet.address);
             txSig = await sendTreasuryToUserTransfer(devnetConn, pubkey, mintFor("USDC"), toBaseUnits(0.1, "USDC"));
           } catch (e) {
-            console.log("[PUNCH-TX] greetNearby:", e);
             // Cohérence swap/stake/unstake : la VRAIE raison (RPC saturé,
             // réseau perdu...) est stockée pour l'écran, jamais avalée.
             set({ lastTxError: readableTxError(e) });
@@ -407,7 +406,6 @@ export const usePunch = create<
               toBaseUnits(parts.worker, shift.token)
             );
           } catch (e) {
-            console.log("[PUNCH-TX] cashShift:", e);
             // Lisible comme partout : "RPC devnet saturé", "réseau perdu"...
             set({ lastTxError: readableTxError(e) });
             return null;
@@ -496,7 +494,6 @@ export const usePunch = create<
             );
             await sendTreasuryToUserTransfer(devnetConn, pubkey, mintFor(to), toBaseUnits(out, to));
           } catch (e) {
-            console.log("[PUNCH-TX] swap:", e);
             set({ lastTxError: readableTxError(e) });
             return null;
           }
@@ -562,7 +559,6 @@ export const usePunch = create<
             const units = toBaseUnits(amount, "SKR");
             txSig = await sendUserToTreasuryTransfer(devnetConn, token, pubkey, mintFor("SKR"), units);
           } catch (e) {
-            console.log("[PUNCH-TX] stake:", e);
             set({ lastTxError: readableTxError(e) });
             return false;
           }
@@ -610,7 +606,6 @@ export const usePunch = create<
             const units = toBaseUnits(net, "SKR");
             txSig = await sendTreasuryToUserTransfer(devnetConn, pubkey, mintFor("SKR"), units);
           } catch (e) {
-            console.log("[PUNCH-TX] unstake:", e);
             set({ lastTxError: readableTxError(e) });
             return false;
           }
@@ -665,7 +660,6 @@ export const usePunch = create<
               toBaseUnits(input.amount, input.token)
             );
           } catch (e) {
-            console.log("[PUNCH-TX] postShift:", e);
             set({ lastTxError: readableTxError(e) });
             return "tx";
           }

@@ -139,13 +139,14 @@ export default function SplitScreen() {
             )}
           </View>
           {/* Preuve on-chain : les vraies signatures ouvrent la page tx (devnet).
-              Les signatures fictives du mode démo restent en texte simple. */}
+              Les signatures fictives du mode démo restent en texte simple,
+              étiquetées "démo" pour la lisibilité du jury. */}
           {isRealSig(r.signature) ? (
             <TouchableOpacity onPress={() => Linking.openURL(txUrl(r.signature))} activeOpacity={0.7}>
               <Text style={[s.recTx, s.recTxLink]} numberOfLines={1}>{t.tx} {shortAddr(r.signature)} ↗</Text>
             </TouchableOpacity>
           ) : (
-            <Text style={s.recTx} numberOfLines={1}>{t.tx} {shortAddr(r.signature)}</Text>
+            <Text style={s.recTx} numberOfLines={1}>{t.tx} {shortAddr(r.signature)} · {t.demoSig}</Text>
           )}
         </TouchableOpacity>
       ))}

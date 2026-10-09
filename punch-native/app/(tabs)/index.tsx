@@ -12,6 +12,7 @@ import {
   Pressable,
   Linking,
   AppState,
+  useAnimatedValue,
 } from "react-native";
 import type { AppStateStatus } from "react-native";
 import { useRouter, useFocusEffect } from "expo-router";
@@ -22,14 +23,13 @@ import { NEARBY } from "../../lib/punch/shifts";
 import { countryByCode } from "../../lib/punch/globe";
 import { helloCountInPeriod, helloSkr } from "../../lib/punch/hellos";
 import { PublicKey } from "@solana/web3.js";
-import { sendPunchMemo } from "../../lib/solana/wallet";
+import { sendPunchMemo, readableTxError } from "../../lib/solana/wallet";
 import { activeConnection } from "../../lib/solana/rpc";
 import { lookTokens, lookShape } from "../../lib/punch/looks";
 
 const appIcon = require("../../assets/images/icon.png");
 const DIAL_SIZE = 208;
 const RING_R = 86;
-const RING_C = 2 * Math.PI * RING_R;
 const COOLDOWN_TOTAL = 75000;
 
 export default function HomeScreen() {
@@ -82,10 +82,15 @@ export default function HomeScreen() {
 
   const rank = rankFromStake(wallet.stakedSkr);
 
-  useEffect(() => {
-    const id = setInterval(pushFeed, 12000);
-    return () => clearInterval(id);
-  }, []);
+  // Le feed simulé ne doit tiquer QUE quand l'Accueil est focus : react-navigation
+  // garde l'écran monté, sinon pushFeed modifiait le store (et re-rendait Home)
+  // toutes les 12 s même depuis un autre onglet.
+  useFocusEffect(
+    useCallback(() => {
+      const id = setInterval(pushFeed, 12000);
+      return () => clearInterval(id);
+    }, [pushFeed]),
+  );
 
   const handlePunch = useCallback(async () => {
     if (punchedToday()) return;
@@ -96,23 +101,24 @@ export default function HomeScreen() {
         const day = new Date().toISOString().slice(0, 10);
         const sig = await sendPunchMemo(conn, wallet.authToken, pubkey, `PUNCH ${day}`);
         punchIn(sig);
-      } catch {
+      } catch (e) {
         // Signature refusée ou réseau coupé : erreur propre, et surtout
         // JAMAIS de pointage simulé en secours (pas de cooldown, pas de frais,
         // pas de stats modifiées comme si la transaction avait réussi).
-        Alert.alert(t.txFailed);
+        // La vraie raison (RPC saturé, feuille fermée...) accompagne le titre.
+        Alert.alert(t.txFailed, readableTxError(e));
       }
     } else {
       punchIn();
     }
-  }, [wallet.real, wallet.authToken, punchedToday()]);
+  }, [wallet.real, wallet.address, wallet.authToken, punchedToday, punchIn, t.txFailed]);
 
   const cd = cooldownLeft();
   const punched = punchedToday();
 
   // Animation d'entrée du ticket IN (portage du CSS receipt-enter du web :
   // fondu + remontée + léger scale, 400 ms easing sort-cubic).
-  const ticketIn = useRef(new Animated.Value(0)).current;
+  const ticketIn = useAnimatedValue(0);
   useEffect(() => {
     if (punched) {
       Animated.timing(ticketIn, {
@@ -136,7 +142,7 @@ export default function HomeScreen() {
   const liveClock = useLiveClock();
 
   // Enfoncement du ticket au toucher (look b, transform du home.tsx source).
-  const pressAnim = useRef(new Animated.Value(1)).current;
+  const pressAnim = useAnimatedValue(1);
   const pressIn = () => Animated.spring(pressAnim, { toValue: 0.98, useNativeDriver: true }).start();
   const pressOut = () => Animated.spring(pressAnim, { toValue: 1, useNativeDriver: true }).start();
 
@@ -414,7 +420,7 @@ function PunchDial({
   cooldown: number;
   onPress: () => void;
 }) {
-  const pulse = useRef(new Animated.Value(1)).current;
+  const pulse = useAnimatedValue(1);
 
   // Anneau du cadran : la maquette a.jpg + l'accent a.dark du CSS imposent
   // l'or machine #d4af37 quel que soit le thème pour l'habillage a.
@@ -428,7 +434,7 @@ function PunchDial({
     );
     loop.start();
     return () => loop.stop();
-  }, [punched]);
+  }, [punched, pulse]);
 
   const progress = punched ? Math.min(1, cooldown / COOLDOWN_TOTAL) : 1;
 
@@ -467,12 +473,18 @@ function PunchDial({
 function RingProgress({ size, radius, progress, color, trackColor }: { size: number; radius: number; progress: number; color: string; trackColor: string }) {
   const segments = 60;
   const active = Math.round(segments * progress);
-  const dots = Array.from({ length: segments }, (_, i) => {
-    const angle = (i / segments) * Math.PI * 2 - Math.PI / 2;
-    const cx = size / 2 + Math.cos(angle) * radius - 1.5;
-    const cy = size / 2 + Math.sin(angle) * radius - 1.5;
-    return { cx, cy, on: i < active };
-  });
+  // 60 positions recalculées à chaque render de l'horloge (≈1/s) : on ne les
+  // refait que quand le nombre de segments actifs change vraiment.
+  const dots = useMemo(
+    () =>
+      Array.from({ length: segments }, (_, i) => {
+        const angle = (i / segments) * Math.PI * 2 - Math.PI / 2;
+        const cx = size / 2 + Math.cos(angle) * radius - 1.5;
+        const cy = size / 2 + Math.sin(angle) * radius - 1.5;
+        return { cx, cy, on: i < active };
+      }),
+    [size, radius, active],
+  );
   return (
     <View style={{ position: "absolute", width: size, height: size }}>
       {dots.map((d, i) => (
@@ -502,7 +514,9 @@ function RingProgress({ size, radius, progress, color, trackColor }: { size: num
 function useLiveClock() {
   const [now, setNow] = useState(() => Date.now());
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const lastRenderedSec = useRef(Math.floor(Date.now() / 1000));
+  // Sentinel -1 : le premier tick (dans l'effet, jamais en rendu) pose la
+  // seconde courante — on évite Date.now() impur pendant le rendu.
+  const lastRenderedSec = useRef(-1);
   // L'horloge ne tourne que si l'app est active ET l'onglet Accueil focus
   // (react-navigation garde les écrans montés : sans ça, elle tiquerait en
   // arrière-plan de tous les autres onglets).

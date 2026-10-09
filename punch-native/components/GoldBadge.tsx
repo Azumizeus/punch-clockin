@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import { usePunch, useT } from "../lib/punch/store";
+import { usePunch } from "../lib/punch/store";
 import { fonts } from "../lib/punch/fonts";
 import { metalKit } from "../lib/punch/theme";
 
@@ -13,7 +13,6 @@ import { metalKit } from "../lib/punch/theme";
  * c'est un blason, pas un tableau de bord.
  */
 export function GoldBadge() {
-  const t = useT();
   const theme = usePunch((s) => s.theme);
   const locale = usePunch((s) => s.locale);
   const wallet = usePunch((s) => s.wallet);

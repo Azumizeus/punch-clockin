@@ -1,5 +1,5 @@
-import { Children, useEffect, useRef, type ReactNode } from "react";
-import { Animated, Easing, StyleSheet, View, ViewStyle } from "react-native";
+import { Children, useEffect, type ReactNode } from "react";
+import { Animated, Easing, StyleSheet, useAnimatedValue, View, ViewStyle } from "react-native";
 
 /**
  * MOTION — portage des animations du CSS source validé
@@ -19,7 +19,7 @@ const STAGGER_DELAYS = [40, 90, 140, 190, 240, 290];
 
 /** Enveloppe animée d'UN enfant du stagger (punch-in 420 ms). */
 function StaggerItem({ delay, children }: { delay: number; children: ReactNode }) {
-  const v = useRef(new Animated.Value(0)).current;
+  const v = useAnimatedValue(0);
   useEffect(() => {
     Animated.timing(v, {
       toValue: 1,
@@ -56,7 +56,7 @@ export function StaggerIn({ children, style }: { children: ReactNode; style?: Vi
 
 /** Réception du ticket : receipt-in 400 ms (translateY 16, scale 0.98). */
 export function ReceiptIn({ children }: { children: ReactNode }) {
-  const v = useRef(new Animated.Value(0)).current;
+  const v = useAnimatedValue(0);
   useEffect(() => {
     Animated.timing(v, {
       toValue: 1,
@@ -86,7 +86,7 @@ export function ReceiptIn({ children }: { children: ReactNode }) {
  * de `inset` px du bord, avec le rayon du cadran de l'habillage.
  */
 export function PulseRing({ inset = 12, radius = 999, color }: { inset?: number; radius?: number; color: string }) {
-  const v = useRef(new Animated.Value(0)).current;
+  const v = useAnimatedValue(0);
   useEffect(() => {
     const loop = Animated.loop(
       Animated.timing(v, {

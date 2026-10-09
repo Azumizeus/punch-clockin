@@ -27,7 +27,7 @@ export default function RootLayout() {
   // Le thème affiché est celui persisté (dark/light/gold), rechargé depuis
   // MMKV via rehydratePunch() — jamais écrasé par le thème du système, sinon
   // le thème choisi ne survivrait pas à la fermeture complète de l'app.
-  const theme = usePunch((s) => s.theme);
+  // (Pas d'abonnement ici : useColors() réagit déjà au thème dans les écrans.)
   const connected = usePunch((s) => s.wallet.connected);
   const localeChosen = usePunch((s) => s.localeChosen);
   const router = useRouter();

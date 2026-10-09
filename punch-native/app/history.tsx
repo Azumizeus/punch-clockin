@@ -95,7 +95,7 @@ export default function HistoryScreen() {
                     <Text style={s.rowSig}>↗ {r.signature.slice(0, 10)}…</Text>
                   </TouchableOpacity>
                 ) : (
-                  <Text style={s.rowSig}>{r.signature.slice(0, 10)}…</Text>
+                  <Text style={s.rowSig}>{r.signature.slice(0, 10)}… · {t.demoSig}</Text>
                 )}
               </View>
             </TouchableOpacity>
