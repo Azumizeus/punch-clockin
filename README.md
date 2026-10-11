@@ -1,5 +1,7 @@
 # PUNCH : Clock'in — proof of presence on Solana
 
+![PUNCH — proof of presence](docs/site/banner.png)
+
 [![CI](https://github.com/Azumizeus/punch-clockin/actions/workflows/ci.yml/badge.svg)](https://github.com/Azumizeus/punch-clockin/actions/workflows/ci.yml)
 [![Release](https://img.shields.io/github/v/release/Azumizeus/punch-clockin)](https://github.com/Azumizeus/punch-clockin/releases/latest)
 [![Proof chain](https://img.shields.io/badge/proof-chain%20verified-8A7A56)](docs/PROOF-CHAIN.md)
