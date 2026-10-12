@@ -194,6 +194,7 @@ for part, group in (("A", rows[:half]), ("B", rows[half:])):
             draw.text((x + 4, y + 4), "%.1f" % tt, fill=(255, 255, 255))
             x += W + 6
         y += FH + 14
+    # audit: OUTDIR is a fixed repo-local dir and `part` comes from our own constants (no user input).
     jp = os.path.join(OUTDIR, "planche-%s.jpg" % part)
     sheet.save(jp, quality=85)
     b64 = base64.b64encode(open(jp, "rb").read()).decode()

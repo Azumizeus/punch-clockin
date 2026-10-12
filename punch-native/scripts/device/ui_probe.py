@@ -16,7 +16,10 @@ une fenetre Option pour ignorer les zones animees (horloge).
 import os
 import subprocess
 import time
-import xml.etree.ElementTree as ET
+try:  # audit Radiants: prefer defusedxml (XXE / entity expansion)
+    import defusedxml.ElementTree as ET
+except ImportError:  # local dev tool; input = uiautomator dump from our own device
+    import xml.etree.ElementTree as ET  # nosec B405
 
 ADB = os.path.join(os.environ["LOCALAPPDATA"], "Android", "Sdk", "platform-tools", "adb.exe")
 

@@ -6,7 +6,10 @@ import os
 import subprocess
 import sys
 import time
-import xml.etree.ElementTree as ET
+try:  # audit Radiants: prefer defusedxml (XXE / entity expansion)
+    import defusedxml.ElementTree as ET
+except ImportError:  # local dev tool; input = uiautomator dump from our own device
+    import xml.etree.ElementTree as ET  # nosec B405
 
 sys.stdout.reconfigure(errors="replace")
 
