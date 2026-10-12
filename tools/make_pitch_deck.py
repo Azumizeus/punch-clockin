@@ -2,7 +2,7 @@
 """
 Génère docs/punch-clockin-deck.pdf — le pitch deck de soumission CLOCK IN.
 12 slides EN (contenu : docs/PITCH-DECK.md), fond sombre #0a0908, accent or #d4af37,
-captures de l'app (rushes QA _shots/demo-v165, vitrine v1.6.8).
+captures de l'app (rushes QA _shots/demo-v165, vitrine v1.7.1).
 
 Usage : python tools/make_pitch_deck.py
 Prérequis : pip install fpdf2  (PIL non requis)
@@ -24,7 +24,7 @@ LINE = (60, 52, 34)      # filets
 
 REPO = "github.com/Azumizeus/punch-clockin"
 TREASURY = "FUiCbnDhEEJtz9Zcj66hGB54iGMGeyjRKD7CsTwpihJn"
-RELEASE = "github.com/Azumizeus/punch-clockin/releases/tag/v1.6.8"
+RELEASE = "github.com/Azumizeus/punch-clockin/releases/tag/v1.7.1"
 
 FONTS = {
     "R": ["C:/Windows/Fonts/georgia.ttf", "/usr/share/fonts/truetype/msttcorefonts/Georgia-Regular.ttf"],
@@ -92,12 +92,12 @@ SLIDES = [
         "mono": ["Treasury: " + TREASURY, "explorer.solana.com/address/" + TREASURY + "?cluster=devnet"],
     },
     {
-        "kicker": "06 · PROOF ON DEVICE (v1.6.8)",
-        "title": "The Settings screen proves it:\npublic RPC, version 1.6.8, honest exit",
+        "kicker": "06 · PROOF ON DEVICE (v1.7.1)",
+        "title": "The Settings screen proves it:\npublic RPC, version 1.7.1, honest exit",
         "bullets": [
             "Network section: custom RPC endpoint with a live \u201cTest connection\u201d check — \u201cRPC public actif\u201d when the endpoint answers.",
             "A wrong endpoint fails honestly: the exact reason is shown, nothing moves, nothing is signed.",
-            "About: Version 1.6.8 — and \u201cQuitter le r\u00e9seau\u201d requires a real signed Seed Vault transaction.",
+            "About: Version 1.7.1 — and \u201cQuitter le r\u00e9seau\u201d requires a real signed Seed Vault transaction.",
         ],
         "img": os.path.join(ROOT, "docs", "site", "device", "settings.png"),
         "img_h": 168,
@@ -151,7 +151,7 @@ SLIDES = [
         "links": [
             ("GitHub repo — source, judge guide, signed APK", "https://" + REPO),
             ("Judge guide (step-by-step test)", "https://" + REPO + "/blob/master/docs/GUIDE-JURY.md"),
-            ("Signed APK + demo video (Release v1.6.8)", "https://" + RELEASE),
+            ("Signed APK + demo video (Release v1.7.1)", "https://" + RELEASE),
             ("Treasury on devnet explorer", "https://explorer.solana.com/address/" + TREASURY + "?cluster=devnet"),
         ],
         "close": "Thank you — Clock in. Build. Get paid. 92 / 3 / 5.",
