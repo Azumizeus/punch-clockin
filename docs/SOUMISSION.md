@@ -104,20 +104,20 @@ Pitch deck: <fichier PDF joint ou lien>
 
 **Device gallery (EN) — à coller dans le champ « gallery » / visuels du formulaire :**
 ```
-Device gallery — proof from a real Solana Seeker (v1.7.0)
+Device gallery — proof from a real Solana Seeker (v1.7.1)
 
 Both screenshots are captured directly on a physical Solana Seeker running the
-signed v1.7.0 build — no mockups, no simulator. On the home screen the app is
+signed v1.7.1 build — no mockups, no simulator. On the home screen the app is
 connected, with social data honestly labeled "Démo · en direct" — a simulated
 live demo, by design. The settings screen shows the built-in network check
-("RPC public actif" — public RPC active), the exact app version (1.7.0), and the
+("RPC public actif" — public RPC active), the exact app version (1.7.1), and the
 signed exit action "Quitter le réseau" (leave the network).
 
 These captures are regenerated straight from the device with one command
 (punch-native/scripts/device/vitrine.py). Their SHA-256 hashes are published in
-docs/site/device/MANIFEST.json, embedded as a release asset on v1.7.0 for
+docs/site/device/MANIFEST.json, embedded as a release asset on v1.7.1 for
 out-of-repo traceability
-(https://github.com/Azumizeus/punch-clockin/releases/download/v1.7.0/MANIFEST.json),
+(https://github.com/Azumizeus/punch-clockin/releases/download/v1.7.1/MANIFEST.json),
 and enforced in CI by tools/check_device_sync.py: if the gallery ever drifts
 from what the device produced, the build fails.
 What you see online is exactly what the phone produced.
