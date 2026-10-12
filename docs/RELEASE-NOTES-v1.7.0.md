@@ -1,6 +1,6 @@
 # PUNCH : Clock'in — release v1.7.0
 
-**Signed APK (arm64):** [`punch-clockin-seeker-v1.7.0.apk`](https://github.com/Azumizeus/punch-clockin/releases/tag/v1.7.0) — built & signed by CI (treasury secret injected at build time), SHA-256 in the attached `.sha256` file.
+**Signed APK (arm64):** [`punch-clockin-seeker-v1.7.0.apk`](https://github.com/Azumizeus/punch-clockin/releases/download/v1.7.0/punch-clockin-seeker-v1.7.0.apk) — built & signed by CI (treasury secret injected at build time), SHA-256 in the attached `.sha256` file.
 
 **APK signé (arm64) :** même fichier — construit et signé par la CI (secret trésor injecté au build), SHA-256 dans le fichier `.sha256` joint.
 
