@@ -6,6 +6,8 @@
 [![Release](https://img.shields.io/github/v/release/Azumizeus/punch-clockin)](https://github.com/Azumizeus/punch-clockin/releases/latest)
 [![Proof chain](https://img.shields.io/badge/proof-chain%20verified-8A7A56)](docs/PROOF-CHAIN.md)
 
+> **For judges:** start with [`docs/JUDGES.md`](docs/JUDGES.md) — build steps, map of the transaction code, devnet treasury/mint explorer links, fraud model (implemented vs planned), handled edge cases and where the SKR economics are computed. Deck text version: [`docs/PITCH-DECK.md`](docs/PITCH-DECK.md). **Runs on Solana devnet** (hackathon build, not mainnet).
+
 > **FR :** PUNCH est l'app du hackathon **CLOCK IN** (Solana Mobile) : tu pointes une fois par jour depuis un vrai téléphone Seeker, une vraie transaction Solana (devnet) prouve ta présence, et l'économie qui en découle suit une règle unique, affichée partout : **92 % à la personne qui a fait le geste, 3 % aux détenteurs de SKR, 5 % à l'app**. Fais partie de l'écosystème **Nexus Seeker**.
 
 **EN:** PUNCH is our entry for the **CLOCK IN** hackathon (Solana Mobile): punch in once a day from a real Seeker phone, a real Solana transaction (devnet) proves your presence, and the resulting economy follows one rule, printed everywhere: **92% to the person who showed up, 3% to SKR holders, 5% to the app**. Part of the **Nexus Seeker** ecosystem.
