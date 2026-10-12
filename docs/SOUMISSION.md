@@ -96,7 +96,7 @@ You show up. You get paid. 92 / 3 / 5.
 ```
 GitHub repo (source + judge guide): https://github.com/Azumizeus/punch-clockin
 Signed APK (arm64): https://github.com/Azumizeus/punch-clockin/releases/latest
-Demo video: <lien-youtube>
+Demo video: https://youtube.com/shorts/p674TqLHngQ
 Devnet treasury on explorer: https://explorer.solana.com/address/FUiCbnDhEEJtz9Zcj66hGB54iGMGeyjRKD7CsTwpihJn?cluster=devnet
 Judge guide: https://github.com/Azumizeus/punch-clockin/blob/master/docs/GUIDE-JURY.md
 Proof (SHA-256 of captures & video): https://azumizeus.github.io/punch-clockin/proof.html
