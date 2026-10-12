@@ -64,8 +64,9 @@ Le secret GitHub `TREASURY_SECRET_DEVNET` a été **posé via l'API** (valeur = 
 
 **Project name :**
 ```
-PUNCH — Proof of presence on Solana
+PUNCH : Clock'in
 ```
+> ⚠️ Le nom officiel dans le formulaire est « PUNCH : Clock'in » (même nom que README, app.json, label Android et les vidéos). L'ancien texte « PUNCH — Proof of presence on Solana » reste correct comme one-liner de description, pas comme nom.
 
 **One-liner :**
 ```
