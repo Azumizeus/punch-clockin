@@ -38,5 +38,7 @@ punch-native/releases/*
 # finals de la soumission (voix Gemini Charon, 12/10)
 !punch-native/releases/punch-final-fr.mp4
 !punch-native/releases/punch-final-en.mp4
+# miniature YouTube de la soumission (generee par _vid/make-thumb-fr.py)
+!punch-native/releases/thumb-final-fr.png
 # cles locales (toujours hors git)
 punch-native/_vid/gemini.key

@@ -104,7 +104,7 @@ PUNCH, Clock'in, Solana, Solana Seeker, Seeker, Seed Vault, CLOCK IN, hackathon,
 3. Pendant le traitement, dans **« Détails »** :
    - **Titre** → copie le bloc « Titre » FR ci-dessus.
    - **Description** → copie le bloc « Description » FR (YouTube garde les sauts de ligne).
-   - **Miniature** → en attendant la veille du 11 nov, choisis la image auto proposée (l'action « épingler la thumbnail » est notée dans CHECKLIST-9OCT §5).
+   - **Miniature** → glisse `punch-native/releases/thumb-final-fr.png` (1280×720, titre « PUNCH : Clock'in » + règle 92/3/5 + panneau téléphone, générée par `_vid/make-thumb-fr.py`). Elle est trackée dans le repo.
    - **Playlist** → pas besoin.
    - **Sélection d'audience** → « Non, ... » (pas d'enfants).
 4. **Suivant ×3** (Éléments vidéo, Bilan de fin, Visibilité) — pas d'éléments interactifs.
