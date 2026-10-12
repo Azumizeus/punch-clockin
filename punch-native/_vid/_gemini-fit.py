@@ -90,11 +90,12 @@ def mux(vid, aud, outname):
 fj = lambda n: os.path.join(J, n)
 fr_segs = [
     fj('fr-a.mp4'),                                            #   4.00 ->  4.00
-    fj('fr-b.mp4'),                                            #   8.50 -> 12.50
-    fj('fr-live21.mp4'),                                       #   3.50 -> 16.00
-    freeze(fj('fr-245.png'), 9.55, 'fr-t1.mp4'),               #         -> 25.55
-    freeze(fj('fr-245.png'), 10.00, 'fr-t2.mp4'),              #         -> 35.55
-    freeze(fj('fr-380.png'), 13.41, 'fr-cut.mp4'),             #         -> 48.96
+    freeze(fj('fr-120.png'), 1.30, 'fr-title-hold.mp4'),       #         ->  5.30
+    freeze(fj('fr-245.png'), 10.00, 'fr-t1.mp4'),              # ticket  -> 15.30
+    freeze(fj('fr-380.png'), 10.25, 'fr-cut1.mp4'),            # regle   -> 25.55
+    fj('fr-b.mp4'),                                            # tap     -> 34.05
+    fj('fr-live21.mp4'),                                       # live    -> 37.55
+    freeze(fj('fr-245.png'), 11.41, 'fr-t2.mp4'),              # ticket  -> 48.96
     fj('fr-board-live.mp4'),                                   #   6.71 -> 55.67
     fj('fr-board-live.mp4'),                                   #   6.71 -> 62.38
     fj('fr-board-live.mp4'),                                   #   6.71 -> 69.08
@@ -107,11 +108,14 @@ fr_segs = [
     freeze(os.path.join(FR, '09-final.png'), 3.00, 'fr-f.mp4'),       #  ->114.99
     freeze(fj('card-fr.png'), 7.01, 'fr-card.mp4'),            #         ->122.00
 ]
-fr_vid = build_video(fr_segs, 'punch-final-fr-FIT.mp4')
-fr_aud = build_audio('fr',
+WANT = sys.argv[1:] or ['fr', 'en']
+fr_vid = fr_aud = None
+if 'fr' in WANT:
+    fr_vid = build_video(fr_segs, 'punch-final-fr-FIT.mp4')
+    fr_aud = build_audio('fr',
     {'hook': 5.30, 'punch': 25.55, 'board': 48.96, 'globe': 72.85,
      'honesty': 96.90, 'close': 111.99}, 'vo-fit-fr.m4a')
-mux(fr_vid, fr_aud, 'punch-final-fr-GEMINI.mp4')
+    mux(fr_vid, fr_aud, 'punch-final-fr-GEMINI.mp4')
 
 # ---------------- EN ----------------
 es = lambda n: os.path.join(EN, n)
@@ -127,14 +131,17 @@ en_segs = [
     os.path.join(K, 'v-money.mp4'),                            #   5.00 -> 72.41
     live(es('seg-04-world.mp4'), 0, 13.49, 'en-world.mp4'),    #         -> 85.90
     live(es('seg-05-hellos.mp4'), 0, 5.52, 'en-hellos.mp4'),   #         -> 91.42
-    os.path.join(K, 'v-settings.mp4'),                         #   9.66 ->101.08
-    freeze(es('08-settings.png'), 5.83, 'en-sh.mp4'),          #         ->106.91
+    live(es('seg-08-arc.mp4'), 0, 9.00, 'en-leave.mp4'),       # quitter ->100.42
+    live(es('seg-07-settings.mp4'), 0, 4.00, 'en-set2.mp4'),   # compteurs->104.42
+    freeze(es('08-settings.png'), 2.49, 'en-sh.mp4'),          #         ->106.91
     freeze(es('05-hellos-paye.png'), 5.00, 'en-paye.mp4'),     #         ->111.91
     freeze(os.path.join(J, 'card-en.png'), 10.09, 'en-card.mp4'),  #    ->122.00
 ]
-en_vid = build_video(en_segs, 'punch-final-en-FIT.mp4')
-en_aud = build_audio('en',
+en_vid = en_aud = None
+if 'en' in WANT:
+    en_vid = build_video(en_segs, 'punch-final-en-FIT.mp4')
+    en_aud = build_audio('en',
     {'hook': 5.30, 'punch': 25.27, 'board': 47.08, 'globe': 67.41,
      'honesty': 91.42, 'close': 106.91}, 'vo-fit-en.m4a')
-mux(en_vid, en_aud, 'punch-final-en-GEMINI.mp4')
+    mux(en_vid, en_aud, 'punch-final-en-GEMINI.mp4')
 print('ALL DONE')
