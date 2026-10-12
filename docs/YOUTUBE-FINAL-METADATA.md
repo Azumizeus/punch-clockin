@@ -1,7 +1,7 @@
 # Métadonnées YouTube — FINAL cuts (punch-final-fr / punch-final-en)
 
-> **Supersède `YOUTUBE-METADATA.md`** (qui visait les demos 2:17/2:23 de v1.7.0 — obsolètes depuis les nouveaux montages).
-> **Fichiers à uploader** (définitifs, avec voix + montages du 9/10) :
+> **Supersède `YOUTUBE-METADATA.md`** (demos 2:17/2:23 de v1.7.0 — historiques).
+> **Fichiers à uploader** (finale voix Gemini Charon, 12/10) :
 > - **FR (démo officielle soumission) :** `punch-native/releases/punch-final-fr.mp4` — 1 min 30 (89,9 s)
 > - **EN (jury anglophone) :** `punch-native/releases/punch-final-en.mp4` — 1 min 38 (95,5 s)
 >

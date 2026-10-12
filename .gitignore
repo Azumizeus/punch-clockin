@@ -35,3 +35,8 @@ punch-native/releases/*
 # la video demo est trackee (attachee aux GitHub Releases), + ses sous-titres
 !punch-native/releases/punch-clockin-demo.mp4
 !punch-native/releases/punch-clockin-demo.srt
+# finals de la soumission (voix Gemini Charon, 12/10)
+!punch-native/releases/punch-final-fr.mp4
+!punch-native/releases/punch-final-en.mp4
+# cles locales (toujours hors git)
+punch-native/_vid/gemini.key

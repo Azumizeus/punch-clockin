@@ -23,9 +23,9 @@ neutralisé: 9 octobre 2026 (dates officielles Radiants VÉRIFIÉES SUR LE PORTA
 
 | Livrable | État | Lien / action |
 |---|---|---|
-| **APK Android fonctionnel** | ✅ prêt (v1.7.0, arm64, signé, **construit en CI avec le vrai trésor**, règle 1 pointage/jour) | https://github.com/Azumizeus/punch-clockin/releases/tag/v1.7.0 |
+| **APK Android fonctionnel** | ✅ prêt (v1.7.1, arm64, signé, **construit en CI avec le vrai trésor**, règle 1 pointage/jour) | https://github.com/Azumizeus/punch-clockin/releases/latest |
 | **Repo GitHub source** | ✅ prêt, **public**, CI verte | https://github.com/Azumizeus/punch-clockin |
-| **Vidéo démo** | ✅ **refaite le 08/10 sur Seeker v1.6.9 (sans relief 3D)** — 2 versions : **FR** (2 min 17, voix fr-FR-HenriNeural) et **EN** (2 min 23, voix en-US-AndrewNeural, pour le jury anglophone). Script officiel mot pour mot : hook 92/3/5 → connexion Seed Vault → punch signé → ticket → board → wallet/SKR → globe + say hi → réglages réseau → quitter le réseau. Sous-titres SRT séparés (FR 25 cartes / EN 22 cartes). Métadonnées YouTube prêtes : `docs/YOUTUBE-METADATA.md` | `punch-clockin-demo-fr.mp4` + `punch-clockin-demo-en.mp4` dans `punch-native/releases/` — **à uploader sur YouTube (public ou répertorié)** et lier |
+| **Vidéo démo** | ✅ **Finale du 12/10** — 2 versions condensées : **FR** (`punch-final-fr.mp4`, 1 min 30) et **EN** (`punch-final-en.mp4`, 1 min 38), voix off Google Gemini (Charon). Métadonnées YouTube prêtes : `docs/YOUTUBE-FINAL-METADATA.md` | `punch-final-fr.mp4` + `punch-final-en.mp4` dans `punch-native/releases/` — **à uploader sur YouTube (public ou répertorié)** et lier |
 | **Pitch deck** | ✅ prêt | [`docs/punch-clockin-deck.pdf`](https://github.com/Azumizeus/punch-clockin/blob/master/docs/punch-clockin-deck.pdf) (12 slides EN, dont la diapo de preuve Réseau/Version (tournée sur v1.6.8) et la diapo « proof chain » avec diagramme Seeker → MANIFEST → CI → proof → Release) |
 
 ### Preuves visuelles du livrable 1 (captures Seeker v1.7.0)
@@ -57,7 +57,7 @@ Le secret GitHub `TREASURY_SECRET_DEVNET` a été **posé via l'API** (valeur = 
 - [x] Liens APK de `README.md` pointés vers la GitHub Release (fait le 22/09)
 - [x] `punch-clockin-deck.pdf` exporté et commité
 - [x] Tester l'APK de la release sur un vrai Seeker : connexion, pointage, reçu avec signature cliquable
-- [ ] Uploader la vidéo **EN** sur YouTube avec les métadonnées de `docs/YOUTUBE-METADATA.md` et noter le lien (dernière action manuelle avant « Submit » — la vidéo FR est un plus)
+- [ ] Uploader la vidéo **FR** (puis EN) sur YouTube avec les métadonnées de `docs/YOUTUBE-FINAL-METADATA.md` et noter le lien (dernière action manuelle avant « Submit »)
 - [x] Ancienne vidéo v1.6.6 + SRT supprimés, vieilles APK archivées dans `punch-native/releases/_archive/` (nettoyage du 08/10) ; seule la v1.6.9 reste à la racine de releases/
 
 ## 5. Textes prêts à coller dans le formulaire de soumission
