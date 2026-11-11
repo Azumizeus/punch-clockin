@@ -9,11 +9,19 @@ import { useFonts, Fraunces_500Medium, Fraunces_600SemiBold } from "@expo-google
 import { Figtree_400Regular, Figtree_500Medium, Figtree_600SemiBold } from "@expo-google-fonts/figtree";
 import { IBMPlexMono_400Regular } from "@expo-google-fonts/ibm-plex-mono";
 import { usePunch, rehydratePunch } from "../lib/punch/store";
+import { assertClusterConsistency } from "../lib/solana/networkConfig";
 
 const g = globalThis as any;
 if (typeof g.Buffer === "undefined") {
   g.Buffer = Buffer;
 }
+
+// Garde-fou réseau : évalué au chargement du layout racine, donc AVANT le
+// premier écran et avant toute transaction. Un build dont le cluster déclaré
+// ne correspond pas refuse de démarrer — mieux vaut une app qui ne tourne pas
+// qu'une app qui signe sur le mauvais réseau. Pour la bascule mainnet, il faut
+// changer ACTIVE_CLUSTER *et* cette ligne : deux clés, volontairement.
+assertClusterConsistency("devnet");
 
 export default function RootLayout() {
   const [fontsLoaded] = useFonts({
