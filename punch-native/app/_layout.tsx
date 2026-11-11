@@ -1,7 +1,7 @@
 import "../lib/punch/storage";
 import "react-native-get-random-values";
 import { Buffer } from "buffer";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Stack, useRouter, useSegments } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { View } from "react-native";
@@ -40,12 +40,29 @@ export default function RootLayout() {
   const localeChosen = usePunch((s) => s.localeChosen);
   const router = useRouter();
   const segments = useSegments();
+  // Tant que le store n'a pas relu MMKV, tous ses champs valent leur defaut :
+  // router sur cet etat enverrait sur /language (ou /connect) un utilisateur
+  // dont le choix est pourtant deja enregistre.
+  const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
-    rehydratePunch();
+    let alive = true;
+    const done = () => {
+      if (alive) setHydrated(true);
+    };
+    // MMKV lit de facon synchrone : la relecture peut deja etre terminee.
+    if (usePunch.persist.hasHydrated()) {
+      done();
+      return;
+    }
+    void Promise.resolve(rehydratePunch()).then(done, done);
+    return () => {
+      alive = false;
+    };
   }, []);
 
   useEffect(() => {
+    if (!hydrated) return;
     const seg = segments[0];
     const inLanguage = seg === "language";
     const inConnect = seg === "connect";
@@ -59,7 +76,7 @@ export default function RootLayout() {
     } else if (connected && (inConnect || inLanguage)) {
       router.replace("/");
     }
-  }, [connected, localeChosen, segments]);
+  }, [hydrated, connected, localeChosen, segments]);
 
   // Identité unique gold : toujours statusbar claire sur noir chaud.
   const isDark = true;

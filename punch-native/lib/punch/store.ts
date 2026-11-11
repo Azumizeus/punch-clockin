@@ -1097,7 +1097,11 @@ export function useColors() {
 }
 
 export function rehydratePunch() {
-  void usePunch.persist.rehydrate();
+  // On rend la promesse : l'appelant doit pouvoir attendre la fin de la
+  // relecture avant de router, sinon il decide sur l'etat par defaut
+  // (localeChosen = false) et affiche l'ecran de langue a un utilisateur
+  // qui l'a deja choisie.
+  return usePunch.persist.rehydrate();
 }
 
 /**
