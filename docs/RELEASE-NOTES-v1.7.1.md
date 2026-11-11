@@ -4,6 +4,18 @@
 
 **APK signé (arm64) :** même fichier — construit et signé par la CI (secret trésor injecté au build, prouvé par dérivation), SHA-256 dans le fichier `.sha256` joint.
 
+## Package / application id
+
+**EN —** This build ships under the application id **`com.punchclockin.app`** (it was `com.anonymous.punchnative`). Android treats the two as different apps: the old one is **not** replaced, it stays installed alongside — uninstall it so you don't end up with two PUNCH icons. The rename is what the Solana dApp Store submission requires; the signing identity is unchanged (same certificate), only the package differs.
+
+**FR —** Ce build porte l'application id **`com.punchclockin.app`** (auparavant `com.anonymous.punchnative`). Android les considère comme deux apps distinctes : l'ancienne n'est **pas** remplacée, elle reste installée à côté — désinstallez-la pour éviter deux icônes PUNCH. Le renommage est ce qu'exige la soumission au Solana dApp Store ; l'identité de signature ne change pas (même certificat), seul le package diffère.
+
+## Network guard / Garde-fou réseau
+
+**EN —** The app now refuses to start when its build-time cluster does not match the cluster it runs on (`assertClusterConsistency`, evaluated at root-layout load — before the first screen and before any transaction). A devnet build stays on devnet; flipping to mainnet needs two deliberate keys.
+
+**FR —** L'app refuse désormais de démarrer quand le cluster figé au build ne correspond pas à celui sur lequel elle tourne (`assertClusterConsistency`, évalué au chargement du layout racine — avant le premier écran et avant toute transaction). Un build devnet reste sur devnet ; la bascule mainnet demande deux clés volontaires.
+
 ## New in v1.7.1 — honest failure & honest demo labels / L'échec honnête et le démo étiqueté
 
 **EN —** Two audit findings applied, both about honesty:
@@ -27,6 +39,8 @@ Appartient au lot d'audit : la **clé du trésor devnet** est toujours embarqué
 ## Install
 
 ```bash
+# l'ancienne app (com.anonymous.punchnative) n'est pas remplacee : desinstallez-la
+adb uninstall com.anonymous.punchnative
 adb install -r punch-clockin-seeker-v1.7.1.apk
 ```
 
