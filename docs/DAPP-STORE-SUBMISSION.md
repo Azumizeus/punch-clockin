@@ -14,7 +14,7 @@
 | Wallet éditeur financé | Phantom/Solfare/Backpack | ~0,2 SOL + marge ArDrive | ☐ à faire |
 | Fiche dApp (textes ci-dessous) | Portail → « Add a dApp » | 0 | ✅ textes prêts (§3) |
 | Assets (icône, captures, vidéo) | `docs/store/` + release GitHub | ~0,1-0,3 SOL upload | ✅ prêts (§4) |
-| Upload APK v1.6.7 « New Version » | Portail | tx ≈0,05 SOL | ☐ après release v1.6.7 |
+| Upload APK v1.7.1 « New Version » | Portail | tx ≈0,05 SOL | ☐ après release v1.7.1 (package `com.punchclockin.app`) |
 | Review Solana Mobile | — | 0 | ☐ 3-5 jours ouvrés |
 
 ## 1. Compte éditeur (une seule fois)
@@ -84,7 +84,7 @@ Source code: github.com/Azumizeus/punch-clockin
 
 | Asset | Fichier | Conformité |
 |---|---|---|
-| Icône (512×512 exigé) | `docs/store/icon-512.png` | ✅ 512×512, dérivée de l'icône officielle 1024 |
+| Icône (512×512 exigé) | `docs/store/icon-512.png` | ✅ 512×512, dérivée de l'icône officielle 1024, fond opaque |
 | Capture CLOCK IN | `docs/store/screenshot-punch.png` | ✅ 1200×2670 (≥1080px), portrait |
 | Capture Missions | `docs/store/screenshot-board.png` | ✅ même ratio |
 | Capture Wallet | `docs/store/screenshot-wallet.png` | ✅ même ratio |
@@ -98,10 +98,10 @@ Source code: github.com/Azumizeus/punch-clockin
 
 ## 5. Soumission (« New Version »)
 
-1. Télécharger l'APK signé de la release : `punch-clockin-seeker-v1.6.7.apk`
-   (vérifier le SHA-256 du fichier `.sha256` joint).
+1. Télécharger l'APK signé de la release : `punch-clockin-seeker-v1.7.1.apk`
+   (package `com.punchclockin.app`, versionCode 25 ; vérifier le SHA-256 du fichier `.sha256` joint).
 2. Portail → app PUNCH → **New Version** → uploader l'APK.
-3. Renseigner les notes de version (reprendre `docs/RELEASE-NOTES-v1.6.7.md`).
+3. Renseigner les notes de version (reprendre `docs/RELEASE-NOTES-v1.7.1.md`).
 4. **Submit** → approuver **chaque** demande de signature (upload Arweave + mint du
    release NFT). ⚠️ N'en sauter aucune : des assets manquants sinon.
 5. L'entre automatiquement dans la file de review — mise en ligne dès approbation.
@@ -118,6 +118,8 @@ Source code: github.com/Azumizeus/punch-clockin
 - **Compatibilité devices** : l'app exige **Seed Vault** (cible Solana Seeker) —
   c'est exactement l'équipement des utilisateurs Saga/Seeker du store ✓. Les
   téléphones sans Seed Vault doivent voir un message clair (déjà le cas dans l'app).
+- **Package final** : `com.punchclockin.app` (acté dans `punch-native/app.json` le 2026-10-28 ;
+  fini `com.anonymous.*`). Immuable après la première soumission.
 - **Clé éditeur ≠ clé trésor** : ne jamais connecter/importer le trésor dans le
   portail ou le wallet éditeur.
 - **Budget** : ~0,2 SOL (tx) + upload ArDrive (APK ~65 Mo + assets ≈ 10 Mo).
