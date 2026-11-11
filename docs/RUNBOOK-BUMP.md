@@ -47,7 +47,7 @@ cd punch-native
 npx expo prebuild -p android --no-install
 cd android && ./gradlew assembleRelease --no-daemon && cd ..
 adb install -r android/app/build/outputs/apk/release/app-release.apk
-adb shell dumpsys package com.anonymous.punchnative | grep versionName   # -> 1.6.9
+adb shell dumpsys package com.punchclockin.app | grep versionName   # -> 1.6.9
 ```
 
 ## 3. La vitrine (captures v1.6.9 + MANIFEST)

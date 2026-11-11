@@ -23,7 +23,7 @@ import time
 sys.stdout.reconfigure(errors="replace")
 
 ADB = os.path.join(os.environ["LOCALAPPDATA"], "Android", "Sdk", "platform-tools", "adb.exe")
-PKG = "com.anonymous.punchnative"
+PKG = "com.punchclockin.app"
 SHOTS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "_shots", "demo-v165")
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from ui_probe import fresh_dump, find_text

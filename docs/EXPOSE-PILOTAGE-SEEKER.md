@@ -21,7 +21,7 @@
 
 | Élément | Détail réel du projet |
 |---|---|
-| Téléphone | **Solana Seeker** (Android, 1200×2670), avec Seed Vault + PUNCH installé (`com.anonymous.punchnative`, `MainActivity`) |
+| Téléphone | **Solana Seeker** (Android, 1200×2670), avec Seed Vault + PUNCH installé (`com.punchclockin.app`, `MainActivity`) |
 | Liaison | Câble USB + **ADB** (`%LOCALAPPDATA%\Android\Sdk\platform-tools\adb.exe`) |
 | Pilote | Scripts Python sur le PC : `punch-native/scripts/device/*.py` (19 scripts) |
 | Rushs produits | `punch-native/_shots/demo-v169-fr/` et `demo-v169-en/` : 9 `.mp4` + ~17 `.png` + `evidence-{fr,en}.md` par langue |

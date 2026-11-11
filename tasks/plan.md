@@ -1,7 +1,7 @@
 # Plan d'action PUNCH — Mainnet + dApp Store + post-CLOCK IN
 
 ## Overview
-PUNCH est aujourd'hui un build hackathon **devnet** (`punch-native/`, package `com.anonymous.punchnative`, v1.7.1). Le hackathon CLOCK IN est en phase de jugement (résultats attendus début novembre). Pour passer en produit réel : (1) suivre le verdict CLOCK IN, (2) publier sur le Solana dApp Store (obligatoire pour toucher un prix), (3) migrer vers mainnet sans tricher sur la sécurité (clé trésor actuellement injectée dans l'app — inacceptable en mainnet), (4) cadrer ton auto-investissement en sponsor propre.
+PUNCH est aujourd'hui un build hackathon **devnet** (`punch-native/`, package `com.punchclockin.app`, v1.7.1). Le hackathon CLOCK IN est en phase de jugement (résultats attendus début novembre). Pour passer en produit réel : (1) suivre le verdict CLOCK IN, (2) publier sur le Solana dApp Store (obligatoire pour toucher un prix), (3) migrer vers mainnet sans tricher sur la sécurité (clé trésor actuellement injectée dans l'app — inacceptable en mainnet), (4) cadrer ton auto-investissement en sponsor propre.
 
 ## Nouvelles du hackathon CLOCK IN (vérifié le 28/10/2026)
 - Organisé par **Solana Mobile + RadiantsDAO**. Soumissions ouvertes 08/09/2026, closes le **12/10**.
@@ -13,7 +13,7 @@ PUNCH est aujourd'hui un build hackathon **devnet** (`punch-native/`, package `c
 ## Architecture Decisions
 - Mainnet = environnement séparé, pas un simple swap d'URL. Config réseau centralisée (`lib/solana/devnetConfig.ts` → futur `networkConfig.ts` avec garde-fous build devnet/mainnet).
 - La clé trésor **sort du client** avant mainnet (serveur signataire ou programme Anchor). Non négociable — `docs/JUDGES.md` le dit déjà.
-- Package Android définitif choisi **avant** la soumission store (`com.anonymous.punchnative` → ex. `com.punchclockin.app`) : immuable après création.
+- Package Android définitif choisi **avant** la soumission store (`com.punchclockin.app`, acté le 2026-10-28) : immuable après création.
 - Trésor mainnet sous **multisig** (ex. Squads), avec working capital séparé des réserves.
 
 ## Task List

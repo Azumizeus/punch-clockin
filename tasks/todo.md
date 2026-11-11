@@ -31,7 +31,7 @@
 ## Task 3: Identité Android définitive + assets listing
 **Description:** Choisir le package final (immuable après soumission), le nom ≤25 car., la description courte ≤50 car., icône 512×512 opaque, bannière 1200×600, 4–8 screenshots.
 **Acceptance criteria:**
-- [ ] `punch-native/app.json`: `android.package` final (ex. `com.punchclockin.app`, fini `com.anonymous.*`), `name` ≤25 car.
+- [ ] `punch-native/app.json`: `android.package` final = `com.punchclockin.app` (fini `com.anonymous.*`), `name` ≤25 car.
 - [ ] Icône 512×512 opaque, bannière 1200×600, 4–8 captures produites
 **Verification:**
 - [ ] Build succeeds: `npx expo prebuild` sans erreur de package

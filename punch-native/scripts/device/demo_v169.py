@@ -22,7 +22,7 @@ from datetime import datetime
 sys.stdout.reconfigure(errors="replace")
 
 ADB = os.path.join(os.environ["LOCALAPPDATA"], "Android", "Sdk", "platform-tools", "adb.exe")
-PKG = "com.anonymous.punchnative"
+PKG = "com.punchclockin.app"
 LANG = (sys.argv[1] if len(sys.argv) > 1 else "en").lower()
 ARC_ONLY = len(sys.argv) > 2 and sys.argv[2] == "arc-only"
 SHOTS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "_shots", "demo-v169-" + LANG)
@@ -100,7 +100,7 @@ def tap(x, y, delay=1.5):
     # quand l'app est fermée, les taps tombaient sur le launcher (fenêtres
     # personnelles). Si le focus est autre part, on ignore le tap.
     f = focus()
-    if "punchnative" not in f and "solanamobile" not in f:
+    if not any(k in f for k in ("punchclockin", "punchnative", "solanamobile")):
         log("SKIP", "tap annulé : app au premier plan ? (%s)" % f[:60])
         time.sleep(delay)
         return

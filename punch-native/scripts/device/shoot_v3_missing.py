@@ -23,7 +23,7 @@ sys.stdout.reconfigure(errors="replace")
 from ui_probe import fresh_dump, find_text, sh, tap  # noqa: E402
 
 ADB = os.path.join(os.environ["LOCALAPPDATA"], "Android", "Sdk", "platform-tools", "adb.exe")
-PKG = "com.anonymous.punchnative"
+PKG = "com.punchclockin.app"
 SHOTS = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "_shots", "demo-v166"))
 os.makedirs(SHOTS, exist_ok=True)
 

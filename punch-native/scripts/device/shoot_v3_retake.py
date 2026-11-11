@@ -17,7 +17,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 sys.stdout.reconfigure(errors="replace")
 from ui_probe import fresh_dump, find_text, sh, tap  # noqa: E402
 
-PKG = "com.anonymous.punchnative"
+PKG = "com.punchclockin.app"
 SHOTS = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "_shots", "demo-v166"))
 CONNECT_CTA = ("Ouvrir mon portefeuille", "Open my wallet")
 
